@@ -1,1 +1,10 @@
-hello 
+---
+layout: default 
+title: My blog
+---
+
+## {{ page.title }}
+New Posts
+{% for post in site.posts %}
+* {{ post.date | date_to_string }} [{{ post.title }}]({{ site.baseurl }}{{ post.url }})
+{% endfor %}
