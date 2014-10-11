@@ -21,4 +21,10 @@ title: 你好，世界
 2. second
 1. third
 
-    <?php phpinfo(); 
+---
+    <?php
+        var_dump($_GET);
+        $a = array();
+        foreach($a as $key=>$v){
+            echo $key, $v;
+        }

@@ -2,9 +2,12 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <link href="/asset/highlight/monokai.css" rel="stylesheet" type="text/css" media="all">
         <title>{{ page.title }}</title>
     </head>
     <body>
         {{ content }}
+        <script type="text/javascript" src="/asset/highlight/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
     </body>
 </html>
