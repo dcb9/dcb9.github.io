@@ -1,0 +1,61 @@
+/* ------------------Clear--------------------- */
+.clear{content: "\0020"; display: block; height: 0; clear: both; visibility: hidden; }
+
+/* ------------------Style--------------------- */
+html, body {width:100%; padding:0; margin:0;}
+body {background: #999999;color: #333;font: 16px/25px 'Droid Sans',sans-serif;}
+body .wrap-body{background:#ffffff; margin: 30px auto; padding: 30px;}
+
+a{color: #76D2C5;text-decoration: none;}
+a:hover {color: #474747; text-decoration: none;}
+
+a.button{cursor: pointer;color: #ffffff;line-height: 14px;font-family: Arial, Helvetica, sans-serif;font-size: 14px;font-weight: bold;	background: #3F3F3F;border:1px solid #ffffff; -webkit-border-radius: 4px;-moz-border-radius: 4px;-khtml-border-radius: 4px;border-radius: 4px;}
+a.button {	display: inline-block;	text-decoration: none;	padding: 6px 12px 6px 12px;}
+a.button:hover{}
+
+/* ------------------Header-------------------- */
+header {}
+header .wrap-header{}
+
+header #logo {background:#76D2C5; width: 100%; text-align: center; padding: 40px 0px; color : #ffffff; }
+header #logo h1{font-size: 60px; line-height: 80px; color: #ffffff;}
+
+header .top {height: 40px;}
+header .top .socials ul {list-style: none;}
+header .top .socials ul li {position: relative;float: left; margin: 5px 0 5px 5px;}
+
+/* -------------------------------------------- */
+/* ------------------Navigation---------------- */
+nav {}
+nav .wrap-nav{display: inline-block; background: #91DBD1; width: 100%;}
+
+.menu ul {list-style: none;margin: 0;padding: 0;}
+.menu  ul li {position: relative;float: left;padding: 6px 5px 0px 5px;}
+.menu  ul li a {font-size: 18px; color: #ffffff;display: block;padding: 6px 30px;margin-bottom: 5px;z-index: 6;position: relative;}
+.menu  ul li:hover {background-color:#ffffff;}
+.menu  ul li:hover a {color:#000000;}
+
+/* -------------------------------------------- */
+/* ------------------Content------------------- */
+
+.block{}
+/* -------------------------------------------- */
+/* ------------------Form------------------- */
+.buttons {padding-top:17px; text-align:right}
+.buttons a {margin-left:30px}
+
+/* -------------------------------------------- */
+/* ------------------Footer-------------------- */
+footer {background-color:#76D2C5; margin-top:30px;}
+footer .wrap-footer{padding:10px 0px; color:#ffffff;}
+footer .box {}
+footer .box .heading { padding:5px; border-bottom:1px solid #ffffff;}
+footer .box .heading h2{padding:0 10px; color:#ffffff;}
+footer .box .content {padding:15px;}
+footer .box .content a{	color: #ffffff; text-decoration: underline;}
+footer .box .content p{margin-bottom: 10px;}
+footer .box .gallery {}
+footer .box .gallery img{padding:3px; background: #ffffff; margin: 0 5px 5px 0;}
+
+.copyright{text-align:center; margin-top:20px; background:#91DBD1; padding:10px 0px;color:#ffffff; }
+.copyright a{text-decoration:underline; color:#ffffff; }
