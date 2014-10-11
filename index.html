@@ -3,8 +3,10 @@ layout: default
 title: My blog
 ---
 
-## {{ page.title }}
-New Posts
+<h2> {{ page.title }}<h2>
+<p>New Posts</p>
+<ul>
 {% for post in site.posts %}
-* {{ post.date | date_to_string }} [{{ post.title }}]({{ site.baseurl }}{{ post.url }})
+<li>{{ post.date | date_to_string }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
 {% endfor %}
+</ul>
