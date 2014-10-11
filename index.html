@@ -1,12 +1,13 @@
 ---
 layout: default 
-title: My blog
+title: Lemon
 ---
 <!--------------Content--------------->
 <section id="content">
     {% for post in site.posts %}
     <article>
         <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h2>
+        <p>{{ post.excerpt }}</p>
         <p>By Bob on {{ post.date | date_to_string }}
     </article>
     {% endfor %}

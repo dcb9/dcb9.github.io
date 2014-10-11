@@ -1,0 +1,16 @@
+---
+layout: default
+title: 归档
+---
+{% for post in site.posts %}
+   {% assign now_year = post.date | date: "%Y"  %}
+    {% unless now_year == last_year %}
+        <h2>{{ now_year }}</h2>
+    {% endunless %}
+    <p><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a> {{ post.date | date: "%Y-%m-%d" }}</p>
+        <h2></h2>
+    {% unless now_year == last_year %}
+        </h2>
+    {% endunless %}
+   {% assign last_year = post.date | date: "%Y"  %}
+{% endfor %}

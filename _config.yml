@@ -1,1 +1,3 @@
-
+markdown: rdiscount
+timezone: Asia/Shanghai
+lsi: true
