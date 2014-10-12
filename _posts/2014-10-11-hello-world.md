@@ -29,8 +29,3 @@ categories: 生活
         foreach($a as $key=>$v){
             echo $key, $v;
         }
-
-
----
-
-{{ site.related_posts }}
