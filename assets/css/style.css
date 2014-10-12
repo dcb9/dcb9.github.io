@@ -59,3 +59,5 @@ footer .box .gallery img{padding:3px; background: #ffffff; margin: 0 5px 5px 0;}
 
 .copyright{text-align:center; margin-top:20px; background:#91DBD1; padding:10px 0px;color:#ffffff; }
 .copyright a{text-decoration:underline; color:#ffffff; }
+
+code{ font-size: 95%; color: #990066; padding: 0.2em 0.2em; margin: 0 0.1em;}
