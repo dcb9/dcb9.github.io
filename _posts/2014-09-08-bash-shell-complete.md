@@ -1,7 +1,7 @@
 ---
 title: 使用complete来扩展Bash shell自定义脚本的键补全
 tags: shell, complete
-layout: default
+layout: post
 ---
 我们有许多的服务器需要管理，所以就会使用到一个软件dsh 来批量操作多台机器。默认是这样子的 # dsh 各种参数加选项（但其实我们用的参数和选项的值永远都是那几个，连位置都不变 ） 指定组名  "需要执行的命令"，由于组名是定义在 /etc/dsh/group 目录下面的，所以在默认的bash shell 里面，当我想让它自动补全组名的时候是不可以的。
 

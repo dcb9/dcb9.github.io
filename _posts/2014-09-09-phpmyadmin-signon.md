@@ -1,7 +1,7 @@
 ---
 title: PHPMyAdmin改造实现单点登录
 tags: phpmyadmin php signon
-layout: default
+layout: post
 ---
 PHPMyAdmin单点登录的实质就是不要phpmyadmin默认的登录认证方式，而使用自己网站程序的认证系统，这样就实现了单点登录。phpmyadmin里面提供了一种signon的模式来做这件事。
 

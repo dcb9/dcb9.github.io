@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: 2013我为公司做了啥
 categories: 工作
 ---

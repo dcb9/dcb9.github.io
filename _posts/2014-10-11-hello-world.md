@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: 你好，世界
 tags: aaa, bbb
 categories: 生活

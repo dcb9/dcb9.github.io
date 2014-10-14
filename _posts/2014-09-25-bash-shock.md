@@ -1,7 +1,7 @@
 ---
 title: Bash shock安全漏洞测试
 tags: bash 漏洞
-layout: default
+layout: post
 ---
 
 昨天从微信上面，看到朋友发的最新的bash漏洞信息，感觉真的很可怕，现在互联网公司几乎都有使用到bash。现在我来带领大家实践一下使用这个漏洞的过程。

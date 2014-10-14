@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: Yii在Web分布式下将Session存储到Memcached
 tags: yii, memcached, session
 ---
