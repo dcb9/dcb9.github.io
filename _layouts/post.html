@@ -22,7 +22,11 @@
     </head>
     <body>
         <div class="wrap-body zerogrid">
-            <header> <h1>{{ post.title }}</h1> </header
+            <h1><center>{{ page.title }}</center></h1>
+            <table width="100%"><tr>
+            <td>Post by: {{ page.date | date_to_string }}</td>
+            <td><a href="/">Go Home</a></td>
+            </tr></table>
             {{ content }}
         </div>
         <script type="text/javascript" src="/assets/highlight/highlight.pack.js"></script>
