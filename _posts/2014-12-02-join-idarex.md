@@ -17,6 +17,7 @@ categories: 工作
 * ssh-agent
 * 使用 .ssh/config 来简化连接信息
 * ngrok 内网穿透
+* weinre Web移动应用调度工具
 * Yii2 现在正式启用了
 * 独轮电动车 —— 这货听说是同事抽奖中的，感觉好利害的说。
 
