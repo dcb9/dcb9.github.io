@@ -8,7 +8,7 @@ categories: 工作
 
 ### 晒一晒这一周学到的新的东西
 
-* RegularJS
+* AngularJS
 * Bower Web 应用包管理器
 * git commit --amend
 * ApiGen
