@@ -59,10 +59,12 @@ root@precise64:~# docker run rails
 
 <img src="/images/ruby_install_2.png" />
 
-The Old Way
+#### 老方法
+
 If you are scripting the process to build a virtual machine image from a base image (example: building the Rails stack on Ubuntu), getting all of the pieces to flow correctly can be a pain if you don't do it frequently. Lets say you install the dependencies for Ruby:
 
-$time apt-get install -y -q ruby1.9.1 ruby1.9.1-dev rubygems1.9.1 irb1.9.1 build-essential libopenssl-ruby1.9.1 libssl-dev zlib1g-dev
+```
+$ time apt-get install -y -q ruby1.9.1 ruby1.9.1-dev rubygems1.9.1 irb1.9.1 build-essential libopenssl-ruby1.9.1 libssl-dev zlib1g-dev
 Reading package lists...
 Building dependency tree...
 The following extra packages will be installed:
@@ -72,16 +74,22 @@ Processing triggers for libc-bin ...
 ldconfig deferred processing now taking place
 
 real 1m22.470s
+```
+
 Then, you try to install the dependencies for NodeJS, but you forget to add the node apt repository:
 
+```
 $apt-get install -y nodejs
 ...
 E: Unable to locate package nodejs
+```
+
 After you fix the NodeJS issue, you still want to be confident your script works on a fresh base image. You'd need to re-run the Ruby install, waiting 82 seconds before the Node install even starts. Painful.
 
 The Docker Way
 Put the steps to build an image in a Dockerfile. Dockerfiles are easy to read because you don't need to learn a separate DSL - it's basically just running commands as you enter them. Installing Ruby the first time won't be any faster, but lets take a look what happens when we build the image again from the Dockerfile:
 
+```
 FROM ubuntu:12.04
 RUN apt-get update
 
@@ -90,6 +98,9 @@ RUN apt-get install -y -q mysql-client libmysqlclient-dev
 
 ## RUBY
 RUN apt-get install -y -q ruby1.9.1 ruby1.9.1-dev rubygems1.9.1 irb1.9.1 build-essential libopenssl-ruby1.9.1 libssl-dev zlib1g-dev
+```
+
+```
 root@precise64:/# time docker build -t="dlite/appserver" .
 Uploading context 92160 bytes
 Step 1 : FROM ubuntu:12.04
@@ -106,6 +117,7 @@ Step 4 : RUN apt-get install -y -q ruby1.9.1 ruby1.9.1-dev rubygems1.9.1 irb1.9.
 Successfully built 7038022227c0
 
 real    0m0.848s
+```
 Wow - how did installing Ruby take under one second this time around? See those cache keys (ex: dc92be6158b0)? Rather than re-running the line from the Dockerfile, Docker sees that it has already run that command and just retrieves the file system changes from its cache. It can do this magic because Docker uses the AuFS file system, which is a union file system (kind of like applying diffs).
 
 In short, Docker makes it painless to iteratively build an image as you don't need to wait for previously successful steps to complete again. I'm not perfect and Docker doesn't punish me when I make mistakes.
@@ -131,6 +143,7 @@ But images are large, right? Not with Docker - remember containers don't run the
 
 For example, lets say we're installing Memcached onto our app servers. We'll build a new image. I'll tag it as dlite/appserver-memcached, where dlite is my index.docker.io user name. It's based off the dite/appserver image.
 
+```
 root@precise64:/# time docker build -t="dlite/appserver-memcached" .
 Uploading context 92160 bytes
 Step 1 : FROM appserver
@@ -152,10 +165,13 @@ Successfully built 2a2a689daee3
 real    0m13.289s
 user    0m0.132s
 sys 0m0.376s
+```
+
 It took just 13 seconds to install Memcached because prior Dockerfile lines were cached. I love speed.
 
 I'll commit and push this:
 
+```
 root@precise64:/# time docker push dlite/appserver-memcached
 The push refers to a repository [dlite/appserver-memcached] (len: 1)
 Processing checksums
@@ -167,19 +183,26 @@ Image 8dbd9e392a964056420e5d58ca5cc376ef18e2de93b5cc90e868a1bbc8318c1c already p
 Pushing tags for rev [ad8f8a3809afcf0e2cff1af93a8c29275a847609b05b20f7b6d2a5cbd32ff0d8] on {https://registry-1.docker.io/v1/repositories/dlite/appserver-memcached/tags/latest}
 
 real    0m28.710s
+```
 On the production server, I'll pull this image down:
 
+```
 root@prod:/# time docker pull dlite/appserver-memcached
 Pulling repository dlite/appserver-memcached
 Pulling image ad8f8a3809afcf0e2cff1af93a8c29275a847609b05b20f7b6d2a5cbd32ff0d8 (latest) from dlite/appserver-memcached
 
 real    0m15.749s
+```
+
 It took just 15 seconds to grab the dlite/appserver-memached image. Note the image size is just 10 MB as it uses the appserver image as the base:
 
+```
 root@precise64:~# docker images
 REPOSITORY            TAG                 ID                  CREATED             SIZE
 appserver             latest              7038022227c0        3 days ago          78.66 MB (virtual 427.9 MB)
 appserver-memcached   latest              77dc850dcccc        16 minutes ago      10.19 MB (virtual 438.1 MB)
+```
+
 We didn't need to pull down the entire image with Memcached, just the changes to add Memcached to the dlite/appserver image.
 
 Most of the time, the changes we make are much smaller, so pulling down new images will be even faster.
