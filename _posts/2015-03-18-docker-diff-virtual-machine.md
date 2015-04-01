@@ -231,7 +231,7 @@ How about communicating across Docker hosts?
 
 The upcoming release of Flynn.io, which will use etcd for this, will help. However, these are problems smaller scale deployments didn't have to worry about before.
 
-### Docker 可以使用 Git 去部署
+### Docker 可以像 Git 一样部署
 
 创建一个项目的时候，开发者可以去使用 `Git` 来提升性能和灵活性。 `Git` 鼓励实验新的东西，并且在你做错了不会给你带来很多的麻烦事：在一个分支去做你的实验，如果做遭了，只需要 `git rebase` 或 `git reset`， Git 可以很简单地就创建一个分支和推送一个分支。
 
