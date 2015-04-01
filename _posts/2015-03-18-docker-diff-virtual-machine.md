@@ -61,7 +61,7 @@ root@precise64:~# docker run rails
 
 #### 老方法
 
-If you are scripting the process to build a virtual machine image from a base image (example: building the Rails stack on Ubuntu), getting all of the pieces to flow correctly can be a pain if you don't do it frequently. Lets say you install the dependencies for Ruby:
+如果你用脚本从一个基本的镜像创建一个虚拟机镜像（例如：在 `Ubuntu` 上创建 `Rails stack`），若想把这个都做的正确是非常痛苦的，除非你经常的在做这个，看看安装 `Ruby` 依赖的一些信息吧：
 
 ```
 $ time apt-get install -y -q ruby1.9.1 ruby1.9.1-dev rubygems1.9.1 irb1.9.1 build-essential libopenssl-ruby1.9.1 libssl-dev zlib1g-dev
@@ -76,7 +76,7 @@ ldconfig deferred processing now taking place
 real 1m22.470s
 ```
 
-Then, you try to install the dependencies for NodeJS, but you forget to add the node apt repository:
+然后，尝试去安装 `NodeJS` 的依赖，但是你忘记了添加 Node 到 apt 库中
 
 ```
 $apt-get install -y nodejs
@@ -84,10 +84,12 @@ $apt-get install -y nodejs
 E: Unable to locate package nodejs
 ```
 
-After you fix the NodeJS issue, you still want to be confident your script works on a fresh base image. You'd need to re-run the Ruby install, waiting 82 seconds before the Node install even starts. Painful.
+等你把这个问题解决了，想在新的基本镜像上运行你的脚本。
+你需要重新安装 `Ruby`，还需要在安装 `Node` 之前，忍受不必要的 82 秒时间，真是痛苦至极。
 
-The Docker Way
-Put the steps to build an image in a Dockerfile. Dockerfiles are easy to read because you don't need to learn a separate DSL - it's basically just running commands as you enter them. Installing Ruby the first time won't be any faster, but lets take a look what happens when we build the image again from the Dockerfile:
+使用 `Docker` 的方式
+
+把创建镜像的步骤写入到 `Dockerfile` 文件中，看懂 `Dockerfile` 非常容易，因为里面就是你输入的命令，第一次安装 `Ruby` 不会比其它方式快，但是请看我们再次通过 `Dockerfile` 创建一个镜像：
 
 ```
 FROM ubuntu:12.04
@@ -118,11 +120,12 @@ Successfully built 7038022227c0
 
 real    0m0.848s
 ```
-Wow - how did installing Ruby take under one second this time around? See those cache keys (ex: dc92be6158b0)? Rather than re-running the line from the Dockerfile, Docker sees that it has already run that command and just retrieves the file system changes from its cache. It can do this magic because Docker uses the AuFS file system, which is a union file system (kind of like applying diffs).
 
-In short, Docker makes it painless to iteratively build an image as you don't need to wait for previously successful steps to complete again. I'm not perfect and Docker doesn't punish me when I make mistakes.
+哇哦，为什么安装 `Ruby` 连一秒都不到？ 看那些 Keys (例如：dc92be6158b0 )，`Docker` 不会重新运行 `Dockerfile` 中的每一行命令，会检查那是不是已经运行过的命令，是的话直接从缓存中取回对文件的修改。
+做的如此神奇，是因为 `Docker` 使用了 `AuFS` 文件系统（union file system）
 
 
+总之，`Docker` 让我们反复地创建一个镜像不再那么痛苦，对于已经成功的后面就不需要再等了。I'm not perfect and Docker doesn't punish me when I make mistakes.
 
 ### 部署镜像，不更新基础设施
 
@@ -221,14 +224,17 @@ Mind blown! It means we don't need to worry about consistency - we aren't modify
 Working with short-lived containers introduces a new set of problems - distributed configuration / coordination and service discovery:
 
 How do we update the HAProxy config when new app server containers are started?
+
 How do app servers communicate with the database container when a new database container is started?
+
 How about communicating across Docker hosts?
+
 The upcoming release of Flynn.io, which will use etcd for this, will help. However, these are problems smaller scale deployments didn't have to worry about before.
 
 ### Docker 可以使用 Git 去部署
 
-Developers are able to leverage Git's performance and flexibility when building applications. Git encourages experiments and doesn't punish you when things go wrong: start your experiments in a branch, if things fall down, just git rebase or git reset. It's easy to start a branch and fast to push it.
+创建一个项目的时候，开发者可以去使用 `Git` 来提升性能和灵活性。 `Git` 鼓励实验新的东西，并且在你做错了不会给你带来很多的麻烦事：在一个分支去做你的实验，如果做遭了，只需要 `git rebase` 或 `git reset`， Git 可以很简单地就创建一个分支和推送一个分支。
 
-Docker encourages experimentation for operations. Containers start quickly. Building images is a snap. Using another images as a base image is easy. Deploying whole images is fast, and last but not least, it's not painful to rollback.
+`Docker` 鼓励实验操作，容器启动非常地快，创建一个镜像更是非常地快，使用别的镜像做为基本镜像也非常的容易，部署更个镜像非常地快，最后但同样重要的是，回滚也非常地方便。
 
-Fast + flexible = deployments are about to become a lot more enjoyable.
+快速 + 灵活 = 部署将会更快乐
