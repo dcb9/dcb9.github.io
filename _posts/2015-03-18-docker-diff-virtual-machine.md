@@ -144,9 +144,9 @@ real    0m0.848s
 
 部署镜像——不修改已经存在的虚拟机，你会 100% 有确定在本地可以运行的，在生产环境也能运行。
 
-But images are large, right? Not with Docker - remember containers don't run their own guest OS and we're using a union file system. When we make changes to an image, we just need the new layers.
+镜像非常地大是吗？在 `Docker` 上不是这样的，请记住容器不会运行在宿主机上，它使用 union file system，当我们改变一个镜像，我们只需要新的一层。（说的好高大上，完全听不懂，后面可以看看 union file system 为何如此强大）
 
-For example, lets say we're installing Memcached onto our app servers. We'll build a new image. I'll tag it as dlite/appserver-memcached, where dlite is my index.docker.io user name. It's based off the dite/appserver image.
+例如，在应用服务器上安装 `Memcached`，创建一个新的镜像，然后给它打上一个 `tag` 叫 `dlite/appserver-memcached`，它是基于 `dlite/appserver` 这个镜像的，dlite 是我在 index.docker.io 上的用户名。
 
 ```
 root@precise64:/# time docker build -t="dlite/appserver-memcached" .
@@ -172,9 +172,9 @@ user    0m0.132s
 sys 0m0.376s
 ```
 
-It took just 13 seconds to install Memcached because prior Dockerfile lines were cached. I love speed.
+只用了 13 秒就安装好了 `Memcached`，`Dockerfile` 在执行时会优先使用已经安装成功的缓存，这个速度我喜欢。。。
 
-I'll commit and push this:
+把刚才的操作提交到仓库
 
 ```
 root@precise64:/# time docker push dlite/appserver-memcached
@@ -189,7 +189,8 @@ Pushing tags for rev [ad8f8a3809afcf0e2cff1af93a8c29275a847609b05b20f7b6d2a5cbd3
 
 real    0m28.710s
 ```
-On the production server, I'll pull this image down:
+
+在线上服务器把镜像下载下来
 
 ```
 root@prod:/# time docker pull dlite/appserver-memcached
@@ -199,7 +200,7 @@ Pulling image ad8f8a3809afcf0e2cff1af93a8c29275a847609b05b20f7b6d2a5cbd32ff0d8 (
 real    0m15.749s
 ```
 
-It took just 15 seconds to grab the dlite/appserver-memached image. Note the image size is just 10 MB as it uses the appserver image as the base:
+只用了 15 秒就把 `dlite/appserver-memached` 镜像下载下来了，镜像只有 10 MB 它使用 appserver 为基础镜像。
 
 ```
 root@precise64:~# docker images
@@ -208,30 +209,28 @@ appserver             latest              7038022227c0        3 days ago        
 appserver-memcached   latest              77dc850dcccc        16 minutes ago      10.19 MB (virtual 438.1 MB)
 ```
 
-We didn't need to pull down the entire image with Memcached, just the changes to add Memcached to the dlite/appserver image.
+我们不需要下载全部的镜像，只需要下载添加 `Memcached` 的改变就可以了。
 
-Most of the time, the changes we make are much smaller, so pulling down new images will be even faster.
+大多数情况下，我们的修改非常的小，所以下载一个新的镜像会非常地快。
 
-This has big implications:
+启动一个新的 `Docker` 容器很快，上传和下载一个新的镜像也很轻量。
 
-It's fast to start new Docker containers
-Pushing+pulling new Docker images is lightweight
+与其在现有的虚拟机上弄的乱七八糟，不如启动一个新的容器，然后把旧的容器删除就好了。
 
-Rather than messing with existing running virtual machines, we'll just fire up new containers and stop the old containers.
+令人情奇的（Mind blown!）
+它意味着我们不需要去担心统一性，我们不会去修改现有的虚拟机，只是启动一个新的容器。那也意味着回滚也就是轻而易举的事！`Memcached` 挂了？直接停止使用 `dlite/appserver-memcached` 然后启动 `dlite/appserver-memcached` 的容器就好了。
 
-Mind blown! It means we don't need to worry about consistency - we aren't modifying existing VMs, just launching new containers. It means rollbacks are a breeze! Memcached falling down? Stop the containers running dlite/appserver-memcached and start containers with the dlite/appserver image again.
+### 不足之处
 
-### 不足
+生态还不是很完善，对于分布式配置 / 协调和服务发现没有好的解决方案（那是博文以前，现在应该很不一样了，可参考：《[腾讯Gaia：万台规模的Docker应用实践](http://blog.sina.cn/dpool/blog/s/blog_ea790d9d0102w7rw.html?vt=4&wm=3164_0001&tt_group_id=4092136568)）》
 
-Working with short-lived containers introduces a new set of problems - distributed configuration / coordination and service discovery:
+我们如何做到新应用服务窗口启动了，自动更改 `HAProxy` 的 配置文件？
 
-How do we update the HAProxy config when new app server containers are started?
+新的数据库容器启动了，应用服务器如何自动与数据库容器通信？
 
-How do app servers communicate with the database container when a new database container is started?
+如何让不同主机的 `Docker` 窗口通信？
 
-How about communicating across Docker hosts?
-
-The upcoming release of Flynn.io, which will use etcd for this, will help. However, these are problems smaller scale deployments didn't have to worry about before.
+即将到来的 Flynn.io 将会解决这些问题，上面的问题将不再是问题（现在这些总是早就不是问题了， Docker 的生态圈已经非常完善，国内 [DaoCloud](https://www.daocloud.io/) 在这方面就是领头羊，正在使用它的加速。）
 
 ### Docker 可以像 Git 一样部署
 
