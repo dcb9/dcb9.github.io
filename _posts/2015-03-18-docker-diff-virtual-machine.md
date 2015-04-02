@@ -59,7 +59,7 @@ root@precise64:~# docker run rails
 
 <img src="/images/ruby_install_2.png" />
 
-#### 老方法
+#### 传统方法
 
 如果你用脚本从一个基本的镜像创建一个虚拟机镜像（例如：在 `Ubuntu` 上创建 `Rails stack`），若想把这个都做的正确是非常痛苦的，除非你经常的在做这个，看看安装 `Ruby` 依赖的一些信息吧：
 
@@ -131,16 +131,18 @@ real    0m0.848s
 
 <img src="/images/deployment_3.png" />
 
-The Old Way
-Like many other deployments today, Scout uses long-running virtual machines. We handle infrastructure updates via Puppet, but this is frequently more painful than we'd like:
+传统的做法
 
-If we're deploying an update to our stack, Puppet will run and update each of our virtual machines. This takes a long time - even though only a small portion of stack may change, Puppet checks everything.
-Problems can happen during a deploy. If we're installing Memcached and there is a network hiccup, apt-get install memcached could fail on some of our servers.
-Rolling back major changes often doesn't go as smoothly as we'd like (like updating Ruby versions).
-None of these issues are Puppet's fault - a tool like Puppet or Chef is needed when you have long-running VMs that could become inconsistent over time.
+[Scout](https://scoutapp.com/)和其它部署一样，很长的时间在运行虚拟机，使用 `Puppet` 来更新所有的基础设施，但是经常会非常的痛苦。
 
-The Docker Way
-Deploy images - don't modify existing VMs. You'll be 100% sure what runs locally will run on production.
+如果我们部署更新到我们的栈，`Puppet` 会在每台虚拟机运行更新，这会花去许多的时间——即使是一个小小的改变，`Puppet` 需要检查所其它所有的都检查一遍。在部署的时间会出问题：如果我们安装 `Memcached` 时网络有点问题，`apt-get install memcached` 就会执行失败。 
+
+回滚到主要的改变通过不会像我们想像的那么平稳，（例如更新 `Ruby` 的版本）
+这些总是并不是 `Puppet` 的问题， `Puppet` 和 `Chef` 是一个工具，当你要在一直运行的多台虚拟机上运行命令时，它会给你到多台机器上去运行，可以节省许多时间。
+
+`Docker` 的做法
+
+部署镜像——不修改已经存在的虚拟机，你会 100% 有确定在本地可以运行的，在生产环境也能运行。
 
 But images are large, right? Not with Docker - remember containers don't run their own guest OS and we're using a union file system. When we make changes to an image, we just need the new layers.
 
