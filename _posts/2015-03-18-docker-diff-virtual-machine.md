@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Docer 和虚拟机的一些对比 [翻译]
+title: Docker 和虚拟机的一些对比 [翻译]
 categories: 工作 docker
 ---
 
