@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 对于新服务器的权限配置
+title: 对于一台新服务器权限的配置
 categories: 工作
 ---
 
