@@ -24,4 +24,4 @@ print_r($obj);
 
 以下是我在学习 `SplDoublyLinkedList` 时写的一些测试，以后看到这个测试类，就知道了 `SplDoublyLinkedList` 该怎么用了。
 
-<script src="https://gist.github.com/bobchengbin/06dcab3f3da1ac226f74.js"></script>
+<script src="https://gist.github.com/dcb9/06dcab3f3da1ac226f74.js"></script>
