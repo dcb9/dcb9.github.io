@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 本地开发——TCP Proxy 解决 API 必须绑定白名单才能访问的问题
+title: 本地开发——TCP Proxy 解决 API 必须绑定 IP 白名单才能访问的问题
 categories: tools
 ---
 
