@@ -8,7 +8,7 @@ ngrok 2.0 开始收费了，国内好几个 ngrok 倒下了，于是搭了一个
 
 ### 使用方法
 
-- 去百度云盘下载对应的客户端 <a href="http://pan.baidu.com/s/1bnwROLL" target="_blank">http://pan.baidu.com/s/1bnwROLL</a>
+- 下载客户端 <a href="http://d.phpor.me/1aHNc" target="_blank">MAC</a> <a href="http://d.phpor.me/eHuo" target="_blank">Linux</a> <a href="http://d.phpor.me/1bRYl" target="_blank">Windows</a>
 - 创建配置文件 *ngrok.cfg*
 
 ```
