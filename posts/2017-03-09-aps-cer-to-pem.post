@@ -1,0 +1,34 @@
+;;;;;
+title: Apple Push Services .cer to .pem
+tags: note
+date: 2017-03-09
+format: md
+;;;;;
+
+Download certificates file, and install into your KeyChain **`login`** group (if you install into `system` group that you can't export p12).
+
+#### Convert p12 to pem:
+
+```
+$ openssl pkcs12 -in Certificates.p12 -out Certificates.pem -nodes
+```
+
+#### Check validity
+
+```
+$ openssl x509 -in Certificates.pem -noout -dates
+```
+
+#### Test pem
+
+##### Dev
+
+```
+$ openssl s_client -connect gateway.sandbox.push.apple.com:2195 -cert Certificates.pem -key Certificates.pem
+```
+
+##### Prod
+
+```
+openssl s_client -connect gateway.push.apple.com:2195 -cert Certificates.pem -key Certificates.pem
+```
