@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"> <channel> <title>Chengbin Du&#039;s Blog</title> <link>https://dcb9.github.io</link> <atom:link href="https://dcb9.github.io/rss.xml" rel="self" type="application/rss+xml" /> <language>en-us</language> <pubDate>Tue, 26 Apr 2022 11:47:07 +0800</pubDate> <item> <title>使用 Python 绘制多项式函数</title> <link>https://dcb9.github.io/posts/使用-Python-绘制多项式函数.html</link> <pubDate>2018-11-24</pubDate> <author>Chengbin Du</author> <guid isPermaLink="true">https://dcb9.github.io/posts/使用-Python-绘制多项式函数.html</guid> <category><![CDATA[ Python ]]></category><category><![CDATA[ Polynomial ]]></category><category><![CDATA[ 多项式 ]]></category><category><![CDATA[ math ]]></category> <description><![CDATA[ <h2>简介</h2>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"> <channel> <title>Du, Chengbin&#039;s Blog</title> <link>https://dcb9.github.io</link> <atom:link href="https://dcb9.github.io/rss.xml" rel="self" type="application/rss+xml" /> <language>en-us</language> <pubDate>Tue, 26 Apr 2022 11:56:39 +0800</pubDate> <item> <title>使用 Python 绘制多项式函数</title> <link>https://dcb9.github.io/posts/使用-Python-绘制多项式函数.html</link> <pubDate>2018-11-24</pubDate> <author>Du, Chengbin</author> <guid isPermaLink="true">https://dcb9.github.io/posts/使用-Python-绘制多项式函数.html</guid> <category><![CDATA[ Python ]]></category><category><![CDATA[ Polynomial ]]></category><category><![CDATA[ 多项式 ]]></category><category><![CDATA[ math ]]></category> <description><![CDATA[ <h2>简介</h2>
 
 <div style="width: 62%">
 <img src="https://d.pr/i/N7GiqZ+" style="width: 30%; float: left; margin-right: 15px; "/>
@@ -397,7 +397,7 @@ p3 = p + p2
 1x^4 + 1x^3 + 2x^2 + 3x^1 + 4x^0</span></code></pre>
 
 <p><a href="https://www.python-course.eu/polynomial_class_in_python.php" >原文链接</a></p>
- ]]></description> </item><item> <title>Payment channel 支付通道参考资料</title> <link>https://dcb9.github.io/posts/Payment-channel-支付通道参考资料.html</link> <pubDate>2018-10-26</pubDate> <author>Chengbin Du</author> <guid isPermaLink="true">https://dcb9.github.io/posts/Payment-channel-支付通道参考资料.html</guid> <category><![CDATA[ PaymentChannel ]]></category><category><![CDATA[ 支付通道 ]]></category><category><![CDATA[ Ethereum ]]></category><category><![CDATA[ 以太坊 ]]></category> <description><![CDATA[ <p>最近在学习支付通道，所以罗列一下相关参考资料：</p>
+ ]]></description> </item><item> <title>Payment channel 支付通道参考资料</title> <link>https://dcb9.github.io/posts/Payment-channel-支付通道参考资料.html</link> <pubDate>2018-10-26</pubDate> <author>Du, Chengbin</author> <guid isPermaLink="true">https://dcb9.github.io/posts/Payment-channel-支付通道参考资料.html</guid> <category><![CDATA[ PaymentChannel ]]></category><category><![CDATA[ 支付通道 ]]></category><category><![CDATA[ Ethereum ]]></category><category><![CDATA[ 以太坊 ]]></category> <description><![CDATA[ <p>最近在学习支付通道，所以罗列一下相关参考资料：</p>
 
 <ul>
 <li><p><a href="https://www.learnchannels.org/" >Learn Channels</a></p></li>
@@ -438,7 +438,7 @@ p3 = p + p2
 <li>文档不太全，最近团队也在改核心的实现，可以跟着文档把流程跑通，文档有许多地方有误，可以加入 <a href="https://discord.gg/yKkzZZm" >Discord</a> 和开发者讨论相当细节。</li>
 </ul></li>
 </ul>
- ]]></description> </item><item> <title>招商银行 E 招贷的年利率是多少？</title> <link>https://dcb9.github.io/posts/招商银行-E-招贷的年利率是多少.html</link> <pubDate>2018-09-08</pubDate> <author>Chengbin Du</author> <guid isPermaLink="true">https://dcb9.github.io/posts/招商银行-E-招贷的年利率是多少.html</guid> <category><![CDATA[ 生活 ]]></category><category><![CDATA[ 贷款 ]]></category><category><![CDATA[ math ]]></category> <description><![CDATA[ <p>&quot;Cherish your doubts, for doubt is the handmaiden of truth.
+ ]]></description> </item><item> <title>招商银行 E 招贷的年利率是多少？</title> <link>https://dcb9.github.io/posts/招商银行-E-招贷的年利率是多少.html</link> <pubDate>2018-09-08</pubDate> <author>Du, Chengbin</author> <guid isPermaLink="true">https://dcb9.github.io/posts/招商银行-E-招贷的年利率是多少.html</guid> <category><![CDATA[ 生活 ]]></category><category><![CDATA[ 贷款 ]]></category><category><![CDATA[ math ]]></category> <description><![CDATA[ <p>&quot;Cherish your doubts, for doubt is the handmaiden of truth.
 Doubt is the key to the door of knowledge; it is the servant of discovery.
 A belief which may not be questioned binds us to error,
 for there is incompleteness and imperfection in every belief.
@@ -552,7 +552,7 @@ $$ 还款总额 =   还款总利息 + 贷款额 $$</p>
 <p>用 《<a href="https://play.google.com/store/apps/details?id=com.alago.eqnlite&hl=en_US" >Equation Solver</a>》求解：</p>
 
 <p><img src="https://d.pr/i/Nf22EE+" style="width: 500px" /></p>
- ]]></description> </item><item> <title>Plasma MVP 为什么需要发送交易后再生成 confirmation signature？</title> <link>https://dcb9.github.io/posts/Plasma-MVP-为什么需要发送交易后再生成-confirmation-signature.html</link> <pubDate>2018-09-06</pubDate> <author>Chengbin Du</author> <guid isPermaLink="true">https://dcb9.github.io/posts/Plasma-MVP-为什么需要发送交易后再生成-confirmation-signature.html</guid> <category><![CDATA[ 翻译 ]]></category><category><![CDATA[ 工作 ]]></category><category><![CDATA[ Ethereum ]]></category><category><![CDATA[ Plasma_MVP ]]></category> <description><![CDATA[ <p>以下内容翻译自 Ethereum Research ”<a href="https://ethresear.ch/t/why-do-dont-we-need-two-phase-sends-plus-confirmation/1866/14" >Why do/don’t we need two phase sends plus confirmation</a>” 的回复。</p>
+ ]]></description> </item><item> <title>Plasma MVP 为什么需要发送交易后再生成 confirmation signature？</title> <link>https://dcb9.github.io/posts/Plasma-MVP-为什么需要发送交易后再生成-confirmation-signature.html</link> <pubDate>2018-09-06</pubDate> <author>Du, Chengbin</author> <guid isPermaLink="true">https://dcb9.github.io/posts/Plasma-MVP-为什么需要发送交易后再生成-confirmation-signature.html</guid> <category><![CDATA[ 翻译 ]]></category><category><![CDATA[ 工作 ]]></category><category><![CDATA[ Ethereum ]]></category><category><![CDATA[ Plasma_MVP ]]></category> <description><![CDATA[ <p>以下内容翻译自 Ethereum Research ”<a href="https://ethresear.ch/t/why-do-dont-we-need-two-phase-sends-plus-confirmation/1866/14" >Why do/don’t we need two phase sends plus confirmation</a>” 的回复。</p>
 
 <p>Generally, there are two major reasons why it’s necessary to have the two-phase send + conf in Plasma.</p>
 
@@ -666,7 +666,7 @@ $$ 还款总额 =   还款总利息 + 贷款额 $$</p>
 <li><p>A 退出之前的旧 UTXO</p></li>
 <li><p>管理员不能使用 A 转给 B 的这笔交易来挑战 A，因为管理员没有 confirmation signature</p></li>
 </ol>
- ]]></description> </item><item> <title>如何从服务端跟踪所有 HTTP 请求，并方便回放？</title> <link>https://dcb9.github.io/posts/如何从服务端跟踪所有-HTTP-请求并方便回放.html</link> <pubDate>2017-03-31</pubDate> <author>Chengbin Du</author> <guid isPermaLink="true">https://dcb9.github.io/posts/如何从服务端跟踪所有-HTTP-请求并方便回放.html</guid> <category><![CDATA[ 工作 ]]></category> <description><![CDATA[ <p>客户端工程师：“xxx 接口坏了，我的程序都没动过”，后端经常会收到这样的质问，但是我们现在如何重现这个问题？有以下几种情况：</p>
+ ]]></description> </item><item> <title>如何从服务端跟踪所有 HTTP 请求，并方便回放？</title> <link>https://dcb9.github.io/posts/如何从服务端跟踪所有-HTTP-请求并方便回放.html</link> <pubDate>2017-03-31</pubDate> <author>Du, Chengbin</author> <guid isPermaLink="true">https://dcb9.github.io/posts/如何从服务端跟踪所有-HTTP-请求并方便回放.html</guid> <category><![CDATA[ 工作 ]]></category> <description><![CDATA[ <p>客户端工程师：“xxx 接口坏了，我的程序都没动过”，后端经常会收到这样的质问，但是我们现在如何重现这个问题？有以下几种情况：</p>
 
 <p>一、后端测试了一下发现没有问题</p>
 
@@ -726,7 +726,7 @@ $$ 还款总额 =   还款总利息 + 贷款额 $$</p>
 <p><a href="https://github.com/dcb9/boast" >Boast 项目地址</a></p>
 
 <p>Go 和前端都是现学现卖，欢迎大家拍砖。</p>
- ]]></description> </item><item> <title>Apple Push Services .cer to .pem</title> <link>https://dcb9.github.io/posts/Apple-Push-Services-cer-to-pem.html</link> <pubDate>2017-03-09</pubDate> <author>Chengbin Du</author> <guid isPermaLink="true">https://dcb9.github.io/posts/Apple-Push-Services-cer-to-pem.html</guid> <category><![CDATA[ note ]]></category> <description><![CDATA[ <p>Download certificates file, and install into your KeyChain <strong><code>login</code></strong> group (if you install into <code>system</code> group that you can't export p12).</p>
+ ]]></description> </item><item> <title>Apple Push Services .cer to .pem</title> <link>https://dcb9.github.io/posts/Apple-Push-Services-cer-to-pem.html</link> <pubDate>2017-03-09</pubDate> <author>Du, Chengbin</author> <guid isPermaLink="true">https://dcb9.github.io/posts/Apple-Push-Services-cer-to-pem.html</guid> <category><![CDATA[ note ]]></category> <description><![CDATA[ <p>Download certificates file, and install into your KeyChain <strong><code>login</code></strong> group (if you install into <code>system</code> group that you can't export p12).</p>
 
 <h4>Convert p12 to pem:</h4>
 
@@ -745,7 +745,7 @@ $$ 还款总额 =   还款总利息 + 贷款额 $$</p>
 <h5>Prod</h5>
 
 <pre><code>openssl s_client -connect gateway.push.apple.com:2195 -cert Certificates.pem -key Certificates.pem</code></pre>
- ]]></description> </item><item> <title>Alexander Makarov 于 CLOUDWAYS 的面试</title> <link>https://dcb9.github.io/posts/Alexander-Makarov-于-CLOUDWAYS-的面试.html</link> <pubDate>2016-09-04</pubDate> <author>Chengbin Du</author> <guid isPermaLink="true">https://dcb9.github.io/posts/Alexander-Makarov-于-CLOUDWAYS-的面试.html</guid> <category><![CDATA[ 翻译 ]]></category><category><![CDATA[ 工作 ]]></category> <description><![CDATA[ <p><a target="_blank" href="https://github.com/samdark">Alexander Makarov</a> 是一个高级工程师并且他是 <a target="_blank" href="http://www.yiiframework.com/">Yii 框架</a>的核心贡献者之一，同时他还是 <a target="_blank" href="https://github.com/samdark/yii2-cookbook">Yii 2.0 Cookbook</a> 的作者</p>
+ ]]></description> </item><item> <title>Alexander Makarov 于 CLOUDWAYS 的面试</title> <link>https://dcb9.github.io/posts/Alexander-Makarov-于-CLOUDWAYS-的面试.html</link> <pubDate>2016-09-04</pubDate> <author>Du, Chengbin</author> <guid isPermaLink="true">https://dcb9.github.io/posts/Alexander-Makarov-于-CLOUDWAYS-的面试.html</guid> <category><![CDATA[ 翻译 ]]></category><category><![CDATA[ 工作 ]]></category> <description><![CDATA[ <p><a target="_blank" href="https://github.com/samdark">Alexander Makarov</a> 是一个高级工程师并且他是 <a target="_blank" href="http://www.yiiframework.com/">Yii 框架</a>的核心贡献者之一，同时他还是 <a target="_blank" href="https://github.com/samdark/yii2-cookbook">Yii 2.0 Cookbook</a> 的作者</p>
 
 <p>Alexander 在 Cloudways 面试中，讲述了他职业路径、对 Yii 框架的贡献以及 Yii 和其它框架的对比，最后他还给学生一些非常好的建议。</p>
 
@@ -827,7 +827,7 @@ $$ 还款总额 =   还款总利息 + 贷款额 $$</p>
 <p>感谢 <a href="https://github.com/yiqing95" >@亦清</a> 帮忙翻译了许多内容</p>
 
 <p>源文链接：<a target="_blank" href="https://www.cloudways.com/blog/alexander-makarov-yii-interview/">https://www.cloudways.com/blog/alexander-makarov-yii-interview/</a></p>
- ]]></description> </item><item> <title>本地开发——TCP Proxy 解决 API 必须绑定 IP 白名单才能访问的问题</title> <link>https://dcb9.github.io/posts/本地开发TCP-Proxy-解决-API-必须绑定-IP-白名单才能访问的问题.html</link> <pubDate>2015-11-29</pubDate> <author>Chengbin Du</author> <guid isPermaLink="true">https://dcb9.github.io/posts/本地开发TCP-Proxy-解决-API-必须绑定-IP-白名单才能访问的问题.html</guid> <category><![CDATA[ 工作 ]]></category> <description><![CDATA[ <p>本次对接一个票务系统的时候，<strong>他们那边的 API 访问需要在白名单的才可以访问</strong>，当时我就提出了个问题</p>
+ ]]></description> </item><item> <title>本地开发——TCP Proxy 解决 API 必须绑定 IP 白名单才能访问的问题</title> <link>https://dcb9.github.io/posts/本地开发TCP-Proxy-解决-API-必须绑定-IP-白名单才能访问的问题.html</link> <pubDate>2015-11-29</pubDate> <author>Du, Chengbin</author> <guid isPermaLink="true">https://dcb9.github.io/posts/本地开发TCP-Proxy-解决-API-必须绑定-IP-白名单才能访问的问题.html</guid> <category><![CDATA[ 工作 ]]></category> <description><![CDATA[ <p>本次对接一个票务系统的时候，<strong>他们那边的 API 访问需要在白名单的才可以访问</strong>，当时我就提出了个问题</p>
 
 <p>问：那我在本地怎么调试开发啊？（因为我开发机 IP 是不固定的）</p>
 
@@ -846,7 +846,7 @@ $ nohup ./src/tcproxy "0.0.0.0:19999 -&gt; rr{x.x.y.z:port}" &</code></pre>
 <p>代码里面的 Host 直接换成我自己的 ip:19999 端口就可以访问了。</p>
 
 <p>使用这个有个注意的点，就是你的代码要有环境之分，不同的环境应可以自定义配置，参考 <a href="http://12factor.net/zh_cn/config" >12 Factor 的配置</a></p>
- ]]></description> </item><item> <title>另一个国内的 Ngrok 服务器分享</title> <link>https://dcb9.github.io/posts/另一个国内的-Ngrok-服务器分享.html</link> <pubDate>2015-11-04</pubDate> <author>Chengbin Du</author> <guid isPermaLink="true">https://dcb9.github.io/posts/另一个国内的-Ngrok-服务器分享.html</guid> <category><![CDATA[ ngrok ]]></category> <description><![CDATA[ <p>ngrok 2.0 开始收费了，国内好几个 ngrok 倒下了，于是搭了一个供大家玩耍，只要还有钱就会给服务器续费的！</p>
+ ]]></description> </item><item> <title>另一个国内的 Ngrok 服务器分享</title> <link>https://dcb9.github.io/posts/另一个国内的-Ngrok-服务器分享.html</link> <pubDate>2015-11-04</pubDate> <author>Du, Chengbin</author> <guid isPermaLink="true">https://dcb9.github.io/posts/另一个国内的-Ngrok-服务器分享.html</guid> <category><![CDATA[ ngrok ]]></category> <description><![CDATA[ <p>ngrok 2.0 开始收费了，国内好几个 ngrok 倒下了，于是搭了一个供大家玩耍，只要还有钱就会给服务器续费的！</p>
 
 <h3>使用方法</h3>
 
@@ -929,7 +929,7 @@ trust_host_root_certs: false</code></pre>
 
 <p>最后还是非常感谢 DaoCloud，所有的 V 友建议都是了解一下，对自己百利而有一害（中毒太深）！</p>
 </blockquote>
- ]]></description> </item><item> <title>对于一台新服务器权限的配置</title> <link>https://dcb9.github.io/posts/对于一台新服务器权限的配置.html</link> <pubDate>2015-05-29</pubDate> <author>Chengbin Du</author> <guid isPermaLink="true">https://dcb9.github.io/posts/对于一台新服务器权限的配置.html</guid> <category><![CDATA[ 工作 ]]></category> <description><![CDATA[ <p>作为一个程序员，在网站没有运维的情况下，也要有能够搭建应用的能力，由于不是专业的运维所以考虑的问题可能不够全面，只顾着把应用搭起来，权限管理非常地松，认为只要登陆 <code>root</code> 可以运行命令就行了，这样的话会有很多后患的，有的时候只是未爆发出来，当爆发出来就已经晚了。</p>
+ ]]></description> </item><item> <title>对于一台新服务器权限的配置</title> <link>https://dcb9.github.io/posts/对于一台新服务器权限的配置.html</link> <pubDate>2015-05-29</pubDate> <author>Du, Chengbin</author> <guid isPermaLink="true">https://dcb9.github.io/posts/对于一台新服务器权限的配置.html</guid> <category><![CDATA[ 工作 ]]></category> <description><![CDATA[ <p>作为一个程序员，在网站没有运维的情况下，也要有能够搭建应用的能力，由于不是专业的运维所以考虑的问题可能不够全面，只顾着把应用搭起来，权限管理非常地松，认为只要登陆 <code>root</code> 可以运行命令就行了，这样的话会有很多后患的，有的时候只是未爆发出来，当爆发出来就已经晚了。</p>
 
 <p>以下是我对一台新服务器的权限的实例，欢迎大家拍砖。</p>
 

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<feed xmlns="http://www.w3.org/2005/Atom"> <title>Chengbin Du&#039;s Blog</title> <link href="https://dcb9.github.io"/> <link type="application/atom+xml" rel="self" href="https://dcb9.github.io/atom.xml"/> <updated>Tue, 26 Apr 2022 11:47:07 +0800</updated> <author> <name>Chengbin Du</name> </author> <entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/使用-Python-绘制多项式函数.html"/> <title>使用 Python 绘制多项式函数</title> <published>2018-11-24</published> <updated>2018-11-24</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;h2&gt;简介&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"> <title>Du, Chengbin&#039;s Blog</title> <link href="https://dcb9.github.io"/> <link type="application/atom+xml" rel="self" href="https://dcb9.github.io/atom.xml"/> <updated>Tue, 26 Apr 2022 11:56:39 +0800</updated> <author> <name>Du, Chengbin</name> </author> <entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/使用-Python-绘制多项式函数.html"/> <title>使用 Python 绘制多项式函数</title> <published>2018-11-24</published> <updated>2018-11-24</updated> <author> <name>Du, Chengbin</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;h2&gt;简介&lt;/h2&gt;
 
 &lt;div style=&quot;width: 62%&quot;&gt;
 &lt;img src=&quot;https://d.pr/i/N7GiqZ+&quot; style=&quot;width: 30%; float: left; margin-right: 15px; &quot;/&gt;
@@ -397,7 +397,7 @@ p3 = p + p2
 1x^4 + 1x^3 + 2x^2 + 3x^1 + 4x^0&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://www.python-course.eu/polynomial_class_in_python.php&quot; &gt;原文链接&lt;/a&gt;&lt;/p&gt;
-</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/Payment-channel-支付通道参考资料.html"/> <title>Payment channel 支付通道参考资料</title> <published>2018-10-26</published> <updated>2018-10-26</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;最近在学习支付通道，所以罗列一下相关参考资料：&lt;/p&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/Payment-channel-支付通道参考资料.html"/> <title>Payment channel 支付通道参考资料</title> <published>2018-10-26</published> <updated>2018-10-26</updated> <author> <name>Du, Chengbin</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;最近在学习支付通道，所以罗列一下相关参考资料：&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://www.learnchannels.org/&quot; &gt;Learn Channels&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
@@ -438,7 +438,7 @@ p3 = p + p2
 &lt;li&gt;文档不太全，最近团队也在改核心的实现，可以跟着文档把流程跑通，文档有许多地方有误，可以加入 &lt;a href=&quot;https://discord.gg/yKkzZZm&quot; &gt;Discord&lt;/a&gt; 和开发者讨论相当细节。&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/招商银行-E-招贷的年利率是多少.html"/> <title>招商银行 E 招贷的年利率是多少？</title> <published>2018-09-08</published> <updated>2018-09-08</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;&amp;quot;Cherish your doubts, for doubt is the handmaiden of truth.
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/招商银行-E-招贷的年利率是多少.html"/> <title>招商银行 E 招贷的年利率是多少？</title> <published>2018-09-08</published> <updated>2018-09-08</updated> <author> <name>Du, Chengbin</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;&amp;quot;Cherish your doubts, for doubt is the handmaiden of truth.
 Doubt is the key to the door of knowledge; it is the servant of discovery.
 A belief which may not be questioned binds us to error,
 for there is incompleteness and imperfection in every belief.
@@ -552,7 +552,7 @@ $$ 还款总额 =   还款总利息 + 贷款额 $$&lt;/p&gt;
 &lt;p&gt;用 《&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.alago.eqnlite&amp;hl=en_US&quot; &gt;Equation Solver&lt;/a&gt;》求解：&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;https://d.pr/i/Nf22EE+&quot; style=&quot;width: 500px&quot; /&gt;&lt;/p&gt;
-</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/Plasma-MVP-为什么需要发送交易后再生成-confirmation-signature.html"/> <title>Plasma MVP 为什么需要发送交易后再生成 confirmation signature？</title> <published>2018-09-06</published> <updated>2018-09-06</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;以下内容翻译自 Ethereum Research ”&lt;a href=&quot;https://ethresear.ch/t/why-do-dont-we-need-two-phase-sends-plus-confirmation/1866/14&quot; &gt;Why do/don’t we need two phase sends plus confirmation&lt;/a&gt;” 的回复。&lt;/p&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/Plasma-MVP-为什么需要发送交易后再生成-confirmation-signature.html"/> <title>Plasma MVP 为什么需要发送交易后再生成 confirmation signature？</title> <published>2018-09-06</published> <updated>2018-09-06</updated> <author> <name>Du, Chengbin</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;以下内容翻译自 Ethereum Research ”&lt;a href=&quot;https://ethresear.ch/t/why-do-dont-we-need-two-phase-sends-plus-confirmation/1866/14&quot; &gt;Why do/don’t we need two phase sends plus confirmation&lt;/a&gt;” 的回复。&lt;/p&gt;
 
 &lt;p&gt;Generally, there are two major reasons why it’s necessary to have the two-phase send + conf in Plasma.&lt;/p&gt;
 
@@ -666,7 +666,7 @@ $$ 还款总额 =   还款总利息 + 贷款额 $$&lt;/p&gt;
 &lt;li&gt;&lt;p&gt;A 退出之前的旧 UTXO&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;管理员不能使用 A 转给 B 的这笔交易来挑战 A，因为管理员没有 confirmation signature&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
-</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/如何从服务端跟踪所有-HTTP-请求并方便回放.html"/> <title>如何从服务端跟踪所有 HTTP 请求，并方便回放？</title> <published>2017-03-31</published> <updated>2017-03-31</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;客户端工程师：“xxx 接口坏了，我的程序都没动过”，后端经常会收到这样的质问，但是我们现在如何重现这个问题？有以下几种情况：&lt;/p&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/如何从服务端跟踪所有-HTTP-请求并方便回放.html"/> <title>如何从服务端跟踪所有 HTTP 请求，并方便回放？</title> <published>2017-03-31</published> <updated>2017-03-31</updated> <author> <name>Du, Chengbin</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;客户端工程师：“xxx 接口坏了，我的程序都没动过”，后端经常会收到这样的质问，但是我们现在如何重现这个问题？有以下几种情况：&lt;/p&gt;
 
 &lt;p&gt;一、后端测试了一下发现没有问题&lt;/p&gt;
 
@@ -726,7 +726,7 @@ $$ 还款总额 =   还款总利息 + 贷款额 $$&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/dcb9/boast&quot; &gt;Boast 项目地址&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Go 和前端都是现学现卖，欢迎大家拍砖。&lt;/p&gt;
-</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/Apple-Push-Services-cer-to-pem.html"/> <title>Apple Push Services .cer to .pem</title> <published>2017-03-09</published> <updated>2017-03-09</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;Download certificates file, and install into your KeyChain &lt;strong&gt;&lt;code&gt;login&lt;/code&gt;&lt;/strong&gt; group (if you install into &lt;code&gt;system&lt;/code&gt; group that you can&#039;t export p12).&lt;/p&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/Apple-Push-Services-cer-to-pem.html"/> <title>Apple Push Services .cer to .pem</title> <published>2017-03-09</published> <updated>2017-03-09</updated> <author> <name>Du, Chengbin</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;Download certificates file, and install into your KeyChain &lt;strong&gt;&lt;code&gt;login&lt;/code&gt;&lt;/strong&gt; group (if you install into &lt;code&gt;system&lt;/code&gt; group that you can&#039;t export p12).&lt;/p&gt;
 
 &lt;h4&gt;Convert p12 to pem:&lt;/h4&gt;
 
@@ -745,7 +745,7 @@ $$ 还款总额 =   还款总利息 + 贷款额 $$&lt;/p&gt;
 &lt;h5&gt;Prod&lt;/h5&gt;
 
 &lt;pre&gt;&lt;code&gt;openssl s_client -connect gateway.push.apple.com:2195 -cert Certificates.pem -key Certificates.pem&lt;/code&gt;&lt;/pre&gt;
-</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/Alexander-Makarov-于-CLOUDWAYS-的面试.html"/> <title>Alexander Makarov 于 CLOUDWAYS 的面试</title> <published>2016-09-04</published> <updated>2016-09-04</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://github.com/samdark&quot;&gt;Alexander Makarov&lt;/a&gt; 是一个高级工程师并且他是 &lt;a target=&quot;_blank&quot; href=&quot;http://www.yiiframework.com/&quot;&gt;Yii 框架&lt;/a&gt;的核心贡献者之一，同时他还是 &lt;a target=&quot;_blank&quot; href=&quot;https://github.com/samdark/yii2-cookbook&quot;&gt;Yii 2.0 Cookbook&lt;/a&gt; 的作者&lt;/p&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/Alexander-Makarov-于-CLOUDWAYS-的面试.html"/> <title>Alexander Makarov 于 CLOUDWAYS 的面试</title> <published>2016-09-04</published> <updated>2016-09-04</updated> <author> <name>Du, Chengbin</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://github.com/samdark&quot;&gt;Alexander Makarov&lt;/a&gt; 是一个高级工程师并且他是 &lt;a target=&quot;_blank&quot; href=&quot;http://www.yiiframework.com/&quot;&gt;Yii 框架&lt;/a&gt;的核心贡献者之一，同时他还是 &lt;a target=&quot;_blank&quot; href=&quot;https://github.com/samdark/yii2-cookbook&quot;&gt;Yii 2.0 Cookbook&lt;/a&gt; 的作者&lt;/p&gt;
 
 &lt;p&gt;Alexander 在 Cloudways 面试中，讲述了他职业路径、对 Yii 框架的贡献以及 Yii 和其它框架的对比，最后他还给学生一些非常好的建议。&lt;/p&gt;
 
@@ -827,7 +827,7 @@ $$ 还款总额 =   还款总利息 + 贷款额 $$&lt;/p&gt;
 &lt;p&gt;感谢 &lt;a href=&quot;https://github.com/yiqing95&quot; &gt;@亦清&lt;/a&gt; 帮忙翻译了许多内容&lt;/p&gt;
 
 &lt;p&gt;源文链接：&lt;a target=&quot;_blank&quot; href=&quot;https://www.cloudways.com/blog/alexander-makarov-yii-interview/&quot;&gt;https://www.cloudways.com/blog/alexander-makarov-yii-interview/&lt;/a&gt;&lt;/p&gt;
-</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/本地开发TCP-Proxy-解决-API-必须绑定-IP-白名单才能访问的问题.html"/> <title>本地开发——TCP Proxy 解决 API 必须绑定 IP 白名单才能访问的问题</title> <published>2015-11-29</published> <updated>2015-11-29</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;本次对接一个票务系统的时候，&lt;strong&gt;他们那边的 API 访问需要在白名单的才可以访问&lt;/strong&gt;，当时我就提出了个问题&lt;/p&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/本地开发TCP-Proxy-解决-API-必须绑定-IP-白名单才能访问的问题.html"/> <title>本地开发——TCP Proxy 解决 API 必须绑定 IP 白名单才能访问的问题</title> <published>2015-11-29</published> <updated>2015-11-29</updated> <author> <name>Du, Chengbin</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;本次对接一个票务系统的时候，&lt;strong&gt;他们那边的 API 访问需要在白名单的才可以访问&lt;/strong&gt;，当时我就提出了个问题&lt;/p&gt;
 
 &lt;p&gt;问：那我在本地怎么调试开发啊？（因为我开发机 IP 是不固定的）&lt;/p&gt;
 
@@ -846,7 +846,7 @@ $ nohup ./src/tcproxy &quot;0.0.0.0:19999 -&amp;gt; rr{x.x.y.z:port}&quot; &amp;
 &lt;p&gt;代码里面的 Host 直接换成我自己的 ip:19999 端口就可以访问了。&lt;/p&gt;
 
 &lt;p&gt;使用这个有个注意的点，就是你的代码要有环境之分，不同的环境应可以自定义配置，参考 &lt;a href=&quot;http://12factor.net/zh_cn/config&quot; &gt;12 Factor 的配置&lt;/a&gt;&lt;/p&gt;
-</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/另一个国内的-Ngrok-服务器分享.html"/> <title>另一个国内的 Ngrok 服务器分享</title> <published>2015-11-04</published> <updated>2015-11-04</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;ngrok 2.0 开始收费了，国内好几个 ngrok 倒下了，于是搭了一个供大家玩耍，只要还有钱就会给服务器续费的！&lt;/p&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/另一个国内的-Ngrok-服务器分享.html"/> <title>另一个国内的 Ngrok 服务器分享</title> <published>2015-11-04</published> <updated>2015-11-04</updated> <author> <name>Du, Chengbin</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;ngrok 2.0 开始收费了，国内好几个 ngrok 倒下了，于是搭了一个供大家玩耍，只要还有钱就会给服务器续费的！&lt;/p&gt;
 
 &lt;h3&gt;使用方法&lt;/h3&gt;
 
@@ -929,7 +929,7 @@ trust_host_root_certs: false&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;最后还是非常感谢 DaoCloud，所有的 V 友建议都是了解一下，对自己百利而有一害（中毒太深）！&lt;/p&gt;
 &lt;/blockquote&gt;
-</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/对于一台新服务器权限的配置.html"/> <title>对于一台新服务器权限的配置</title> <published>2015-05-29</published> <updated>2015-05-29</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;作为一个程序员，在网站没有运维的情况下，也要有能够搭建应用的能力，由于不是专业的运维所以考虑的问题可能不够全面，只顾着把应用搭起来，权限管理非常地松，认为只要登陆 &lt;code&gt;root&lt;/code&gt; 可以运行命令就行了，这样的话会有很多后患的，有的时候只是未爆发出来，当爆发出来就已经晚了。&lt;/p&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/对于一台新服务器权限的配置.html"/> <title>对于一台新服务器权限的配置</title> <published>2015-05-29</published> <updated>2015-05-29</updated> <author> <name>Du, Chengbin</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;作为一个程序员，在网站没有运维的情况下，也要有能够搭建应用的能力，由于不是专业的运维所以考虑的问题可能不够全面，只顾着把应用搭起来，权限管理非常地松，认为只要登陆 &lt;code&gt;root&lt;/code&gt; 可以运行命令就行了，这样的话会有很多后患的，有的时候只是未爆发出来，当爆发出来就已经晚了。&lt;/p&gt;
 
 &lt;p&gt;以下是我对一台新服务器的权限的实例，欢迎大家拍砖。&lt;/p&gt;
 
