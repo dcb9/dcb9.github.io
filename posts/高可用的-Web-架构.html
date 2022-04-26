@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"> <head> <title>Chengbin Du&#039;s Blog</title> <meta http-equiv="content-type" content="text/html;" charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1"> <link href="//fonts.googleapis.com/css?family=Vollkorn:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" /> <link href="//fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css" /> <link href= "https://dcb9.github.io/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="https://dcb9.github.io/rss.xml" type="application/rss+xml" />  </head> <body> <div class="navigation"> <a href="https://dcb9.github.io">Chengbin Du&#039;s Blog</a> | <a href="/">Home</a>  | <a href="http://github.com/dcb9">GitHub</a>  | <a href="https://twitter.com/robertduu">Twitter</a>  </div> <div id="content"> <div class="article-meta">
+<h1 class="title">高可用的 Web 架构</h1>
+<div class="tags">
+Tagged as <a href="https://dcb9.github.io/tag/工作.html">工作</a> </div>
+<div class="date">
+Written on 2014-11-15 </div>
+</div>
+<div class="article-content">
+<p>最近工作需要，画了一幅比较典型的高可用 Web 架构图，这中间都是开源产品</p>
+
+<p><img src="https://d.pr/i/4XDF1B+" /></p>
+
+<p>所用软件列表：</p>
+
+<ul>
+<li>HAProxy + Keepalived</li>
+<li>Nginx + php-fpm</li>
+<li>MySQL</li>
+<li>NFS</li>
+<li>MooseFS</li>
+<li>Redis</li>
+<li>Memcached</li>
+</ul>
+
+<p>学习和使用这些软件就可以搭建一套非常棒的 Web 架构了，目前只有 NFS 是单点，因为其它的网络文件系统，通过测试发现性能都比不上 NFS ，所以这一层还是个单点，但是可以做 Lsyncd + Rsyncd 来做文件备份同步。</p>
+ </div>
+<div class="relative-nav">
+<a href="https://dcb9.github.io/posts/Roberts-Resume.html">Previous</a><br>
+<a href="https://dcb9.github.io/posts/使用-Yii2-时遇到的实际问题.html">Next</a><br>
+</div>
+ </div>  <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="https://dcb9.github.io/css/cc-by-sa.png" /> </a> by Chengbin Du <a id="coleslaw-logo" href="https://github.com/redline6561/coleslaw"> <img src="https://dcb9.github.io/css/logo_small.jpg" alt="Coleslaw logo" /> </a> </div> </body> </html>

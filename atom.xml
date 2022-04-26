@@ -1,0 +1,994 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom"> <title>Chengbin Du&#039;s Blog</title> <link href="https://dcb9.github.io"/> <link type="application/atom+xml" rel="self" href="https://dcb9.github.io/atom.xml"/> <updated>Tue, 26 Apr 2022 11:46:23 +0800</updated> <author> <name>Chengbin Du</name> </author> <entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/使用-Python-绘制多项式函数.html"/> <title>使用 Python 绘制多项式函数</title> <published>2018-11-24</published> <updated>2018-11-24</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;h2&gt;简介&lt;/h2&gt;
+
+&lt;div style=&quot;width: 62%&quot;&gt;
+&lt;img src=&quot;https://d.pr/i/N7GiqZ+&quot; style=&quot;width: 30%; float: left; margin-right: 15px; &quot;/&gt;
+&lt;div&gt;
+高中你就会接触到&lt;i&gt;多项式&lt;/i&gt;和&lt;i&gt;多项式函数&lt;/i&gt;，本章教程完全依赖多项式，也就是说，我们将会花一节课的时间去了解多项式。下面是一个 4 次多项式的例子：
+
+$$ p(x) = x^4 - 4 \cdot x^2 + 3 \cdot x $$
+
+你会发觉它们跟整数有许多相似之处，本课我们将会定义多种多项式的算术操作，我们的 Polynomial 类也将提供计算多项式的推导和积分的方法，绘制多项式的图像。
+&lt;br /&gt;&lt;br /&gt;
+多项式非常漂亮，现在最重要的是如何用 Python 类来实现它们，我们要感谢 &lt;a href=&quot;http://drewshannon.ca/&quot; target=&quot;_blank&quot;&gt;Drew Shanon&lt;/a&gt;，他让我们使用他的精美的图片，将数学视为艺术！
+&lt;/div&gt;
+&lt;div style=&quot;clear: both&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h2&gt;数学知识介绍&lt;/h2&gt;
+
+&lt;p&gt;我们将只会处理含有一个未知数的多项式，含有一个未知数的多项式的一般形式如下：&lt;/p&gt;
+
+&lt;p&gt;$$ a_n \cdot x^n + a_{n-1} \cdot x^{n-1} + ... + a_1 \cdot x + a_0 $$ &lt;/p&gt;
+
+&lt;p&gt;\( a_0, a_1, ... a_n \) 为常数，\( x \) 为未知数，未知数也就是它没有一个特定的值，可以用任何数都可以用来替换。&lt;/p&gt;
+
+&lt;p&gt;这个表达式经常用求和符号来表示：&lt;/p&gt;
+
+&lt;p&gt;$$ \sum_{k=0}^{n}a_k \cdot x^k \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad $$ &lt;/p&gt;
+
+&lt;p&gt;$$ =  a_n \cdot x^n + a_{n-1} \cdot x^{n-1} + ... + a_1 \cdot x + a_0 $$ &lt;/p&gt;
+
+&lt;p&gt;一个多项式函数，可以用来求多项式的值，一个名为 &lt;code&gt;f&lt;/code&gt; 的函数含有一个参数，定义如下：&lt;/p&gt;
+
+&lt;p&gt;$$ f(x)= \sum_{k=0}^{n}a_k \cdot x^k $$ &lt;/p&gt;
+
+&lt;h2&gt;多项式函数与 Python&lt;/h2&gt;
+
+&lt;p&gt;Python 可以很轻松的实现一个多项式函数，作为一个例子我们定义一个在简介所提到的多项式函数： \( p(x) = x^4 - 4 \cdot x^2 + 3 \cdot x \)，该多项式的 Python 代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;&lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; p&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;x&lt;/span&gt;)&lt;/span&gt;:
+    &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; x**4 - 4*x**2 + 3*x&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们可以在任何其它函数里面调用这个函数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;&lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; x &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;paren1&quot;&gt;[&lt;span class=&quot;code&quot;&gt;-1, 0, 2, 3.4&lt;/span&gt;]&lt;/span&gt;:
+    &lt;span class=&quot;symbol&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;x, p&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;x&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;# output
+-1 -6
+0 0
+2 6
+3.4 97.59359999999998&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;import numpy as np
+import matplotlib.pyplot as plt
+
+X = np.linspace(-3, 3, 50, endpoint=True)
+F = p(X)
+
+plt.plot(X,F)
+plt.show()&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;# output
+&amp;lt;Figure size 640x480 with 1 Axes&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Polynomial 类&lt;/h2&gt;
+
+&lt;p&gt;现在我们将给多项式函数定义一个新的类，我们将会基于我们在 Python 教程 decorators 一章的概念构建，引入一个多项式工厂。&lt;/p&gt;
+
+&lt;p&gt;多项式是由系数来决定的，这意味着一个多项式类的实例需要一个列表来定义这些系数。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;&lt;span class=&quot;special&quot;&gt;class&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; Polynomial&lt;/span&gt;:
+    
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __init__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self, *coefficients&lt;/span&gt;)&lt;/span&gt;:
+        &lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot; input: coefficients are in the form a_n, ...a_1, a_0 
+        &quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;comment&quot;&gt;# for reasons of efficiency we save the coefficients in reverse order,
+&lt;/span&gt;        &lt;span class=&quot;comment&quot;&gt;# i.e. a_0, a_1, ... a_n
+&lt;/span&gt;        self.coefficients = coefficients&lt;span class=&quot;paren1&quot;&gt;[&lt;span class=&quot;code&quot;&gt;::-1&lt;/span&gt;]&lt;/span&gt; &lt;span class=&quot;comment&quot;&gt;# tuple is also turned into list
+&lt;/span&gt;     
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __repr__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self&lt;/span&gt;)&lt;/span&gt;:
+        &lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot;
+        method to return the canonical string representation 
+        of a polynomial.
+   
+        &quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;comment&quot;&gt;# The internal representation is in reverse order,
+&lt;/span&gt;        &lt;span class=&quot;comment&quot;&gt;# so we have to reverse the list
+&lt;/span&gt;        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;Polynomial&quot;&lt;/span&gt; + str&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self.coefficients&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;::-1&lt;/span&gt;]&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们可以像这样实例化&lt;strong&gt;前面例子多项式函数&lt;/strong&gt; &lt;small&gt; \(\ p(x) = x^4 - 4 \cdot x^2 + 3 \cdot x \)&lt;/small&gt; 的多项式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;p = Polynomial&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;4, 0, -4, 3,  0&lt;/span&gt;)&lt;/span&gt;
+&lt;span class=&quot;symbol&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;p&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# output
+&lt;/span&gt;Polynomial&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;4, 0, -4, 3, 0&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;到现在我们已经定义了多项式，但我们需要的是多项式函数，为此我们给 Polynomial 类实例定义方法使其可以被调用：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;&lt;span class=&quot;special&quot;&gt;class&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; Polynomial&lt;/span&gt;:
+    
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __init__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self, *coefficients&lt;/span&gt;)&lt;/span&gt;:
+        &lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot; input: coefficients are in the form a_n, ...a_1, a_0 
+        &quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;comment&quot;&gt;# for reasons of efficiency we save the coefficients in reverse order,
+&lt;/span&gt;        &lt;span class=&quot;comment&quot;&gt;# i.e. a_0, a_1, ... a_n
+&lt;/span&gt;        self.coefficients = coefficients&lt;span class=&quot;paren1&quot;&gt;[&lt;span class=&quot;code&quot;&gt;::-1&lt;/span&gt;]&lt;/span&gt; &lt;span class=&quot;comment&quot;&gt;# tuple is also turned into list
+&lt;/span&gt;     
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __repr__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self&lt;/span&gt;)&lt;/span&gt;:
+        &lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot;
+        method to return the canonical string representation 
+        of a polynomial.
+   
+        &quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;comment&quot;&gt;# The internal representation is in reverse order,
+&lt;/span&gt;        &lt;span class=&quot;comment&quot;&gt;# so we have to reverse the list
+&lt;/span&gt;        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;Polynomial&quot;&lt;/span&gt; + str&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self.coefficients&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;::-1&lt;/span&gt;]&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+            
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __call__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self, x&lt;/span&gt;)&lt;/span&gt;:    
+        res = 0
+        &lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; index, coeff &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; enumerate&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self.coefficients&lt;/span&gt;)&lt;/span&gt;:
+            res += coeff * x** index
+        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; res&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在我们可以传入参数来调用实例了，这就是说实例的行为与多项式函数的行为很像。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;p = Polynomial&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;4, 0, -4, 3, 0&lt;/span&gt;)&lt;/span&gt;
+&lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; x &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; range&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;-3, 3&lt;/span&gt;)&lt;/span&gt;:
+    &lt;span class=&quot;symbol&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;x, p&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;x&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;-3 279
+-2 42
+-1 -3
+0 0
+1 3
+2 54&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;&lt;span class=&quot;symbol&quot;&gt;import&lt;/span&gt; matplotlib.pyplot as plt
+
+X = np.linspace&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;-3, 3, 50, endpoint=True&lt;/span&gt;)&lt;/span&gt;
+F = p&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;X&lt;/span&gt;)&lt;/span&gt;
+
+plt.plot&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;X,F&lt;/span&gt;)&lt;/span&gt;
+plt.show&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://d.pr/i/Nkdsem+&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;还可以定义多项式的加法和减法，我们需要做的就是对两个多项式的相同指数的系数做加法或减法。&lt;/p&gt;
+
+&lt;p&gt;若有以下多项式函数&lt;/p&gt;
+
+&lt;p&gt;$$ f(x) = \sum_{k=0}^{n}a_k \cdot x^k $$&lt;/p&gt;
+
+&lt;p&gt;和 &lt;/p&gt;
+
+&lt;p&gt;$$ g(x) = \sum_{k=0}^{n}b_k \cdot x^k $$&lt;/p&gt;
+
+&lt;p&gt;加法的定义如下:&lt;/p&gt;
+
+&lt;p&gt;$$ (f + g)(x) = \sum_{k=0}^{n}(a_k + b_k) \cdot x^k  $$ &lt;/p&gt;
+
+&lt;p&gt;相应的减法就是&lt;/p&gt;
+
+&lt;p&gt;$$ (f - g)(x) = \sum_{k=0}^{n}(a_k - b_k) \cdot x^k  $$ &lt;/p&gt;
+
+&lt;p&gt;在我们添加 &lt;strong&gt;add&lt;/strong&gt; 和 &lt;strong&gt;sub&lt;/strong&gt; 之前，需要添加一个生成器 &lt;code&gt;zip_longest()&lt;/code&gt;，它和 &lt;code&gt;zip()&lt;/code&gt; 方法一样，将两个参数打包成一个无组，返回列表长度与最长的传入迭代器一致，不够的将会用 &lt;code&gt;fillchar&lt;/code&gt; 来代替。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;&lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; zip_longest&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1, iter2, fillchar=None&lt;/span&gt;)&lt;/span&gt;:
+    
+    &lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; i &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; range&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;max&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;len&lt;span class=&quot;paren3&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1&lt;/span&gt;)&lt;/span&gt;, len&lt;span class=&quot;paren3&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter2&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;:
+        &lt;span class=&quot;symbol&quot;&gt;if&lt;/span&gt; i &amp;gt;= len&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1&lt;/span&gt;)&lt;/span&gt;:
+            &lt;span class=&quot;symbol&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;fillchar, iter2&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;]&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+        &lt;span class=&quot;symbol&quot;&gt;elif&lt;/span&gt; i &amp;gt;= len&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter2&lt;/span&gt;)&lt;/span&gt;:
+            &lt;span class=&quot;symbol&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;]&lt;/span&gt;, fillchar&lt;/span&gt;)&lt;/span&gt;
+        else:
+            &lt;span class=&quot;symbol&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;]&lt;/span&gt;, iter2&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;]&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+        i += 1
+p1 = &lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;2,&lt;/span&gt;)&lt;/span&gt;
+p2 = &lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;-1, 4, 5&lt;/span&gt;)&lt;/span&gt;
+&lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; x &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; zip_longest&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;p1, p2, fillchar=0&lt;/span&gt;)&lt;/span&gt;:
+    &lt;span class=&quot;symbol&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;x&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# output
+&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;2, -1&lt;/span&gt;)&lt;/span&gt;
+&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;0, 4&lt;/span&gt;)&lt;/span&gt;
+&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;0, 5&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;把该生成器作为一个静态方法添加到 Polynomial 类里面，就可以添加 &lt;strong&gt;add&lt;/strong&gt; 和 &lt;strong&gt;sub&lt;/strong&gt; 方法了&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;&lt;span class=&quot;symbol&quot;&gt;import&lt;/span&gt; numpy as np
+&lt;span class=&quot;symbol&quot;&gt;import&lt;/span&gt; matplotlib.pyplot as plt
+&lt;span class=&quot;special&quot;&gt;class&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; Polynomial&lt;/span&gt;:
+    
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __init__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self, *coefficients&lt;/span&gt;)&lt;/span&gt;:
+        &lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot; input: coefficients are in the form a_n, ...a_1, a_0 
+        &quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;comment&quot;&gt;# for reasons of efficiency we save the coefficients in reverse order,
+&lt;/span&gt;        &lt;span class=&quot;comment&quot;&gt;# i.e. a_0, a_1, ... a_n
+&lt;/span&gt;        self.coefficients = coefficients&lt;span class=&quot;paren1&quot;&gt;[&lt;span class=&quot;code&quot;&gt;::-1&lt;/span&gt;]&lt;/span&gt; &lt;span class=&quot;comment&quot;&gt;# tuple is also turned into list
+&lt;/span&gt;     
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __repr__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self&lt;/span&gt;)&lt;/span&gt;:
+        &lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot;
+        method to return the canonical string representation 
+        of a polynomial.
+   
+        &quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;comment&quot;&gt;# The internal representation is in reverse order,
+&lt;/span&gt;        &lt;span class=&quot;comment&quot;&gt;# so we have to reverse the list
+&lt;/span&gt;        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;Polynomial&quot;&lt;/span&gt; + str&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self.coefficients&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;::-1&lt;/span&gt;]&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+            
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __call__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self, x&lt;/span&gt;)&lt;/span&gt;:    
+        res = 0
+        &lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; index, coeff &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; enumerate&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self.coefficients&lt;/span&gt;)&lt;/span&gt;:
+            res += coeff * x** index
+        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; res  
+    
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; degree&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self&lt;/span&gt;)&lt;/span&gt;:
+        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; len&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self.coefficients&lt;/span&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;symbol&quot;&gt;@staticmethod&lt;/span&gt;
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; zip_longest&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1, iter2, fillchar=None&lt;/span&gt;)&lt;/span&gt;:    
+        &lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; i &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; range&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;max&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;len&lt;span class=&quot;paren3&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1&lt;/span&gt;)&lt;/span&gt;, len&lt;span class=&quot;paren3&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter2&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;:
+            &lt;span class=&quot;symbol&quot;&gt;if&lt;/span&gt; i &amp;gt;= len&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1&lt;/span&gt;)&lt;/span&gt;:
+                &lt;span class=&quot;symbol&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;fillchar, iter2&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;]&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+            &lt;span class=&quot;symbol&quot;&gt;elif&lt;/span&gt; i &amp;gt;= len&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter2&lt;/span&gt;)&lt;/span&gt;:
+                &lt;span class=&quot;symbol&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;]&lt;/span&gt;, fillchar&lt;/span&gt;)&lt;/span&gt;
+            else:
+                &lt;span class=&quot;symbol&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;]&lt;/span&gt;, iter2&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;]&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+            i += 1   
+            
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __add__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self, other&lt;/span&gt;)&lt;/span&gt;:
+        c1 = self.coefficients
+        c2 = other.coefficients
+        res = &lt;span class=&quot;paren1&quot;&gt;[&lt;span class=&quot;code&quot;&gt;sum&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;t&lt;/span&gt;)&lt;/span&gt; &lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; t &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; Polynomial.zip_longest&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;c1, c2&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;]&lt;/span&gt;
+        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; Polynomial&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;*res&lt;/span&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __sub__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self, other&lt;/span&gt;)&lt;/span&gt;:
+        c1 = self.coefficients
+        c2 = other.coefficients
+        
+        res = &lt;span class=&quot;paren1&quot;&gt;[&lt;span class=&quot;code&quot;&gt;t1-t2 &lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; t1, t2 &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; Polynomial.zip_longest&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;c1, c2&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;]&lt;/span&gt;
+        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; Polynomial&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;*res&lt;/span&gt;)&lt;/span&gt;
+    
+            
+p1 = Polynomial&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;4, 0, -4, 3, 0&lt;/span&gt;)&lt;/span&gt;
+p2 = Polynomial&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;-0.8, 2.3, 0.5, 1, 0.2&lt;/span&gt;)&lt;/span&gt;
+p_sum = p1 + p2
+p_diff = p1 - p2
+X = np.linspace&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;-3, 3, 50, endpoint=True&lt;/span&gt;)&lt;/span&gt;
+F1 = p1&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;X&lt;/span&gt;)&lt;/span&gt;
+F2 = p2&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;X&lt;/span&gt;)&lt;/span&gt;
+F_sum = p_sum&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;X&lt;/span&gt;)&lt;/span&gt;
+F_diff = p_diff&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;X&lt;/span&gt;)&lt;/span&gt;
+plt.plot&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;X, F1, label=&lt;span class=&quot;string&quot;&gt;&quot;F1&quot;&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+plt.plot&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;X, F2, label=&lt;span class=&quot;string&quot;&gt;&quot;F2&quot;&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+plt.plot&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;X, F_sum, label=&lt;span class=&quot;string&quot;&gt;&quot;F_sum&quot;&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+plt.plot&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;X, F_diff, label=&lt;span class=&quot;string&quot;&gt;&quot;F_diff&quot;&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+plt.legend&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+plt.show&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://d.pr/i/QNAY6s+&quot; alt=&quot;&quot; /&gt; &lt;/p&gt;
+
+&lt;p&gt;添加求微分到 Polynomial 类非常简单，数学的定义如下：&lt;/p&gt;
+
+&lt;p&gt;$$ f&#039;(x) = \sum_{k=0}^{n}k \cdot a_k \cdot x^{k-1}  $$ &lt;/p&gt;
+
+&lt;p&gt;若&lt;/p&gt;
+
+&lt;p&gt;$$ f(x) = \sum_{k=0}^{n}a_k \cdot x^k  $$ &lt;/p&gt;
+
+&lt;p&gt;添加一个 &lt;code&gt;derivative&lt;/code&gt; 方法就能实现这个功能：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;&lt;span class=&quot;symbol&quot;&gt;import&lt;/span&gt; numpy as np
+&lt;span class=&quot;symbol&quot;&gt;import&lt;/span&gt; matplotlib.pyplot as plt
+&lt;span class=&quot;special&quot;&gt;class&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; Polynomial&lt;/span&gt;:
+    
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __init__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self, *coefficients&lt;/span&gt;)&lt;/span&gt;:
+        &lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot; input: coefficients are in the form a_n, ...a_1, a_0 
+        &quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;comment&quot;&gt;# for reasons of efficiency we save the coefficients in reverse order,
+&lt;/span&gt;        &lt;span class=&quot;comment&quot;&gt;# i.e. a_0, a_1, ... a_n
+&lt;/span&gt;        self.coefficients = coefficients&lt;span class=&quot;paren1&quot;&gt;[&lt;span class=&quot;code&quot;&gt;::-1&lt;/span&gt;]&lt;/span&gt; &lt;span class=&quot;comment&quot;&gt;# tuple is also turned into list
+&lt;/span&gt;     
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __repr__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self&lt;/span&gt;)&lt;/span&gt;:
+        &lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot;
+        method to return the canonical string representation 
+        of a polynomial.
+   
+        &quot;&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;comment&quot;&gt;# The internal representation is in reverse order,
+&lt;/span&gt;        &lt;span class=&quot;comment&quot;&gt;# so we have to reverse the list
+&lt;/span&gt;        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;Polynomial&quot;&lt;/span&gt; + str&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self.coefficients&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;::-1&lt;/span&gt;]&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __call__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self, x&lt;/span&gt;)&lt;/span&gt;:    
+        res = 0
+        &lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; index, coeff &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; enumerate&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self.coefficients&lt;/span&gt;)&lt;/span&gt;:
+            res += coeff * x** index
+        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; res 
+    
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; degree&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self&lt;/span&gt;)&lt;/span&gt;:
+        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; len&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self.coefficients&lt;/span&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;symbol&quot;&gt;@staticmethod&lt;/span&gt;
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; zip_longest&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1, iter2, fillchar=None&lt;/span&gt;)&lt;/span&gt;:    
+        &lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; i &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; range&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;max&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;len&lt;span class=&quot;paren3&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1&lt;/span&gt;)&lt;/span&gt;, len&lt;span class=&quot;paren3&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter2&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;:
+            &lt;span class=&quot;symbol&quot;&gt;if&lt;/span&gt; i &amp;gt;= len&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1&lt;/span&gt;)&lt;/span&gt;:
+                &lt;span class=&quot;symbol&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;fillchar, iter2&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;]&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+            &lt;span class=&quot;symbol&quot;&gt;elif&lt;/span&gt; i &amp;gt;= len&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter2&lt;/span&gt;)&lt;/span&gt;:
+                &lt;span class=&quot;symbol&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;]&lt;/span&gt;, fillchar&lt;/span&gt;)&lt;/span&gt;
+            else:
+                &lt;span class=&quot;symbol&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;iter1&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;]&lt;/span&gt;, iter2&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;]&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+            i += 1   
+            
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __add__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self, other&lt;/span&gt;)&lt;/span&gt;:
+        c1 = self.coefficients
+        c2 = other.coefficients
+        res = &lt;span class=&quot;paren1&quot;&gt;[&lt;span class=&quot;code&quot;&gt;sum&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;t&lt;/span&gt;)&lt;/span&gt; &lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; t &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; Polynomial.zip_longest&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;c1, c2, 0&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;]&lt;/span&gt;
+        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; Polynomial&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;*res&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;::-1&lt;/span&gt;]&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __sub__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self, other&lt;/span&gt;)&lt;/span&gt;:
+        c1 = self.coefficients
+        c2 = other.coefficients
+        res = &lt;span class=&quot;paren1&quot;&gt;[&lt;span class=&quot;code&quot;&gt;t1-t2 &lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; t1, t2 &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; Polynomial.zip_longest&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;c1, c2, 0&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;]&lt;/span&gt;
+        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; Polynomial&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;*res&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;::-1&lt;/span&gt;]&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; derivative&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self&lt;/span&gt;)&lt;/span&gt;:
+        derived_coeffs = &lt;span class=&quot;paren1&quot;&gt;[&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;]&lt;/span&gt;
+        exponent = 1
+        &lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; i &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; range&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;1, len&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self.coefficients&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;:
+            derived_coeffs.append&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self.coefficients&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;]&lt;/span&gt; * exponent&lt;/span&gt;)&lt;/span&gt;
+            exponent += 1
+        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; Polynomial&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;*derived_coeffs&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;::-1&lt;/span&gt;]&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;special&quot;&gt;def&lt;/span&gt;&lt;span
+class=&quot;keyword&quot;&gt; __str__&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self&lt;/span&gt;)&lt;/span&gt;:
+        res = &lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;symbol&quot;&gt;for&lt;/span&gt; i &lt;span class=&quot;symbol&quot;&gt;in&lt;/span&gt; range&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;len&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self.coefficients&lt;/span&gt;)&lt;/span&gt;-1, -1, -1&lt;/span&gt;)&lt;/span&gt;:
+            res +=  str&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;self.coefficients&lt;span class=&quot;paren2&quot;&gt;[&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;]&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt; + &lt;span class=&quot;string&quot;&gt;&quot;x^&quot;&lt;/span&gt; + str&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;i&lt;/span&gt;)&lt;/span&gt; + &lt;span class=&quot;string&quot;&gt;&quot; + &quot;&lt;/span&gt;
+        &lt;span class=&quot;symbol&quot;&gt;if&lt;/span&gt; res.endswith&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;span class=&quot;string&quot;&gt;&quot; + &quot;&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;:
+            res = res&lt;span class=&quot;paren1&quot;&gt;[&lt;span class=&quot;code&quot;&gt;:-3&lt;/span&gt;]&lt;/span&gt;
+        &lt;span class=&quot;symbol&quot;&gt;return&lt;/span&gt; res
+            
+p = Polynomial&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;-0.8, 2.3, 0.5, 1, 0.2&lt;/span&gt;)&lt;/span&gt;
+p_der = p.derivative&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+X = np.linspace&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;-2, 3, 50, endpoint=True&lt;/span&gt;)&lt;/span&gt;
+F = p&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;X&lt;/span&gt;)&lt;/span&gt;
+F_derivative = p_der&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;X&lt;/span&gt;)&lt;/span&gt;
+plt.plot&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;X, F, label=&lt;span class=&quot;string&quot;&gt;&quot;F&quot;&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+plt.plot&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;X, F_derivative, label=&lt;span class=&quot;string&quot;&gt;&quot;F_der&quot;&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+plt.legend&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+plt.show&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://d.pr/i/5qhj4i+&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;再来几组：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;p = Polynomial&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;1, 1, 1, 1, 1&lt;/span&gt;)&lt;/span&gt;
+p2 = Polynomial&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;1, 2, 3&lt;/span&gt;)&lt;/span&gt;
+p_der = p.derivative&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+&lt;span class=&quot;symbol&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;p&lt;/span&gt;)&lt;/span&gt;
+&lt;span class=&quot;symbol&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;p_der&lt;/span&gt;)&lt;/span&gt;
+&lt;span class=&quot;symbol&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;p2&lt;/span&gt;)&lt;/span&gt;
+p3 = p + p2
+&lt;span class=&quot;symbol&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;p3&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# output
+&lt;/span&gt;1x^4 + 1x^3 + 1x^2 + 1x^1 + 1x^0
+4x^3 + 3x^2 + 2x^1 + 1x^0
+1x^2 + 2x^1 + 3x^0
+1x^4 + 1x^3 + 2x^2 + 3x^1 + 4x^0&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.python-course.eu/polynomial_class_in_python.php&quot; &gt;原文链接&lt;/a&gt;&lt;/p&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/Payment-channel-支付通道参考资料.html"/> <title>Payment channel 支付通道参考资料</title> <published>2018-10-26</published> <updated>2018-10-26</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;最近在学习支付通道，所以罗列一下相关参考资料：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://www.learnchannels.org/&quot; &gt;Learn Channels&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://lightning.network/&quot; &gt;Lightning network&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://raiden.network/&quot; &gt;Raiden network&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.blunderingcode.com/a-lightning-network-in-two-pages-of-solidity/&quot; &gt;Sparky: A Lightning Network in Two Pages of Solidity&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/dcb9/simple-state-channel-demo&quot; &gt;Simple State channel demo repo&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;State Channel for Dummies&lt;/em&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://medium.com/blockchannel/counterfactual-for-dummies-part-1-8ff164f78540&quot; &gt;Part 1 Payment Channels&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://medium.com/blockchannel/state-channel-for-dummies-part-2-2ffef52220eb&quot; &gt;Part 2 App-Specific State Channels&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://medium.com/blockchannel/state-channels-for-dummies-part-3-10b25f6c08b&quot; &gt;Part 3 Multi-Hop Transactions / Hub-and-Spoke Channels&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://medium.com/blockchannel/state-channel-for-dummies-part-4-f3ba9d76c7c4&quot; &gt;Part 4 Ledger Channels and Virtual Channels&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://medium.com/blockchannel/state-channels-for-dummies-part-5-6238f83f8da3&quot; &gt;Part 5 Generalized State Channels / Counterfactual&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://medium.com/blockchannel/state-channels-for-dummies-part-6-7aae9c08ddee&quot; &gt;Part 6 Stale-State Griefing with Pisa&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;State Channels for Babies
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://medium.com/connext/state-channels-for-babies-c39a8001d9af&quot; &gt;Part 1 Helping Blockchains Take their First Steps&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://medium.com/connext/state-channels-for-babies-part-2-76ad4538b98a&quot; &gt;Part 2 They Grow Up So Fast&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://medium.com/connext/state-channels-for-babies-part-3-cbda0476f0f4&quot; &gt;Part 3 Putting All The Pieces Together&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Perun -- 闪电之神
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://icorating.com/upload/whitepaper/kY6E15MoTYJHVXIYDswipvYGvgioiy3GV2JtWnbF.pdf&quot; &gt;Non-technical summary of Perun pdf&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://eprint.iacr.org/2017/635&quot; &gt;Whitepaper: Virtual Payment Channel Hubs&lt;/a&gt; * 这个白皮书是主要参考的内容&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://youtu.be/hFD1YaYVD6c&quot; &gt;Presentation: Virtual Payment Hubs over Cryptographic Currencies&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.connext.network/&quot; &gt;Connext docs&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;文档不太全，最近团队也在改核心的实现，可以跟着文档把流程跑通，文档有许多地方有误，可以加入 &lt;a href=&quot;https://discord.gg/yKkzZZm&quot; &gt;Discord&lt;/a&gt; 和开发者讨论相当细节。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/招商银行-E-招贷的年利率是多少.html"/> <title>招商银行 E 招贷的年利率是多少？</title> <published>2018-09-08</published> <updated>2018-09-08</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;&amp;quot;Cherish your doubts, for doubt is the handmaiden of truth.
+Doubt is the key to the door of knowledge; it is the servant of discovery.
+A belief which may not be questioned binds us to error,
+for there is incompleteness and imperfection in every belief.
+Doubt is the touchstone of truth; it is an acid which eats away the false.
+Let no man fear for the truth, that doubt may consume it;
+for doubt is a testing of belief.
+The truth stands boldly and unafraid; it is not shaken by the testing;
+For truth, if it be truth, arises from each testing stronger, more secure.
+He that would silence doubt is filled with fear;
+the house of his spirit is built on shifting sands.
+But he that fears no doubt, and knows its use, is founded on a rock.
+He shall walk in the light of growing knowledge;
+the work of his hands shall endure.
+Therefore let us not fear doubt, but let us rejoice in its help:
+It is to the wise as a staff to the blind; doubt is the handmaiden of truth.&amp;quot; ― Robert T. Weston&lt;/p&gt;
+
+&lt;p&gt;以前并未完全了解银行贷款的年利率的计算规则，前两天在 Youtube 上看了李永乐老师讲的&lt;a href=&quot;https://www.youtube.com/watch?v=T6FBfNpiBYw&quot; &gt;《贷款买房，利息怎么算？》&lt;/a&gt;，才明白利息的计算方法。&lt;/p&gt;
+
+&lt;h2&gt;贷款的还款方式&lt;/h2&gt;
+
+&lt;p&gt;银行贷款的还款方式有两种：1. 等额本金 2. 等额本息&lt;/p&gt;
+
+&lt;h3&gt;等额本金&lt;/h3&gt;
+
+&lt;p&gt;等额本金又称利随本清、等本不等息还款法。贷款人将本金分摊到每个月内，同时付清上一交易日至本次还款日之间的利息。&lt;/p&gt;
+
+&lt;p&gt;这种还款方式相对等额本息而言，总的利息支出较低，但是前期支付的本金和利息较多，还款负担逐月递减。&lt;/p&gt;
+
+&lt;p&gt;计算公式：&lt;/p&gt;
+
+&lt;p&gt;$$ 月利率 = \frac{年利率}{12} $$&lt;/p&gt;
+
+&lt;p&gt;$$ 每月本金 = \frac{总本金}{贷款月数} $$
+$$ 累计已还本金 = 每月本金 x 还款月数 $$
+$$ 剩余本金 = 总本金 - 累计已还本金 $$&lt;/p&gt;
+
+&lt;p&gt;$$ 每月利息 = 剩余本金 × 月利率 $$
+$$ 每月还本付息(还款)金额 = 每月本金 + 每月利息 $$&lt;/p&gt;
+
+&lt;p&gt;$$ 还款总利息 =\frac{(贷款月数 + 1)x贷款额x月利率}{　　　　　　　　　2　　　　　　　　}$$
+$$ 还款总额 =   还款总利息 + 贷款额 $$&lt;/p&gt;
+
+&lt;p&gt;假设贷款 10 万元，年利率为 6%，贷款时间为 12 个月，则：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;月利率 = 0.06 / 12 = 0.005
+每月本金 = 100000 / 12 = 8333.333333333
+还款总利息 = (12 + 1) * 100000 * 0.005 / 2 = 3250
+还款总额 =  3250 + 100000 = 103250
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;等额本息&lt;/h3&gt;
+
+&lt;p&gt;等额本息又称为定期付息，即借款人每月按相等的金额偿还贷款本息，其中每月贷款利息按月初剩余贷款本金计算并逐月结清。&lt;/p&gt;
+
+&lt;p&gt;由于每月的还款额相等，因此，在贷款初期每月的还款中，剔除按月结清的利息后，所还的贷款本金就较少；而在贷款后期因贷款本金不断减少、每月的还款额中贷款利息也不断减少，每月所还的贷款本金就较多。&lt;/p&gt;
+
+&lt;p&gt;计算公式：&lt;/p&gt;
+
+&lt;p&gt;$$ 月利率 = \frac{年利率}{ 12} $$&lt;/p&gt;
+
+&lt;p&gt;$$ 每月还款额 = \frac{总本金 × 月利率 × (1 + 月利率) ^ {贷款月数}}{ (1+月利率) ^ {贷款月数}-1}  $$&lt;/p&gt;
+
+&lt;p&gt;$$ 还款总利息 = 每月还款额 x 贷款月数 - 总本金 $$&lt;/p&gt;
+
+&lt;p&gt;$$ 还款总额 = 每月还款额 x 贷款月数 $$&lt;/p&gt;
+
+&lt;p&gt;假设贷款 10 万元，年利率为 6%，贷款时间为 12 个月，则：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;月利率 = 0.06 / 12 = 0.005
+每月还款额 = ( 100000 * 0.005 * ( 1 + 0.005) ^ 12) / (( 1 + 0.005) ^ 12 -1 )
+        = 8606.642970708
+还款总利息 = 8606.642970708 * 12 - 100000 = 3279.715648496
+还款总额 =  3279.715648496 + 100000 = 103279.715648496
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;招商银行 E 招贷&lt;/h2&gt;
+
+&lt;p&gt;从去年年中开始 E 招贷就开始给我打电话说：“您被评为优质客户，可以贷款 8 万元，直接打到卡里”，一直在拒绝，直到今年年初，因为房子要装修了，钱不太够，本能的我应该是找亲戚朋友借的，但想到还要麻烦人家，我直接借 E 招贷多方便啊。&lt;/p&gt;
+
+&lt;p&gt;2018 年 1 月通过 E 招贷贷款了 6 万元，分了 18 期，每期手续费为 450 元，免 1 个月手续费。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;每月还款本金 = 60000 / 18 = 3333.33
+第一个月需要还 3333.33
+后面 17 个月，每个月还 3333.33 + 450 = 3783.33
+总利息 = 17 * 450 = 7650
+总还款额 = 17 * 450 + 60000 = 67650
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4&gt;那么 E 招贷的年利率是多少呢？&lt;/h4&gt;
+
+&lt;h5&gt;等额本金&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code&gt;    设月利率为 A
+
+    ( (18 + 1) * 60000 * A ) / 2 = 7650
+    A = (2 * 7650) / ( ( 18 + 1 ) * 60000)
+    A = .013421053
+
+    年利率 = 12 A = 12 * .013421053 = 0.161052636 = 16.1%
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5&gt;等额本息&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code&gt;    设月利率为 A
+
+    60000 * A * (1 + A)^18 / ((1+A)^18 - 1) = 67650 /  18
+    A =  0.01295
+    年利率 = 12 A  = 12 * 0.01295 = 0.1554 = 15.54%
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;用 《&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.alago.eqnlite&amp;hl=en_US&quot; &gt;Equation Solver&lt;/a&gt;》求解：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://d.pr/i/Nf22EE+&quot; style=&quot;width: 500px&quot; /&gt;&lt;/p&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/Plasma-MVP-为什么需要发送交易后再生成-confirmation-signature.html"/> <title>Plasma MVP 为什么需要发送交易后再生成 confirmation signature？</title> <published>2018-09-06</published> <updated>2018-09-06</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;以下内容翻译自 Ethereum Research ”&lt;a href=&quot;https://ethresear.ch/t/why-do-dont-we-need-two-phase-sends-plus-confirmation/1866/14&quot; &gt;Why do/don’t we need two phase sends plus confirmation&lt;/a&gt;” 的回复。&lt;/p&gt;
+
+&lt;p&gt;Generally, there are two major reasons why it’s necessary to have the two-phase send + conf in Plasma.&lt;/p&gt;
+
+&lt;p&gt;Plasma MVP 为什么有必要使用 send + confirm，主要有两个原因：&lt;/p&gt;
+
+&lt;p&gt;The first reason is specific to Plasma MVP and arises because Plasma MVP allows for fungible coins/tokens. Basically, if we don’t have confirmations, then an operator can place a user’s valid transactions after the operator’s invalid transactions in a block. This is a problem because exits in Plasma MVP are processed in time order. I published a brief write-up on why this time-order processing is necessary &lt;a href=&quot;https://github.com/omisego/research/blob/master/plasma/plasma-mvp/explore/priority.md&quot; &gt;here 8&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;原因一、 因为 Plasma MVP 规范允许 fungible（同质）coins/tokens。从根本上讲，如果没有 confirmations, 那侧链管理员就可以在打包块的时，将用户有效的交易放到管理员的交易的后面。这样就会有问题了，因为 Plasma MVP 退出是按时间顺序来处理的，作者发了一篇短文章来说明为什么按时间顺序的处理是必须的。&lt;a href=&quot;https://github.com/omisego/research/blob/master/plasma/plasma-mvp/explore/priority.md&quot; &gt;exit priority&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s illustrate this first problem with a scenario where the operator steals funds. Assume the contract only holds 10 ETH in total.&lt;/p&gt;
+
+&lt;p&gt;让我们来举例说明这个问题，假设合约里面现在有 10 ETH，管理员想把这笔钱偷走。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Alice broadcasts a transaction spending 10 ETH to Bob.&lt;/li&gt;
+&lt;li&gt;The operator creates an invalid transaction creating 10 ETH for themselves “out of nowhere” and places it at the first index in a block (“transaction #0”).&lt;/li&gt;
+&lt;li&gt;The operator places Alice’s transaction at the second index in the block (“transaction #1”).&lt;/li&gt;
+&lt;li&gt;The operator publishes this block.&lt;/li&gt;
+&lt;li&gt;Bob sees the invalid transaction and submits his exit.&lt;/li&gt;
+&lt;li&gt;The operator submits an exit for the invalid transaction.&lt;/li&gt;
+&lt;li&gt;The operator’s exit processes before Bob’s exit, so the contract is now empty.&lt;/li&gt;
+&lt;li&gt;Bob’s exit cannot be processed because the contract has no funds remaining.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;--&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;A 广播了个交易，A 转给 B 10 个 ETH&lt;/li&gt;
+&lt;li&gt;管理员创建一个无效的交易将 10 个 ETH转给他自己，并把这笔交易放到块的第一个 (“transaction #0”)&lt;/li&gt;
+&lt;li&gt;管理员将 A 的交易放到块的第二个 (“transaction #1)&lt;/li&gt;
+&lt;li&gt;管理员将块递交到主链&lt;/li&gt;
+&lt;li&gt;B 看了无效的交易并申请退出&lt;/li&gt;
+&lt;li&gt;此时管理员也申请退出他刚才的无效交易&lt;/li&gt;
+&lt;li&gt;管理员的退出程序会在 B 退出之前完成，所以合约里面就没有钱了&lt;/li&gt;
+&lt;li&gt;B 的退出将能处理，因为合约里面已经没有钱了&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Now, let’s see what happens when we require confirmations:&lt;/p&gt;
+
+&lt;p&gt;让我们来看看如果我们加上 confirmations 之后会发生什么：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Alice broadcasts a transaction spending 10 ETH to Bob.&lt;/li&gt;
+&lt;li&gt;The operator creates an invalid transaction creating 10 ETH for themselves “out of nowhere” and places it at the first index in a block (“transaction #0”).&lt;/li&gt;
+&lt;li&gt;The operator places Alice’s transaction at the second index in the block (“transaction #1”).&lt;/li&gt;
+&lt;li&gt;The operator publishes this block.&lt;/li&gt;
+&lt;li&gt;Alice sees the invalid transaction and refuses to sign a confirmation on her transaction to Bob.&lt;/li&gt;
+&lt;li&gt;The operator submits an exit for the invalid transaction.&lt;/li&gt;
+&lt;li&gt;Alice exits from her (still technically unspent) 10 ETH UTXO which existed before the operator’s invalid UTXO.&lt;/li&gt;
+&lt;li&gt;The operator’s exit cannot be processed because the contract has no funds remaining.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;--&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;A 广播了个交易，A 转给 B 10 个 ETH&lt;/li&gt;
+&lt;li&gt;管理员创建一个无效的交易将 10 个 ETH转给他自己，并把这笔交易放到块的第一个 (“transaction #0”)&lt;/li&gt;
+&lt;li&gt;管理员将 A 的交易放到块的第二个 (“transaction #1)&lt;/li&gt;
+&lt;li&gt;管理员将块递交到主链&lt;/li&gt;
+&lt;li&gt;A 看到了这个无效的交易，并且拒绝给他的交易生成 confirmation&lt;/li&gt;
+&lt;li&gt;管理员申请退出他刚才生成的无效交易&lt;/li&gt;
+&lt;li&gt;A 申请退出他之前的 10 个未花费的 UTXO（也就是转给 B 之前的 10 个 ETH，这笔交易从技术的角度上讲还没完成，因为他并没有为刚才的交易生成 confirmation ），这个将会在管理员的无效 UTXO 之前处理&lt;/li&gt;
+&lt;li&gt;管理员的退出不能被处理因为合约里面已经没有余额了&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Note that this situation is not a problem in Plasma Cash because coins are unique and non-fungible - the operator can’t just create valid UTXOs “out of nowhere” like they can in Plasma MVP. The operator could create a transaction that appears to give them ownership of a specific coin, but that doesn’t impact the ability for the owners of any other coin to exit.&lt;/p&gt;
+
+&lt;p&gt;提示该情况不会成为 Plasma Cash 的一个问题，因为币是独一无二和非同质的，管理员无法像在 Plasma MVP 一样创建无效的 UTXO。管理员可以创建一笔交易，好像是给他们某个币的所有权，但是那不能影响，币的所有权人退出的能力。&lt;/p&gt;
+
+&lt;p&gt;Now let’s talk about the other potential scenario. This is basically what I mentioned in my reply to Dan above, and it’s less of an attack vector than an annoyance:&lt;/p&gt;
+
+&lt;p&gt;现在让我们来谈谈另一个潜在的情景，基本就是我在上面回复 Dan 提到的。它的攻击性比麻烦要少（我感觉主要是因为，没有哪个侧链的管理员为了获得一点挑战的资金，而冒不诚信的风险）。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Alice broadcasts a transaction spending 10 ETH to Bob.&lt;/li&gt;
+&lt;li&gt;The operator places Alice’s transaction somewhere in the block.&lt;/li&gt;
+&lt;li&gt;The operator publishes the root of this block to the root chain but withholds the actual block information.&lt;/li&gt;
+&lt;li&gt;Alice doesn’t know if her transaction to Bob was actually included in the block or not. Bob doesn’t have enough information to exit because he doesn’t know the index of the transaction in the block.&lt;/li&gt;
+&lt;li&gt;Alice must attempt to exit from her old UTXO.&lt;/li&gt;
+&lt;li&gt;The operator knows that Alice’s old UTXO is spent, so they challenge Alice’s exit with her transaction to Bob (revealing the index).&lt;/li&gt;
+&lt;li&gt;Bob now knows the transaction index, so Bob can exit.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;--&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;A 广播了个交易，A 转给 B 10 个 ETH&lt;/li&gt;
+&lt;li&gt;管理员将 A 的交易放到块中&lt;/li&gt;
+&lt;li&gt;管理员递交该块到主链，但是隐瞒了块的真实信息&lt;/li&gt;
+&lt;li&gt;A 不知道她的转给 B 的这笔交易有没有被打包到块里面，B 也没有足够的信息申请退出，因为他不知道该笔交易的在块中的位置&lt;/li&gt;
+&lt;li&gt;A 尝试退出她旧的 UTXO&lt;/li&gt;
+&lt;li&gt;管理员知道 A 的这个旧 UTXO 已经花出去了，他使用 A 向 B 转帐的这笔交易向 A 的退出发起挑战&lt;/li&gt;
+&lt;li&gt;B 知道这个交易的位置，他可以申请退出了&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;This doesn’t change anything security-wise, but it’s not particularly convenient to have this exit-challenge-exit process. Additionally, Alice will always lose her bond for her original exit. Here’s how it plays out with confirmations:&lt;/p&gt;
+
+&lt;p&gt;这不会改变安全性，但是这个 退出( A 的退出) - 挑战(管理员的挑战）- 退出（B 的退出） 流程并不是特别方便。 此外，A 永远会失去他的退出奖金。 以下是使用 confirmations 的方式：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Alice broadcasts a transaction spending 10 ETH to Bob.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The operator places Alice’s transaction somewhere in the block.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The operator publishes the root of this block to the root chain but withholds the actual block information.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Alice doesn’t know if her transaction to Bob was actually included in the block or not. Alice doesn’t broadcast a confirmation signature.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Alice exits from her old UTXO.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The operator cannot challenge with Alice’s spend to Bob because the operator doesn’t have the required confirmation signature.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;A 广播了个交易，A 转给 B 10 个 ETH&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;管理员将 A 的交易放到块中&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;管理员递交该块到主链，但是隐瞒了块的真实信息&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;A 不知道她的转给 B 的这笔交易有没有被打包到块里面，A 不广播确认的签名&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;A 退出之前的旧 UTXO&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;管理员不能使用 A 转给 B 的这笔交易来挑战 A，因为管理员没有 confirmation signature&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/如何从服务端跟踪所有-HTTP-请求并方便回放.html"/> <title>如何从服务端跟踪所有 HTTP 请求，并方便回放？</title> <published>2017-03-31</published> <updated>2017-03-31</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;客户端工程师：“xxx 接口坏了，我的程序都没动过”，后端经常会收到这样的质问，但是我们现在如何重现这个问题？有以下几种情况：&lt;/p&gt;
+
+&lt;p&gt;一、后端测试了一下发现没有问题&lt;/p&gt;
+
+&lt;p&gt;“我这里测试了是好的啊”，就只能让客户端工程师再操作一遍，亲眼看到错误之后就肯定是有问题了，就得去找问题，这时候这台手机，以及这台手机里面的数据都非常重要，因为这些数据可以让 Bug 重现。&lt;/p&gt;
+
+&lt;p&gt;二、测试了也有问题&lt;/p&gt;
+
+&lt;p&gt;这时候后端就去修改程序了，但是每一次的测试是否有问题都需要在客户端中操作，有时候的操作非常的复杂，在这上面花的时间会比较多。最后使了各种神通才终于找到问题，原来是这个用户的某某数据有异常才会出现这种情况。&lt;/p&gt;
+
+&lt;p&gt;以上这种情况屡见不鲜，最麻烦的点就在于，每次都要以出现 Bug 的相同参数去请求，有时候你知道这些请求的参数，可以把它们放到 Postman 这种工具里面，但大部分时候你并不知道它对应的参数 (token)&lt;/p&gt;
+
+&lt;p&gt;如果我们可以在服务端跟踪所有的请求：接口地址，Header，Body，后端返回的 Header、Body，这样我们就能查到对应的请求参数和返回值，可以直接填到 Postman 里面，要是还能一键重新请求就好了，因为我们不想修改请求的参数，只是想再以相同的参数请求一遍，这样我们来调试对应的程序。&lt;/p&gt;
+
+&lt;p&gt;正好以前用过 ngrok，发现它有一个非常好的 debug 界面，可以达到以上的要求，但现在不需要它的内网穿透功能，于是只能自己写一个程序，只包含以下功能：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;记录接口所有的 Request 和 Response&lt;/li&gt;
+&lt;li&gt;可以一键重新请求某个 Request&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;基本工作原理&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;HTTP 客户端                   Boast                       Web 服务器
+| GET http://localhost:8080/   | 记录请求并进行反向代理      | Response 200 OK
+| ---------------------------&amp;gt; | --------------------------&amp;gt; | ------┐
+|                              |                             |       |
+|                              | 记录返回信息并转发给客户端       |  &amp;lt;----┘
+| &amp;lt;--------------------------- | &amp;lt;-------------------------- |
+
+┌----------------------------------------------------------------------------┐
+| url: http://localhost:8081                                                 |
+| ---------------------------------------------------------------------------|
+| All Transactions         ┌ - - - - - - - - - - - - - - - - - - - - - - - ┐ |
+| ----------------------   | time: 10 hours ago  Client: 127.0.0.1         | |
+| |GET / 200 OK 100 ms |   |                                               | |
+| ----------------------   | Request                      [ Replay ]       | |
+|                          | -   -   -   -   -   -   -   -   -   -   -   - | |
+|                          | GET http://localhost/ HTTP/1.1                | |
+|                          | User-Agent: curl/7.51.0                       | |
+|                          | Accept: */*                                   | |
+|                          |                                               | |
+|                          | Response                                      | |
+|                          | -   -   -   -   -   -   -   -   -   -   -   - | |
+|                          | HTTP/1.1 200 OK                               | |
+|                          | X-Server: HTTPLab                             | |
+|                          | Date: Thu, 02 Mar 2017 02:25:27 GMT           | |
+|                          | Content-Length: 13                            | |
+|                          | Content-Type: text/plain; charset=utf-8       | |
+|                          |                                               | |
+|                          | Hello, World                                  | |
+|                          └ - - - - - - - - - - - - - - - - - - - - - - - ┘ |
+|                                                                            |
+└----------------------------------------------------------------------------┘&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最近正在学习 Go，正好拿它来完成这个小程序，取名为 Boast 为了让我们在重现 Bug 上更为主动和方便，以及更快地修复，好多花点时间来造轮子！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/dcb9/boast&quot; &gt;Boast 项目地址&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Go 和前端都是现学现卖，欢迎大家拍砖。&lt;/p&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/Apple-Push-Services-cer-to-pem.html"/> <title>Apple Push Services .cer to .pem</title> <published>2017-03-09</published> <updated>2017-03-09</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;Download certificates file, and install into your KeyChain &lt;strong&gt;&lt;code&gt;login&lt;/code&gt;&lt;/strong&gt; group (if you install into &lt;code&gt;system&lt;/code&gt; group that you can&#039;t export p12).&lt;/p&gt;
+
+&lt;h4&gt;Convert p12 to pem:&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;$ openssl pkcs12 -in Certificates.p12 -out Certificates.pem -nodes&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4&gt;Check validity&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;$ openssl x509 -in Certificates.pem -noout -dates&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4&gt;Test pem&lt;/h4&gt;
+
+&lt;h5&gt;Dev&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code&gt;$ openssl s_client -connect gateway.sandbox.push.apple.com:2195 -cert Certificates.pem -key Certificates.pem&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5&gt;Prod&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code&gt;openssl s_client -connect gateway.push.apple.com:2195 -cert Certificates.pem -key Certificates.pem&lt;/code&gt;&lt;/pre&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/Alexander-Makarov-于-CLOUDWAYS-的面试.html"/> <title>Alexander Makarov 于 CLOUDWAYS 的面试</title> <published>2016-09-04</published> <updated>2016-09-04</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://github.com/samdark&quot;&gt;Alexander Makarov&lt;/a&gt; 是一个高级工程师并且他是 &lt;a target=&quot;_blank&quot; href=&quot;http://www.yiiframework.com/&quot;&gt;Yii 框架&lt;/a&gt;的核心贡献者之一，同时他还是 &lt;a target=&quot;_blank&quot; href=&quot;https://github.com/samdark/yii2-cookbook&quot;&gt;Yii 2.0 Cookbook&lt;/a&gt; 的作者&lt;/p&gt;
+
+&lt;p&gt;Alexander 在 Cloudways 面试中，讲述了他职业路径、对 Yii 框架的贡献以及 Yii 和其它框架的对比，最后他还给学生一些非常好的建议。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://www.cloudways.com/blog/wp-content/uploads/Alexander-Makarov-Interview-Banner-1.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Cloudways: 跟读者分享一些你的故事吧，你是如何开始你的开发生涯的，是谁促动了你，还有截止现在你觉得自己做的最好的工作是什么？&lt;/p&gt;
+
+&lt;p&gt;Alexander: 读者们好！我是 Alexander Makarov 一名来自俄罗斯的 IT 工程师，大部分工作就是 Yii 框架和参与 &lt;a target=&quot;_blank&quot; href=&quot;http://www.php-fig.org/&quot;&gt;PHP-FIG&lt;/a&gt;，最近，我全职在 &lt;a href=&quot;http://www.stay.com/beijing/guides/&quot; target=&quot;_blank&quot;&gt;stay.com&lt;/a&gt; 上班，只能用我的空闲时间来维护 Yii，你可能在 Github 上见过我 &lt;a target=&quot;_blank&quot; href=&quot;https://github.com/samdark&quot;&gt;@samdark&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;当我还是个孩子的时候，我的父亲配置了一台 z80 的电脑，里面运行着 sinclair basic (BASIC 的编程方言)，当然还有游戏。玩游戏玩够了之后，我开始思考它们是怎么工作的，这些游戏是如何运转的。我喜欢自己明白的那种感觉，所以它决定了我需要正确地学习计算机科学。五年在大学获得了硕士学位，让我得到了一份在西门子做 DBA 和 Java/SAP 的工作，在那之后又过了 10 年，自从大学起我就使用 PHP 来做个人项目，因为它比 J2EE 在开发简单的 web 上更合适。&lt;/p&gt;
+
+&lt;p&gt;最开始 PHP 还是简单的，后来我使用了 CodeIgniter，很快发现它存在着许多的限制，之后搜索了许多完美的框架，试用了 CakePHP、Zend 和其它的，无意中打开了 Yii 官网（当时还很丑），查看了它的文档。它做地非常地合理，试用完 Yii 后，我发现它运行速度非常地快，并且很好地平衡了复杂难懂和简单的操作，让我的工作流程更舒适。2010 年我加入了 Yii 团队一直到现在，它是我做的最值得关注的开源工作。&lt;/p&gt;
+
+&lt;p&gt;Cloudways: 你在 stay.com 主要负责哪些工作？&lt;/p&gt;
+
+&lt;p&gt;Alexander: 主要负责开发网站、CMS 和 API，当 Android、服务器、SOLR 需要时，我会去帮忙。&lt;/p&gt;
+
+&lt;p&gt;Cloudways: Alexander 你是 Zend 认证的开发者，你为什么会选择 Yii 而不是 Zend 呢？你是如何对比它们的？&lt;/p&gt;
+
+&lt;p&gt;Alexander: 我是 ZCE (Zend Certified Developer) 没错，但是你可能把这个证书和 Zend 框架弄混了，ZCE 只是关于PHP 自身的。&lt;/p&gt;
+
+&lt;p&gt;尽管这样，Zend 框架我还是很熟悉的，所以可以回答第二部分问题。在选择框架时候，Zend 框架还是第一版，对我来说它太正式了——所有的模式都与 RFCs、设计模式等完全一致。尽管它理论上是最好的编码方式，但是在实际中显得有点过于复杂了。此外 Zend 团队还偏离了 RFCs（我记得有一次关于 Email 的组件）他们拒绝引入 Email 的补丁。&lt;/p&gt;
+
+&lt;p&gt;另一方面，Yii 所有东西都源自实践，如果在实践中与 RFCs 存在偏差，框架会根据实际环境对功能进行很好的修补，此外它也比 Zend 快，并且有更漂亮的语法，使你日常编码更舒心。&lt;/p&gt;
+
+&lt;p&gt;Cloudways: 你是顶级 PHP 框架 Yii 的核心贡献者之一，你感觉怎么样？&lt;/p&gt;
+
+&lt;p&gt;Alexander:通常很不错。当你意识到你正在创造其他开发者正在其日常工作中使用的东西时，这会是一种非常棒的感觉。当有贡献时，你就会感受到社区的精神。我也有喜欢探查编码的怪癖，并且开发一个框架也给了我更多这样的机会。&lt;/p&gt;
+
+&lt;p&gt;当然，也有一些不好的部分。维护这样大一个开源项目会疯狂地吸干你的时间。有时，有些无理的人要求你立即修复某些东西。但总体上而言，好的部分会比坏的多。 &lt;/p&gt;
+
+&lt;p&gt;Cloudways: 你在 Yii 框架中的主要贡献是什么，还有哪个版本你贡献的最多？&lt;/p&gt;
+
+&lt;p&gt;Alexander: 当我来 Yii 之前就用过 J2EE、CodeIgniter 和一些其它框架，在 1.1 时我主要贡献了一些非常好的功能，这些功能都是来自我以前的经验。Yii 2.0 是另一个故事，我从最开始就参与了这个项目，和薛强及团队成员一起设计了整个框架。&lt;/p&gt;
+
+&lt;p&gt;Cloudways: 根据 2015 年 Sitepoint 的调查，Laravel 排在第一而 Yii 排在第四位，你认为 Yii2 未来会夺得第一吗？&lt;/p&gt;
+
+&lt;p&gt;Alexander: 这是个机会，但是我不认为 Yii 明年会在美国列表排第一，和美国本士的商业竞争是非常困难的，Yii 在美国之外更流行一些，特别是在俄罗斯、乌克兰和前苏联国家。&lt;/p&gt;
+
+&lt;p&gt;Cloudways: 你是如何对比 Yii、Laravel 和 Symfony 的？&lt;/p&gt;
+
+&lt;p&gt;Alexander: 这三个框架都有他们自己的优点和缺点。&lt;/p&gt;
+
+&lt;p&gt;Laravel 有非常棒的市场、开放接口、许多很酷的基础设施，在美国有很好的活动。直到最近，它还未真正地适应大的项目，一个接一个的版本，老版本还没过多久又被废弃了，现在好多了，该框架的管理和发展比较脆弱，因为它在很大程度上取决于它的创始人，希望它会随时间而改变。&lt;/p&gt;
+
+&lt;p&gt;Symfony 有很长的历史，它非常地成熟，是由一个强大的公司，能买得起全职文档小组，和开发团队提供支持，社区也非常的强壮，它倾向于企业解决方案，适用于非常复杂的应用程序，由于这个原因，该框架的某些部分是非常复杂的。&lt;/p&gt;
+
+&lt;p&gt;Yii 所有东西都源自实践 ，因为 Gii 代码生成器和制作精良的、增强的 ActiveRecord 设计模式的实现，它可以非常快速地开发原型。Yii 提供了许多开箱即用的功能，社区也非常的强壮，文档也不错，代码是稳定的，我们关心向后的兼容性，我们削减了许多边缘，只为在相同的硬件及类似应用中，Yii 的性能比 Laravel 或 Symfony 更高。至于缺点，Yii 不会完全按你的方式去做，当你试图去反对最佳实践，干净的代码和领域驱动设计。不过，如果你知道你在做什么，所有的工具都为你服务。&lt;/p&gt;
+
+&lt;p&gt;Cloudways: 你认为 Yii 最好的功能有哪些？&lt;/p&gt;
+
+&lt;p&gt;Alexander: Error handling and debug toolbar, code generation, forms, query builder and active record, data providers and data widgets, strong i18n layer, REST API framework.——这段相信没有看不懂的。&lt;/p&gt;
+
+&lt;p&gt;Cloudways: Alexander，当你不工作时你会做些什么，怎么打发你的时间？&lt;/p&gt;
+
+&lt;p&gt;Alexander: 旅游、骑车、看电影、玩游戏和做许多家庭活动&lt;/p&gt;
+
+&lt;p&gt;Cloudways: 可以给我们的读者，发一张你的工作台吗？&lt;/p&gt;
+
+&lt;p&gt;Alexander: 那就下面这张吧！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://www.cloudways.com/blog/wp-content/uploads/image00-8-1024x819.jpg&quot; alt=&quot;Alexander Makarov workstation&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Cloudways: 你会给即将成为一名开发者的学生哪些建议呢？&lt;/p&gt;
+
+&lt;p&gt;Alexander: 把你的时间花在学习计算机基础上，前五年你可能不会需要它，但之后如果你没有一个良好的基础就无法进步了，它会给你带来很大的区别。&lt;/p&gt;
+
+&lt;p&gt;Cloudways: 我们 Cloudways 提供一键安装 PHP 和不同的 PHP 框架，希望你去看一看，然后分享一下你对本平台的看法，我们可以做什么，以进一步提高本平台的前景和表现？&lt;/p&gt;
+
+&lt;p&gt;Alexander: 总体来说服务是好的，它会节省许多初始化配置的时间，定价合理尤其是对较低层次。当然也有缺点：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;默认的堆栈，以满足许多不同的开发人员的需求，自定义堆栈再增强一下会更好&lt;/li&gt;
+&lt;li&gt;一些 DigitalOcean 的功能还不可用&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;至于 Yii，所有的依赖都支持，所以可以很好的运行。&lt;/p&gt;
+
+&lt;p&gt;感谢 &lt;a href=&quot;https://github.com/yiqing95&quot; &gt;@亦清&lt;/a&gt; 帮忙翻译了许多内容&lt;/p&gt;
+
+&lt;p&gt;源文链接：&lt;a target=&quot;_blank&quot; href=&quot;https://www.cloudways.com/blog/alexander-makarov-yii-interview/&quot;&gt;https://www.cloudways.com/blog/alexander-makarov-yii-interview/&lt;/a&gt;&lt;/p&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/本地开发TCP-Proxy-解决-API-必须绑定-IP-白名单才能访问的问题.html"/> <title>本地开发——TCP Proxy 解决 API 必须绑定 IP 白名单才能访问的问题</title> <published>2015-11-29</published> <updated>2015-11-29</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;本次对接一个票务系统的时候，&lt;strong&gt;他们那边的 API 访问需要在白名单的才可以访问&lt;/strong&gt;，当时我就提出了个问题&lt;/p&gt;
+
+&lt;p&gt;问：那我在本地怎么调试开发啊？（因为我开发机 IP 是不固定的）&lt;/p&gt;
+
+&lt;p&gt;答：测试环境也要加，要不然怎么开发呢？&lt;/p&gt;
+
+&lt;p&gt;想了一下跟他们争肯定是争不过的了，那就是如何满足他们，想了一下，我有自己的公网服务器 IP，本地测试环境直接请求这台机器，它再把请求转发给相应的 API，这样我不管在哪里都可以开发了。&lt;/p&gt;
+
+&lt;p&gt;API 那边的 Host 还是 IP，即 http://x.x.y.z:port/api-route，这样服务端的那里只需要一个 TCP Proxy 就可以了，Google 了一下 &lt;strong&gt;&lt;a href=&quot;https://github.com/dccmx/tcproxy&quot; &gt;tcproxy&lt;/a&gt;&lt;/strong&gt; 这个小巧的非常入眼。&lt;/p&gt;
+
+&lt;h3&gt;安装及使用&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git clone https://github.com/dccmx/tcproxy.git
+$ cd tcproxy &amp;&amp; make ; echo $?  # 输出 0 代表安装成功
+$ nohup ./src/tcproxy &quot;0.0.0.0:19999 -&amp;gt; rr{x.x.y.z:port}&quot; &amp;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码里面的 Host 直接换成我自己的 ip:19999 端口就可以访问了。&lt;/p&gt;
+
+&lt;p&gt;使用这个有个注意的点，就是你的代码要有环境之分，不同的环境应可以自定义配置，参考 &lt;a href=&quot;http://12factor.net/zh_cn/config&quot; &gt;12 Factor 的配置&lt;/a&gt;&lt;/p&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/另一个国内的-Ngrok-服务器分享.html"/> <title>另一个国内的 Ngrok 服务器分享</title> <published>2015-11-04</published> <updated>2015-11-04</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;ngrok 2.0 开始收费了，国内好几个 ngrok 倒下了，于是搭了一个供大家玩耍，只要还有钱就会给服务器续费的！&lt;/p&gt;
+
+&lt;h3&gt;使用方法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;下载客户端 &lt;a href=&quot;http://d.phpor.me/1aHNc&quot; target=&quot;_blank&quot;&gt;MAC&lt;/a&gt; &lt;a href=&quot;http://d.pr/i/eHuo&quot; target=&quot;_blank&quot;&gt;Linux&lt;/a&gt; &lt;a href=&quot;http://d.phpor.me/1bRYl&quot; target=&quot;_blank&quot;&gt;Windows&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;创建配置文件 &lt;em&gt;ngrok.cfg&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;server_addr: &quot;tunnel.phpor.me:4443&quot;
+trust_host_root_certs: false&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;运行 &lt;code&gt;$ ngrok -config ngrok.cfg -subdomain example 8080&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;News&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2016-03-30&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;腾讯机房提示 phpor.me 域名未备案，将于 4 月 1 日禁止访问，惊恐之下去 ICP 查了下，备案确实被注销了，北京地区不能备案 .me 的域名，于是不备案了放到海外机房。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2016-02-07&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;02-05 3:44 ~ 02-07 23:16 故障&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2015-12-28&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;20: 54 ~ 21: 27 故障&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2015-12-24&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;好消息好消息，现在已经使用 DaoCloud + 腾讯云方式来部署了&lt;/p&gt;
+
+&lt;p&gt;中间遇到了 N 多的坑，来吐槽两个&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;由于制作 ngrok 服务端的镜像是只有程序，没有可执行文件，需要在启动容器的时候去生成，但是腾讯云又无法连接 Google 和 GitHub，所以只能想办法把安装 Build 到镜像里面了，幸好 DaoCloud 在构建的时候是可以下载的，构建好了也没有报错。&lt;/p&gt;
+
+&lt;p&gt;但是线上的容器启动时就是没有可执行的 ngrokd 命令，我在本地拉取镜像，然后发现确实没有这个命令，但是重新执行一下就有这个命令了，于是我在 Dockerfile 里面又写了一遍安装命令，再测试一遍发现还是如此。最后没有办法我就在本地把 ngrokd 这个文件生成好，然后拷贝到镜像里面去，直接执行这个二进制文件就完全正常了。&lt;/p&gt;
+
+&lt;p&gt;后来去翻了 tutum/ngrok 的 Dockerfile 源码，才发现原来他把 ngrokd 的这个目录设置成了 VOLUME，导致每次启动容器的时候这个里面的文件就空了。&lt;/p&gt;
+
+&lt;p&gt;大家要是想搭建 Docker 版的 Ngrok 服务端可以参考：&lt;a href=&quot;https://github.com/dcb9/docker/tree/master/ngrok-server&quot; &gt;ngrokd-docker&lt;/a&gt;，直接拷贝过去，把证书替换一下就可以用了。现在的 docker-compose.yml 内容如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ngrok:
+ image: YOUR_IMAGE_URL
+ net: host
+ environment:
+ - DOMAIN=tunnel.phpor.me&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr/&gt;
+
+&lt;p&gt;不知道大家发现没有，其实证书这样子放在代码库里面太危险了，这种就应该拉出去枪毙，但是呢，我的部署点在 DaoCloud 上面，那里部署就只能用环境变量的形式，需要对容器的网络设置为 host，就只能用应用编排了。其实可以把证书放到环境变量里面，注入进去就好了，这样就不用存在代码库里面了，但是 DaoCloud 这边对应用编排的时候好像有对单行的长度做一定的限制，导致一个环境变量应该是在一行的变成了两行！！！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2015-12-17&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Bob 的 Ngrok 服务一直是放在某云上面的，一个月是 90 RMB ，现在是第二个月了，费用还是很贵的。&lt;/p&gt;
+
+&lt;p&gt;昨天 DaoCloud 上对老用户年终大回馈，可以免费领腾讯的优惠券， Bob 一共抽了 700 块左右的钱（个人帐号+公司组织帐号+兄弟的帐号 一般人只能拿到 200 左右的优惠券吧），已经够用一年的了，从下个月开始服务转移到腾讯云上，部署的方式也会改成 DaoCloud 的方式——容器大法，所以请大家放心使用！&lt;/p&gt;
+
+&lt;p&gt;最后还是非常感谢 DaoCloud，所有的 V 友建议都是了解一下，对自己百利而有一害（中毒太深）！&lt;/p&gt;
+&lt;/blockquote&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="https://dcb9.github.io/posts/对于一台新服务器权限的配置.html"/> <title>对于一台新服务器权限的配置</title> <published>2015-05-29</published> <updated>2015-05-29</updated> <author> <name>Chengbin Du</name> <uri>https://dcb9.github.io</uri> </author> <content type="html">&lt;p&gt;作为一个程序员，在网站没有运维的情况下，也要有能够搭建应用的能力，由于不是专业的运维所以考虑的问题可能不够全面，只顾着把应用搭起来，权限管理非常地松，认为只要登陆 &lt;code&gt;root&lt;/code&gt; 可以运行命令就行了，这样的话会有很多后患的，有的时候只是未爆发出来，当爆发出来就已经晚了。&lt;/p&gt;
+
+&lt;p&gt;以下是我对一台新服务器的权限的实例，欢迎大家拍砖。&lt;/p&gt;
+
+&lt;p&gt;一、技术人员通过自己的普通用户权限进入系统，然后如果要运行需要 &lt;code&gt;root&lt;/code&gt; 执行的就用 &lt;code&gt;sudo&lt;/code&gt; 去执行就好，如果有多人要登录，则每人配一个帐号。&lt;/p&gt;
+
+&lt;p&gt;二、服务器上应该禁止密码登录，因为密码登录有一定的漏洞，有的技术人员设的密码跟没搞过计算机一样来个 &lt;code&gt;123456&lt;/code&gt;，这个密码就相当于是个后门了。&lt;/p&gt;
+
+&lt;p&gt;三、由于每个人都有了帐号，那么更理所当然的要把 &lt;code&gt;root&lt;/code&gt; 用户禁止登录，通过经验得知，如果不禁止，有的人还要登 &lt;code&gt;root&lt;/code&gt;，原因可能有以下三点&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;不明白为什么要有普通帐号&lt;/li&gt;
+&lt;li&gt;对安全看的太轻，认为每次都要 &lt;code&gt;sudo&lt;/code&gt; 去运行一个 &lt;code&gt;root&lt;/code&gt; 权限才执行的命令很麻烦 
+用户管理&lt;/li&gt;
+&lt;li&gt;可能不懂权限，或许听说过，但绝对没用过&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;四、修改默认 &lt;code&gt;ssh&lt;/code&gt; 端口&lt;/p&gt;
+
+&lt;h2&gt;添加帐号&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;$ useradd bob
+$ mkdir -p /home/bob
+$ chown -R bob.bob /home/bob
+
+$ gpasswd -a bob sudo // 给用户有 sudo 的权限
+$ passwd bob  设置一个密码，这个是作为当用户想要 sudo 去执行 root 执行的时候使用的&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;本地配置免密码登录&lt;/h2&gt;
+
+&lt;p&gt;本地 &lt;code&gt;ssh-keygen&lt;/code&gt; 生成一串密钥&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;本地 $ ssh-keygen
+  /Users/bob/.ssh/some-app-server_id_rsa
+  本地 $ ssh-copy-id -i .ssh/some-app-server_rsa bob@remote-server-address
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;配置ssh 客户端，方便以后连接服务器。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  本地 $ vim ~/.ssh/config
+  Host some-app-server
+    Hostname remote-server-address
+    User bob
+    Port 19422    
+    IdentityFile ~/.ssh/some-app-server_id_rsa
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以后连接服务器就可以直接 &lt;code&gt;$ ssh some-app-server&lt;/code&gt; 就可以用你的权限登录进去了。&lt;/p&gt;
+
+&lt;h2&gt;配置 ssh 服务端&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;$ vi /etc/ssh/sshd_config  
+PasswordAuthentication no //禁止使用基于口令认证的方式登陆
+PubkeyAuthentication yes //允许使用基于密钥认证的方式登陆
+Port 19422 // 把 ssh 端口改成 19422 这个别固定，你可以随便用，本地要连接服务器，本地的端口得保持一致。
+PermitRootLogin no // 不允许 root 远程登录
+
+重户服务器 $ reboot 使配置生效&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;本人再推荐一个 &lt;code&gt;zsh&lt;/code&gt; 和 &lt;code&gt;oh-my-zsh&lt;/code&gt; 有了这个，命令行就智能了好多，操作起来非常地方便，有兴趣的自己去找找文档。&lt;/p&gt;
+
+&lt;p align=&quot;right&quot;&gt; —— 会一样东西不是本事，从不会到会的，才是真本事&lt;/p&gt;
+</content> </entry> </feed>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"> <head> <title>Chengbin Du&#039;s Blog</title> <meta http-equiv="content-type" content="text/html;" charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1"> <link href="//fonts.googleapis.com/css?family=Vollkorn:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" /> <link href="//fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css" /> <link href= "https://dcb9.github.io/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="https://dcb9.github.io/rss.xml" type="application/rss+xml" />  </head> <body> <div class="navigation"> <a href="https://dcb9.github.io">Chengbin Du&#039;s Blog</a> | <a href="/">Home</a>  | <a href="http://github.com/dcb9">GitHub</a>  | <a href="https://twitter.com/robertduu">Twitter</a>  </div> <div id="content"> <div class="article-meta">
+<h1 class="title">ssh-agent 使用指南</h1>
+<div class="tags">
+Tagged as <a href="https://dcb9.github.io/tag/shall.html">shall</a> </div>
+<div class="date">
+Written on 2014-12-27 </div>
+</div>
+<div class="article-content">
+<p>不知道你有没有遇到这样的情况，有二台以上的服务器(服务器系统是 windows 的不要往下看)需要管理，如果说你有这种情况，而且还没有用到 <code>ssh-agent</code> 的话，那么这篇文章就是为你而写。</p>
+
+<p>假如你有三台服务器 s1.x.com s2.x.com s3.x.com，而且你都做好了登录到每一台机器的免密码功能。就是通过本地机器直接运行 <code>ssh sN.x.com</code> （注意：<em>N</em>）都可以连接到相应的服务器了，那么问题就来了，如果你现在已经连接到 s1 这台机器上，希望通过 s1 这台机器直接连到 s2 这台机器，并且不要输入密码，你测试了一下发现不行，为什么呢？因为 s1 和 s2 这两台机器没有做免密码登录功能，虽然我们可以把本地的私钥上传到 s1 服务器上，让它连接 s2 的时候就使用这个私钥，但是这样子做太危险了啊，如果有人进了你的系统，你整个内网都是可以直接进入的，因为已经拿到了你的私钥了嘛。<code>ssh-agent</code> 就是一个让你不把私钥上传到服务器上，就可以完成刚才的功能的一个工具，让你在这些服务器之间来去自如。</p>
+
+<h3>step1. 开启 ssh-agent</h3>
+
+<p>$ eval <code>ssh-agent</code>
+Agent pid XXX</p>
+
+<h3>step2. 添加私钥</h3>
+
+<p>$ ssh-add ~/.ssh/id_rsa      （如果生成密钥时是使用的默认的，那么就是这个了，如果不是的话就写你的私钥地址吧）</p>
+
+<h3>step3. 告诉ssh 允许 ssh-agent 转发</h3>
+
+<ul>
+<li>修改全局：$ echo &quot;ForwardAgent yes&quot; &gt;&gt; /etc/ssh/ssh_config</li>
+<li>修改个人</li>
+</ul>
+
+<p>===
+    $ touch ~/.ssh/config 
+    $ vim ~/.ssh/config
+    Host *
+      ForwardAgent yes</p>
+
+<h3>step4. 修改每台服务器的 ssh 配置文件，让它们都对 ssh-agent 进行转发</h3>
+
+<p>到每台服务器上去按 step3 -&gt; 全局，做一下。</p>
+
+<p>现在你可以通过本地连接到任意一台服务器了，通过这台服务器再任意的连接到其它的服务器，以后就可以静静地享受这份快乐了！</p>
+ </div>
+<div class="relative-nav">
+<a href="https://dcb9.github.io/posts/加入-iDareX-团队.html">Previous</a><br>
+<a href="https://dcb9.github.io/posts/学习-PHP-程序新东西的另一种方法.html">Next</a><br>
+</div>
+ </div>  <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="https://dcb9.github.io/css/cc-by-sa.png" /> </a> by Chengbin Du <a id="coleslaw-logo" href="https://github.com/redline6561/coleslaw"> <img src="https://dcb9.github.io/css/logo_small.jpg" alt="Coleslaw logo" /> </a> </div> </body> </html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"> <head> <title>Chengbin Du&#039;s Blog</title> <meta http-equiv="content-type" content="text/html;" charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1"> <link href="//fonts.googleapis.com/css?family=Vollkorn:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" /> <link href="//fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css" /> <link href= "https://dcb9.github.io/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="https://dcb9.github.io/rss.xml" type="application/rss+xml" />  </head> <body> <div class="navigation"> <a href="https://dcb9.github.io">Chengbin Du&#039;s Blog</a> | <a href="/">Home</a>  | <a href="http://github.com/dcb9">GitHub</a>  | <a href="https://twitter.com/robertduu">Twitter</a>  </div> <div id="content"> <div class="article-meta">
+<h1 class="title">PHP MyAdmin 改造实现单点登录</h1>
+<div class="tags">
+Tagged as <a href="https://dcb9.github.io/tag/工作.html">工作</a> </div>
+<div class="date">
+Written on 2014-09-09 </div>
+</div>
+<div class="article-content">
+<h3>修改配置文件</h3>
+
+<pre><code># file: config.inc.php
+
+$cfg['Servers'][$i]['auth_type'] = 'signon';  
+$cfg['Servers'][$i]['SignonSession'] = 'SignonSession'; // 为了防止多个session的键的冲突，所以单独设置 个session名称
+$cfg['Servers'][$i]['SignonURL'] = '/signon.php'; // 自定义登录页面
+$cfg['Servers'][$i]['LogoutURL'] = '/signon.php?logout=1'; // 自定义登录页面的退出页面
+</code></pre>
+
+<h3>配置登录程序</h3>
+
+<pre><code># file: /signon.php
+
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header('Location: 网站原来的退出url');
+    exit;
+}
+
+$userDb = array(
+    '单点登录后的用户名或id号' =&gt; '给这个人分配的数据库的用户名',
+);
+
+// mysql中添加用户的时候密码为空就行。然后主要就是对于现在系统的用户名和数据库的用户名的一个映射，
+// 也可以就用现在的用户名作为数据库的用户名，不过得保证字符长度不得大于16，
+// 中文的用户名我也没弄过，如果弄中文的可能也会出问题。
+
+$_SESSION['PMA_single_signon_user'] = $userDb[$cookieofmanagername]; // 这个用户名一定要数据库存在并有相应的权限的。
+$_SESSION['PMA_single_signon_password'] = '';
+
+echo &quot;&lt;script&gt;top.location.href='/phpmyadmin/index.php';&lt;/script&gt;&quot;;
+</code></pre>
+ </div>
+<div class="relative-nav">
+<a href="https://dcb9.github.io/posts/Bash-complete-for-DSH.html">Previous</a><br>
+<a href="https://dcb9.github.io/posts/Send-E-mail-on-Gentoo.html">Next</a><br>
+</div>
+ </div>  <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="https://dcb9.github.io/css/cc-by-sa.png" /> </a> by Chengbin Du <a id="coleslaw-logo" href="https://github.com/redline6561/coleslaw"> <img src="https://dcb9.github.io/css/logo_small.jpg" alt="Coleslaw logo" /> </a> </div> </body> </html>

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"> <head> <title>Chengbin Du&#039;s Blog</title> <meta http-equiv="content-type" content="text/html;" charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1"> <link href="//fonts.googleapis.com/css?family=Vollkorn:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" /> <link href="//fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css" /> <link href= "https://dcb9.github.io/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="https://dcb9.github.io/rss.xml" type="application/rss+xml" />  </head> <body> <div class="navigation"> <a href="https://dcb9.github.io">Chengbin Du&#039;s Blog</a> | <a href="/">Home</a>  | <a href="http://github.com/dcb9">GitHub</a>  | <a href="https://twitter.com/robertduu">Twitter</a>  </div> <div id="content"> <div class="article-meta">
+<h1 class="title">Apple Push Services .cer to .pem</h1>
+<div class="tags">
+Tagged as <a href="https://dcb9.github.io/tag/note.html">note</a> </div>
+<div class="date">
+Written on 2017-03-09 </div>
+</div>
+<div class="article-content">
+<p>Download certificates file, and install into your KeyChain <strong><code>login</code></strong> group (if you install into <code>system</code> group that you can't export p12).</p>
+
+<h4>Convert p12 to pem:</h4>
+
+<pre><code>$ openssl pkcs12 -in Certificates.p12 -out Certificates.pem -nodes</code></pre>
+
+<h4>Check validity</h4>
+
+<pre><code>$ openssl x509 -in Certificates.pem -noout -dates</code></pre>
+
+<h4>Test pem</h4>
+
+<h5>Dev</h5>
+
+<pre><code>$ openssl s_client -connect gateway.sandbox.push.apple.com:2195 -cert Certificates.pem -key Certificates.pem</code></pre>
+
+<h5>Prod</h5>
+
+<pre><code>openssl s_client -connect gateway.push.apple.com:2195 -cert Certificates.pem -key Certificates.pem</code></pre>
+ </div>
+<div class="relative-nav">
+<a href="https://dcb9.github.io/posts/Alexander-Makarov-于-CLOUDWAYS-的面试.html">Previous</a><br>
+<a href="https://dcb9.github.io/posts/如何从服务端跟踪所有-HTTP-请求并方便回放.html">Next</a><br>
+</div>
+ </div>  <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="https://dcb9.github.io/css/cc-by-sa.png" /> </a> by Chengbin Du <a id="coleslaw-logo" href="https://github.com/redline6561/coleslaw"> <img src="https://dcb9.github.io/css/logo_small.jpg" alt="Coleslaw logo" /> </a> </div> </body> </html>

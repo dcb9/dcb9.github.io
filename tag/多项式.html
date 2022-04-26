@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en"> <head> <title>Chengbin Du&#039;s Blog</title> <meta http-equiv="content-type" content="text/html;" charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1"> <link href="//fonts.googleapis.com/css?family=Vollkorn:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" /> <link href="//fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css" /> <link href= "https://dcb9.github.io/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="https://dcb9.github.io/rss.xml" type="application/rss+xml" /> 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="navigation"> <a href="https://dcb9.github.io">Chengbin Du&#039;s Blog</a> | <a href="/">Home</a>  | <a href="http://github.com/dcb9">GitHub</a>  | <a href="https://twitter.com/robertduu">Twitter</a>  </div> <div id="content"> <h1 class="title">Content tagged 多项式</h1> <div class="article-meta"> <a class="article-title" href="https://dcb9.github.io/posts/使用-Python-绘制多项式函数.html">使用 Python 绘制多项式函数</a> <div class="date"> posted on 2018-11-24</div> <div class="article"><h2>简介</h2>
+
+<div style="width: 62%">
+<img src="https://d.pr/i/N7GiqZ+" style="width: 30%; float: left; margin-right: 15px; "/>
+<div>
+高中你就会接触到<i>多项式</i>和<i>多项式函数</i>，本章教程完全依赖多项式，也就是说，我们将会花一节课的时间去了解多项式。下面是一个 4 次多项式的例子：
+
+$$ p(x) = x^4 - 4 \cdot x^2 + 3 \cdot x $$
+
+你会发觉它们跟整数有许多相似之处，本课我们将会定义多种多项式的算术操作，我们的 Polynomial 类也将提供计算多项式的推导和积分的方法，绘制多项式的图像。
+<br /><br />
+多项式非常漂亮，现在最重要的是如何用 Python 类来实现它们，我们要感谢 <a href="http://drewshannon.ca/" target="_blank">Drew Shanon</a>，他让我们使用他的精美的图片，将数学视为艺术！
+</div>
+<div style="clear: both"></div>
+</div>
+
+<h2>数学知识介绍</h2>
+
+<p>我们将只会处理含有一个未知数的多项式，含有一个未知数的多项式的一般形式如下：</p>
+
+<p>$$ a_n \cdot x^n + a_{n-1} \cdot x^{n-1} + ... + a_1 \cdot x + a_0 $$ </p>
+
+<p>\( a_0, a_1, ... a_n \) 为常数，\( x \) 为未知数，未知数也就是它没有一个特定的值，可以用任何数都可以用来替换。</p>
+
+<p>这个表达式经常用求和符号来表示：</p>
+
+<p>$$ \sum_{k=0}^{n}a_k \cdot x^k \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad $$ </p>
+
+<p>$$ =  a_n \cdot x^n + a_{n-1} \cdot x^{n-1} + ... + a_1 \cdot x + a_0 $$ </p>
+
+<p>一个多项式函数，可以用来求多项式的值，一个名为 <code>f</code> 的函数含有一个参数，定义如下：</p>
+
+<p>$$ f(x)= \sum_{k=0}^{n}a_k \cdot x^k $$ </p>
+
+<h2>多项式函数与 Python</h2>
+
+<p>Python 可以很轻松的实现一个多项式函数，作为一个例子我们定义一个在简介所提到的多项式函数： \( p(x) = x^4 - 4 \cdot x^2 + 3 \cdot x \)，该多项式的 Python 代码如下：</p>
+
+<pre><code><span class="code"><span class="special">def</span><span
+class="keyword"> p</span><span class="paren1">(<span class="code">x</span>)</span>:
+    <span class="symbol">return</span> x**4 - 4*x**2 + 3*x</span></code></pre>
+
+<p>我们可以在任何其它函数里面调用这个函数：</p>
+
+<pre><code><span class="code"><span class="symbol">for</span> x <span class="symbol">in</span> <span class="paren1">[<span class="code">-1, 0, 2, 3.4</span>]</span>:
+    <span class="symbol">print</span><span class="paren1">(<span class="code">x, p<span class="paren2">(<span class="code">x</span>)</span></span>)</span></span></code></pre>
+
+<pre><code># output
+-1 -6
+0 0
+2 6
+3.4 97.59359999999998</code></pre>
+
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+X = np.linspace(-3, 3, 50, endpoint=True)
+F = p(X)
+
+plt.plot(X,F)
+plt.show()</code></pre>
+
+<pre><code># output
+&lt;Figure size 640x480 with 1 Axes&gt;</code></pre>
+
+<h2>Polynomial 类</h2>
+
+<p>现在我们将给多项式函数定义一个新的类，我们将会基于我们在 Python 教程 decorators 一章的概念构建，引入一个多项式工厂。</p>
+
+<p>多项式是由系数来决定的，这意味着一个多项式类的实例需要一个列表来定义这些系数。</p>
+
+<pre><code><span class="code"><span class="special">class</span><span
+class="keyword"> Polynomial</span>:
+    
+    <span class="special">def</span><span
+class="keyword"> __init__</span><span class="paren1">(<span class="code">self, *coefficients</span>)</span>:
+        <span class="string">""</span><span class="string">" input: coefficients are in the form a_n, ...a_1, a_0 
+        "</span><span class="string">""</span>
+        <span class="comment"># for reasons of efficiency we save the coefficients in reverse order,
+</span>        <span class="comment"># i.e. a_0, a_1, ... a_n
+</span>        self.coefficients = coefficients<span class="paren1">[<span class="code">::-1</span>]</span> <span class="comment"># tuple is also turned into list
+</span>     
+    <span class="special">def</span><span
+class="keyword"> __repr__</span><span class="paren1">(<span class="code">self</span>)</span>:
+        <span class="string">""</span><span class="string">"
+        method to return the canonical string representation 
+        of a polynomial.
+   
+        "</span><span class="string">""</span>
+        <span class="comment"># The internal representation is in reverse order,
+</span>        <span class="comment"># so we have to reverse the list
+</span>        <span class="symbol">return</span> <span class="string">"Polynomial"</span> + str<span class="paren1">(<span class="code">self.coefficients<span class="paren2">[<span class="code">::-1</span>]</span></span>)</span></span></code></pre>
+
+<p>我们可以像这样实例化<strong>前面例子多项式函数</strong> <small> \(\ p(x) = x^4 - 4 \cdot x^2 + 3 \cdot x \)</small> 的多项式：</p>
+
+<pre><code><span class="code">p = Polynomial<span class="paren1">(<span class="code">4, 0, -4, 3,  0</span>)</span>
+<span class="symbol">print</span><span class="paren1">(<span class="code">p</span>)</span></span></code></pre>
+
+<pre><code><span class="code"><span class="comment"># output
+</span>Polynomial<span class="paren1">(<span class="code">4, 0, -4, 3, 0</span>)</span></span></code></pre>
+
+<p>到现在我们已经定义了多项式，但我们需要的是多项式函数，为此我们给 Polynomial 类实例定义方法使其可以被调用：</p>
+
+<pre><code><span class="code"><span class="special">class</span><span
+class="keyword"> Polynomial</span>:
+    
+    <span class="special">def</span><span
+class="keyword"> __init__</span><span class="paren1">(<span class="code">self, *coefficients</span>)</span>:
+        <span class="string">""</span><span class="string">" input: coefficients are in the form a_n, ...a_1, a_0 
+        "</span><span class="string">""</span>
+        <span class="comment"># for reasons of efficiency we save the coefficients in reverse order,
+</span>        <span class="comment"># i.e. a_0, a_1, ... a_n
+</span>        self.coefficients = coefficients<span class="paren1">[<span class="code">::-1</span>]</span> <span class="comment"># tuple is also turned into list
+</span>     
+    <span class="special">def</span><span
+class="keyword"> __repr__</span><span class="paren1">(<span class="code">self</span>)</span>:
+        <span class="string">""</span><span class="string">"
+        method to return the canonical string representation 
+        of a polynomial.
+   
+        "</span><span class="string">""</span>
+        <span class="comment"># The internal representation is in reverse order,
+</span>        <span class="comment"># so we have to reverse the list
+</span>        <span class="symbol">return</span> <span class="string">"Polynomial"</span> + str<span class="paren1">(<span class="code">self.coefficients<span class="paren2">[<span class="code">::-1</span>]</span></span>)</span>
+            
+    <span class="special">def</span><span
+class="keyword"> __call__</span><span class="paren1">(<span class="code">self, x</span>)</span>:    
+        res = 0
+        <span class="symbol">for</span> index, coeff <span class="symbol">in</span> enumerate<span class="paren1">(<span class="code">self.coefficients</span>)</span>:
+            res += coeff * x** index
+        <span class="symbol">return</span> res</span></code></pre>
+
+<p>现在我们可以传入参数来调用实例了，这就是说实例的行为与多项式函数的行为很像。</p>
+
+<pre><code><span class="code">p = Polynomial<span class="paren1">(<span class="code">4, 0, -4, 3, 0</span>)</span>
+<span class="symbol">for</span> x <span class="symbol">in</span> range<span class="paren1">(<span class="code">-3, 3</span>)</span>:
+    <span class="symbol">print</span><span class="paren1">(<span class="code">x, p<span class="paren2">(<span class="code">x</span>)</span></span>)</span></span></code></pre>
+
+<pre><code><span class="code">-3 279
+-2 42
+-1 -3
+0 0
+1 3
+2 54</span></code></pre>
+
+<pre><code><span class="code"><span class="symbol">import</span> matplotlib.pyplot as plt
+
+X = np.linspace<span class="paren1">(<span class="code">-3, 3, 50, endpoint=True</span>)</span>
+F = p<span class="paren1">(<span class="code">X</span>)</span>
+
+plt.plot<span class="paren1">(<span class="code">X,F</span>)</span>
+plt.show<span class="paren1">(<span class="code"></span>)</span></span></code></pre>
+
+<p><img src="https://d.pr/i/Nkdsem+" alt="" /></p>
+
+<p>还可以定义多项式的加法和减法，我们需要做的就是对两个多项式的相同指数的系数做加法或减法。</p>
+
+<p>若有以下多项式函数</p>
+
+<p>$$ f(x) = \sum_{k=0}^{n}a_k \cdot x^k $$</p>
+
+<p>和 </p>
+
+<p>$$ g(x) = \sum_{k=0}^{n}b_k \cdot x^k $$</p>
+
+<p>加法的定义如下:</p>
+
+<p>$$ (f + g)(x) = \sum_{k=0}^{n}(a_k + b_k) \cdot x^k  $$ </p>
+
+<p>相应的减法就是</p>
+
+<p>$$ (f - g)(x) = \sum_{k=0}^{n}(a_k - b_k) \cdot x^k  $$ </p>
+
+<p>在我们添加 <strong>add</strong> 和 <strong>sub</strong> 之前，需要添加一个生成器 <code>zip_longest()</code>，它和 <code>zip()</code> 方法一样，将两个参数打包成一个无组，返回列表长度与最长的传入迭代器一致，不够的将会用 <code>fillchar</code> 来代替。</p>
+
+<pre><code><span class="code"><span class="special">def</span><span
+class="keyword"> zip_longest</span><span class="paren1">(<span class="code">iter1, iter2, fillchar=None</span>)</span>:
+    
+    <span class="symbol">for</span> i <span class="symbol">in</span> range<span class="paren1">(<span class="code">max<span class="paren2">(<span class="code">len<span class="paren3">(<span class="code">iter1</span>)</span>, len<span class="paren3">(<span class="code">iter2</span>)</span></span>)</span></span>)</span>:
+        <span class="symbol">if</span> i &gt;= len<span class="paren1">(<span class="code">iter1</span>)</span>:
+            <span class="symbol">yield</span> <span class="paren1">(<span class="code">fillchar, iter2<span class="paren2">[<span class="code">i</span>]</span></span>)</span>
+        <span class="symbol">elif</span> i &gt;= len<span class="paren1">(<span class="code">iter2</span>)</span>:
+            <span class="symbol">yield</span> <span class="paren1">(<span class="code">iter1<span class="paren2">[<span class="code">i</span>]</span>, fillchar</span>)</span>
+        else:
+            <span class="symbol">yield</span> <span class="paren1">(<span class="code">iter1<span class="paren2">[<span class="code">i</span>]</span>, iter2<span class="paren2">[<span class="code">i</span>]</span></span>)</span>
+        i += 1
+p1 = <span class="paren1">(<span class="code">2,</span>)</span>
+p2 = <span class="paren1">(<span class="code">-1, 4, 5</span>)</span>
+<span class="symbol">for</span> x <span class="symbol">in</span> zip_longest<span class="paren1">(<span class="code">p1, p2, fillchar=0</span>)</span>:
+    <span class="symbol">print</span><span class="paren1">(<span class="code">x</span>)</span></span></code></pre>
+
+<pre><code><span class="code"><span class="comment"># output
+</span><span class="paren1">(<span class="code">2, -1</span>)</span>
+<span class="paren1">(<span class="code">0, 4</span>)</span>
+<span class="paren1">(<span class="code">0, 5</span>)</span></span></code></pre>
+
+<p>把该生成器作为一个静态方法添加到 Polynomial 类里面，就可以添加 <strong>add</strong> 和 <strong>sub</strong> 方法了</p>
+
+<pre><code><span class="code"><span class="symbol">import</span> numpy as np
+<span class="symbol">import</span> matplotlib.pyplot as plt
+<span class="special">class</span><span
+class="keyword"> Polynomial</span>:
+    
+    <span class="special">def</span><span
+class="keyword"> __init__</span><span class="paren1">(<span class="code">self, *coefficients</span>)</span>:
+        <span class="string">""</span><span class="string">" input: coefficients are in the form a_n, ...a_1, a_0 
+        "</span><span class="string">""</span>
+        <span class="comment"># for reasons of efficiency we save the coefficients in reverse order,
+</span>        <span class="comment"># i.e. a_0, a_1, ... a_n
+</span>        self.coefficients = coefficients<span class="paren1">[<span class="code">::-1</span>]</span> <span class="comment"># tuple is also turned into list
+</span>     
+    <span class="special">def</span><span
+class="keyword"> __repr__</span><span class="paren1">(<span class="code">self</span>)</span>:
+        <span class="string">""</span><span class="string">"
+        method to return the canonical string representation 
+        of a polynomial.
+   
+        "</span><span class="string">""</span>
+        <span class="comment"># The internal representation is in reverse order,
+</span>        <span class="comment"># so we have to reverse the list
+</span>        <span class="symbol">return</span> <span class="string">"Polynomial"</span> + str<span class="paren1">(<span class="code">self.coefficients<span class="paren2">[<span class="code">::-1</span>]</span></span>)</span>
+            
+    <span class="special">def</span><span
+class="keyword"> __call__</span><span class="paren1">(<span class="code">self, x</span>)</span>:    
+        res = 0
+        <span class="symbol">for</span> index, coeff <span class="symbol">in</span> enumerate<span class="paren1">(<span class="code">self.coefficients</span>)</span>:
+            res += coeff * x** index
+        <span class="symbol">return</span> res  
+    
+    <span class="special">def</span><span
+class="keyword"> degree</span><span class="paren1">(<span class="code">self</span>)</span>:
+        <span class="symbol">return</span> len<span class="paren1">(<span class="code">self.coefficients</span>)</span>
+    
+    <span class="symbol">@staticmethod</span>
+    <span class="special">def</span><span
+class="keyword"> zip_longest</span><span class="paren1">(<span class="code">iter1, iter2, fillchar=None</span>)</span>:    
+        <span class="symbol">for</span> i <span class="symbol">in</span> range<span class="paren1">(<span class="code">max<span class="paren2">(<span class="code">len<span class="paren3">(<span class="code">iter1</span>)</span>, len<span class="paren3">(<span class="code">iter2</span>)</span></span>)</span></span>)</span>:
+            <span class="symbol">if</span> i &gt;= len<span class="paren1">(<span class="code">iter1</span>)</span>:
+                <span class="symbol">yield</span> <span class="paren1">(<span class="code">fillchar, iter2<span class="paren2">[<span class="code">i</span>]</span></span>)</span>
+            <span class="symbol">elif</span> i &gt;= len<span class="paren1">(<span class="code">iter2</span>)</span>:
+                <span class="symbol">yield</span> <span class="paren1">(<span class="code">iter1<span class="paren2">[<span class="code">i</span>]</span>, fillchar</span>)</span>
+            else:
+                <span class="symbol">yield</span> <span class="paren1">(<span class="code">iter1<span class="paren2">[<span class="code">i</span>]</span>, iter2<span class="paren2">[<span class="code">i</span>]</span></span>)</span>
+            i += 1   
+            
+    <span class="special">def</span><span
+class="keyword"> __add__</span><span class="paren1">(<span class="code">self, other</span>)</span>:
+        c1 = self.coefficients
+        c2 = other.coefficients
+        res = <span class="paren1">[<span class="code">sum<span class="paren2">(<span class="code">t</span>)</span> <span class="symbol">for</span> t <span class="symbol">in</span> Polynomial.zip_longest<span class="paren2">(<span class="code">c1, c2</span>)</span></span>]</span>
+        <span class="symbol">return</span> Polynomial<span class="paren1">(<span class="code">*res</span>)</span>
+    
+    <span class="special">def</span><span
+class="keyword"> __sub__</span><span class="paren1">(<span class="code">self, other</span>)</span>:
+        c1 = self.coefficients
+        c2 = other.coefficients
+        
+        res = <span class="paren1">[<span class="code">t1-t2 <span class="symbol">for</span> t1, t2 <span class="symbol">in</span> Polynomial.zip_longest<span class="paren2">(<span class="code">c1, c2</span>)</span></span>]</span>
+        <span class="symbol">return</span> Polynomial<span class="paren1">(<span class="code">*res</span>)</span>
+    
+            
+p1 = Polynomial<span class="paren1">(<span class="code">4, 0, -4, 3, 0</span>)</span>
+p2 = Polynomial<span class="paren1">(<span class="code">-0.8, 2.3, 0.5, 1, 0.2</span>)</span>
+p_sum = p1 + p2
+p_diff = p1 - p2
+X = np.linspace<span class="paren1">(<span class="code">-3, 3, 50, endpoint=True</span>)</span>
+F1 = p1<span class="paren1">(<span class="code">X</span>)</span>
+F2 = p2<span class="paren1">(<span class="code">X</span>)</span>
+F_sum = p_sum<span class="paren1">(<span class="code">X</span>)</span>
+F_diff = p_diff<span class="paren1">(<span class="code">X</span>)</span>
+plt.plot<span class="paren1">(<span class="code">X, F1, label=<span class="string">"F1"</span></span>)</span>
+plt.plot<span class="paren1">(<span class="code">X, F2, label=<span class="string">"F2"</span></span>)</span>
+plt.plot<span class="paren1">(<span class="code">X, F_sum, label=<span class="string">"F_sum"</span></span>)</span>
+plt.plot<span class="paren1">(<span class="code">X, F_diff, label=<span class="string">"F_diff"</span></span>)</span>
+plt.legend<span class="paren1">(<span class="code"></span>)</span>
+plt.show<span class="paren1">(<span class="code"></span>)</span></span></code></pre>
+
+<p><img src="https://d.pr/i/QNAY6s+" alt="" /> </p>
+
+<p>添加求微分到 Polynomial 类非常简单，数学的定义如下：</p>
+
+<p>$$ f'(x) = \sum_{k=0}^{n}k \cdot a_k \cdot x^{k-1}  $$ </p>
+
+<p>若</p>
+
+<p>$$ f(x) = \sum_{k=0}^{n}a_k \cdot x^k  $$ </p>
+
+<p>添加一个 <code>derivative</code> 方法就能实现这个功能：</p>
+
+<pre><code><span class="code"><span class="symbol">import</span> numpy as np
+<span class="symbol">import</span> matplotlib.pyplot as plt
+<span class="special">class</span><span
+class="keyword"> Polynomial</span>:
+    
+    <span class="special">def</span><span
+class="keyword"> __init__</span><span class="paren1">(<span class="code">self, *coefficients</span>)</span>:
+        <span class="string">""</span><span class="string">" input: coefficients are in the form a_n, ...a_1, a_0 
+        "</span><span class="string">""</span>
+        <span class="comment"># for reasons of efficiency we save the coefficients in reverse order,
+</span>        <span class="comment"># i.e. a_0, a_1, ... a_n
+</span>        self.coefficients = coefficients<span class="paren1">[<span class="code">::-1</span>]</span> <span class="comment"># tuple is also turned into list
+</span>     
+    <span class="special">def</span><span
+class="keyword"> __repr__</span><span class="paren1">(<span class="code">self</span>)</span>:
+        <span class="string">""</span><span class="string">"
+        method to return the canonical string representation 
+        of a polynomial.
+   
+        "</span><span class="string">""</span>
+        <span class="comment"># The internal representation is in reverse order,
+</span>        <span class="comment"># so we have to reverse the list
+</span>        <span class="symbol">return</span> <span class="string">"Polynomial"</span> + str<span class="paren1">(<span class="code">self.coefficients<span class="paren2">[<span class="code">::-1</span>]</span></span>)</span>
+    
+    <span class="special">def</span><span
+class="keyword"> __call__</span><span class="paren1">(<span class="code">self, x</span>)</span>:    
+        res = 0
+        <span class="symbol">for</span> index, coeff <span class="symbol">in</span> enumerate<span class="paren1">(<span class="code">self.coefficients</span>)</span>:
+            res += coeff * x** index
+        <span class="symbol">return</span> res 
+    
+    <span class="special">def</span><span
+class="keyword"> degree</span><span class="paren1">(<span class="code">self</span>)</span>:
+        <span class="symbol">return</span> len<span class="paren1">(<span class="code">self.coefficients</span>)</span>
+    
+    <span class="symbol">@staticmethod</span>
+    <span class="special">def</span><span
+class="keyword"> zip_longest</span><span class="paren1">(<span class="code">iter1, iter2, fillchar=None</span>)</span>:    
+        <span class="symbol">for</span> i <span class="symbol">in</span> range<span class="paren1">(<span class="code">max<span class="paren2">(<span class="code">len<span class="paren3">(<span class="code">iter1</span>)</span>, len<span class="paren3">(<span class="code">iter2</span>)</span></span>)</span></span>)</span>:
+            <span class="symbol">if</span> i &gt;= len<span class="paren1">(<span class="code">iter1</span>)</span>:
+                <span class="symbol">yield</span> <span class="paren1">(<span class="code">fillchar, iter2<span class="paren2">[<span class="code">i</span>]</span></span>)</span>
+            <span class="symbol">elif</span> i &gt;= len<span class="paren1">(<span class="code">iter2</span>)</span>:
+                <span class="symbol">yield</span> <span class="paren1">(<span class="code">iter1<span class="paren2">[<span class="code">i</span>]</span>, fillchar</span>)</span>
+            else:
+                <span class="symbol">yield</span> <span class="paren1">(<span class="code">iter1<span class="paren2">[<span class="code">i</span>]</span>, iter2<span class="paren2">[<span class="code">i</span>]</span></span>)</span>
+            i += 1   
+            
+    <span class="special">def</span><span
+class="keyword"> __add__</span><span class="paren1">(<span class="code">self, other</span>)</span>:
+        c1 = self.coefficients
+        c2 = other.coefficients
+        res = <span class="paren1">[<span class="code">sum<span class="paren2">(<span class="code">t</span>)</span> <span class="symbol">for</span> t <span class="symbol">in</span> Polynomial.zip_longest<span class="paren2">(<span class="code">c1, c2, 0</span>)</span></span>]</span>
+        <span class="symbol">return</span> Polynomial<span class="paren1">(<span class="code">*res<span class="paren2">[<span class="code">::-1</span>]</span></span>)</span>
+    
+    <span class="special">def</span><span
+class="keyword"> __sub__</span><span class="paren1">(<span class="code">self, other</span>)</span>:
+        c1 = self.coefficients
+        c2 = other.coefficients
+        res = <span class="paren1">[<span class="code">t1-t2 <span class="symbol">for</span> t1, t2 <span class="symbol">in</span> Polynomial.zip_longest<span class="paren2">(<span class="code">c1, c2, 0</span>)</span></span>]</span>
+        <span class="symbol">return</span> Polynomial<span class="paren1">(<span class="code">*res<span class="paren2">[<span class="code">::-1</span>]</span></span>)</span>
+    
+    <span class="special">def</span><span
+class="keyword"> derivative</span><span class="paren1">(<span class="code">self</span>)</span>:
+        derived_coeffs = <span class="paren1">[<span class="code"></span>]</span>
+        exponent = 1
+        <span class="symbol">for</span> i <span class="symbol">in</span> range<span class="paren1">(<span class="code">1, len<span class="paren2">(<span class="code">self.coefficients</span>)</span></span>)</span>:
+            derived_coeffs.append<span class="paren1">(<span class="code">self.coefficients<span class="paren2">[<span class="code">i</span>]</span> * exponent</span>)</span>
+            exponent += 1
+        <span class="symbol">return</span> Polynomial<span class="paren1">(<span class="code">*derived_coeffs<span class="paren2">[<span class="code">::-1</span>]</span></span>)</span>
+    
+    <span class="special">def</span><span
+class="keyword"> __str__</span><span class="paren1">(<span class="code">self</span>)</span>:
+        res = <span class="string">""</span>
+        <span class="symbol">for</span> i <span class="symbol">in</span> range<span class="paren1">(<span class="code">len<span class="paren2">(<span class="code">self.coefficients</span>)</span>-1, -1, -1</span>)</span>:
+            res +=  str<span class="paren1">(<span class="code">self.coefficients<span class="paren2">[<span class="code">i</span>]</span></span>)</span> + <span class="string">"x^"</span> + str<span class="paren1">(<span class="code">i</span>)</span> + <span class="string">" + "</span>
+        <span class="symbol">if</span> res.endswith<span class="paren1">(<span class="code"><span class="string">" + "</span></span>)</span>:
+            res = res<span class="paren1">[<span class="code">:-3</span>]</span>
+        <span class="symbol">return</span> res
+            
+p = Polynomial<span class="paren1">(<span class="code">-0.8, 2.3, 0.5, 1, 0.2</span>)</span>
+p_der = p.derivative<span class="paren1">(<span class="code"></span>)</span>
+X = np.linspace<span class="paren1">(<span class="code">-2, 3, 50, endpoint=True</span>)</span>
+F = p<span class="paren1">(<span class="code">X</span>)</span>
+F_derivative = p_der<span class="paren1">(<span class="code">X</span>)</span>
+plt.plot<span class="paren1">(<span class="code">X, F, label=<span class="string">"F"</span></span>)</span>
+plt.plot<span class="paren1">(<span class="code">X, F_derivative, label=<span class="string">"F_der"</span></span>)</span>
+plt.legend<span class="paren1">(<span class="code"></span>)</span>
+plt.show<span class="paren1">(<span class="code"></span>)</span></span></code></pre>
+
+<p><img src="https://d.pr/i/5qhj4i+" alt="" /></p>
+
+<p>再来几组：</p>
+
+<pre><code><span class="code">p = Polynomial<span class="paren1">(<span class="code">1, 1, 1, 1, 1</span>)</span>
+p2 = Polynomial<span class="paren1">(<span class="code">1, 2, 3</span>)</span>
+p_der = p.derivative<span class="paren1">(<span class="code"></span>)</span>
+<span class="symbol">print</span><span class="paren1">(<span class="code">p</span>)</span>
+<span class="symbol">print</span><span class="paren1">(<span class="code">p_der</span>)</span>
+<span class="symbol">print</span><span class="paren1">(<span class="code">p2</span>)</span>
+p3 = p + p2
+<span class="symbol">print</span><span class="paren1">(<span class="code">p3</span>)</span></span></code></pre>
+
+<pre><code><span class="code"><span class="comment"># output
+</span>1x^4 + 1x^3 + 1x^2 + 1x^1 + 1x^0
+4x^3 + 3x^2 + 2x^1 + 1x^0
+1x^2 + 2x^1 + 3x^0
+1x^4 + 1x^3 + 2x^2 + 3x^1 + 4x^0</span></code></pre>
+
+<p><a href="https://www.python-course.eu/polynomial_class_in_python.php" >原文链接</a></p>
+</div> </div> <div id="relative-nav">   </div> <div id="tagsoup"> <p>This blog covers <a href="https://dcb9.github.io/tag/Docker.html">Docker</a>, <a href="https://dcb9.github.io/tag/Ethereum.html">Ethereum</a>, <a href="https://dcb9.github.io/tag/PaymentChannel.html">PaymentChannel</a>, <a href="https://dcb9.github.io/tag/PlasmaMVP.html">Plasma_MVP</a>, <a href="https://dcb9.github.io/tag/Polynomial.html">Polynomial</a>, <a href="https://dcb9.github.io/tag/Python.html">Python</a>, <a href="https://dcb9.github.io/tag/Yii.html">Yii</a>, <a href="https://dcb9.github.io/tag/Yii2.html">Yii2</a>, <a href="https://dcb9.github.io/tag/email.html">email</a>, <a href="https://dcb9.github.io/tag/gentoo.html">gentoo</a>, <a href="https://dcb9.github.io/tag/git.html">git</a>, <a href="https://dcb9.github.io/tag/math.html">math</a>, <a href="https://dcb9.github.io/tag/memcached.html">memcached</a>, <a href="https://dcb9.github.io/tag/ngrok.html">ngrok</a>, <a href="https://dcb9.github.io/tag/note.html">note</a>, <a href="https://dcb9.github.io/tag/php.html">php</a>, <a href="https://dcb9.github.io/tag/phpunit.html">phpunit</a>, <a href="https://dcb9.github.io/tag/session.html">session</a>, <a href="https://dcb9.github.io/tag/shall.html">shall</a>, <a href="https://dcb9.github.io/tag/shell.html">shell</a>, <a href="https://dcb9.github.io/tag/vagrant.html">vagrant</a>, <a href="https://dcb9.github.io/tag/yii.html">yii</a>, <a href="https://dcb9.github.io/tag/以太坊.html">以太坊</a>, <a href="https://dcb9.github.io/tag/多项式.html">多项式</a>, <a href="https://dcb9.github.io/tag/工作.html">工作</a>, <a href="https://dcb9.github.io/tag/支付通道.html">支付通道</a>, <a href="https://dcb9.github.io/tag/生活.html">生活</a>, <a href="https://dcb9.github.io/tag/翻译.html">翻译</a>, <a href="https://dcb9.github.io/tag/贷款.html">贷款</a> </div> <div id="monthsoup"> <p>View content from <a href="https://dcb9.github.io/date/2018-11.html">2018-11</a>, <a href="https://dcb9.github.io/date/2018-10.html">2018-10</a>, <a href="https://dcb9.github.io/date/2018-09.html">2018-09</a>, <a href="https://dcb9.github.io/date/2017-03.html">2017-03</a>, <a href="https://dcb9.github.io/date/2016-09.html">2016-09</a>, <a href="https://dcb9.github.io/date/2015-11.html">2015-11</a>, <a href="https://dcb9.github.io/date/2015-05.html">2015-05</a>, <a href="https://dcb9.github.io/date/2015-03.html">2015-03</a>, <a href="https://dcb9.github.io/date/2015-02.html">2015-02</a>, <a href="https://dcb9.github.io/date/2014-12.html">2014-12</a>, <a href="https://dcb9.github.io/date/2014-11.html">2014-11</a>, <a href="https://dcb9.github.io/date/2014-10.html">2014-10</a>, <a href="https://dcb9.github.io/date/2014-09.html">2014-09</a>, <a href="https://dcb9.github.io/date/2013-12.html">2013-12</a> </div> </div>  <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="https://dcb9.github.io/css/cc-by-sa.png" /> </a> by Chengbin Du <a id="coleslaw-logo" href="https://github.com/redline6561/coleslaw"> <img src="https://dcb9.github.io/css/logo_small.jpg" alt="Coleslaw logo" /> </a> </div> </body> </html>
