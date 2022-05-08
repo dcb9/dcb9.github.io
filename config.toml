@@ -2,7 +2,7 @@ baseURL = "https://dcb9.github.io"
 languageCode = "en-us"
 title = "Du, Chengbin's Blog"
 theme = "ink"
-paginate = 5
+paginate = 20
 
 copyright = "© Copyright Du, Chengbin"
 
@@ -25,9 +25,9 @@ disqusShortname = ""
 	featherIconsCDN = true
 
 	mode = "light" # "dark" or "auto"
-	# customCSS = "css/custom.css"  # Custom CSS applied to default styles.
+	customCSS = "css/katex.min.css"  # Custom CSS applied to default styles.
 	# customDarkCSS = "css/custom-dark.css"  # Custom styles applied to dark mode css.
-	# customJS = ["js/custom.js", "js/custom1.js"]  # Custom JS scripts.
+	customJS = ["js/katex.min.js", "js/auto-render.min.js",  "js/custom.js"]  # Custom JS scripts.
 
 # Nav.
 [[menu.main]]

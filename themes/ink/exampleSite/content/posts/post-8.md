@@ -62,7 +62,7 @@ Tables aren't part of the core Markdown spec, but Hugo supports supports them ou
 
 #### Code block with backticks
 
-```
+~~~
 html
 <!DOCTYPE html>
 <html lang="en">
@@ -74,7 +74,7 @@ html
   <p>Test</p>
 </body>
 </html>
-```
+~~~
 #### Code block indented with four spaces
 
     <!DOCTYPE html>
@@ -133,5 +133,3 @@ X<sup>n</sup> + Y<sup>n</sup> = Z<sup>n</sup>
 Press <kbd><kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Delete</kbd></kbd> to end the session.
 
 Most <mark>salamanders</mark> are nocturnal, and hunt for insects, worms, and other small creatures.
-
-

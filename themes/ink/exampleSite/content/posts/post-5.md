@@ -37,7 +37,7 @@ Lid est laborum et dolorum fuga, This is [an example](http://example.com/ "Title
 
 Following is the syntax highlighted code block
 
-```go
+~~~go
 func getCookie(name string, r interface{}) (*http.Cookie, error) {
 	rd := r.(*http.Request)
 	cookie, err := rd.Cookie(name)
@@ -53,7 +53,7 @@ func setCookie(cookie *http.Cookie, w interface{}) error {
 	http.SetCookie(wr, cookie)
 	return nil
 }
-```
+~~~
 
 This is blockquote, Will make it *better now*
 
