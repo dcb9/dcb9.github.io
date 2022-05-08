@@ -14,7 +14,7 @@ googleAnalytics = ""
 disqusShortname = ""
 
 [params]
-	subtitle = "A software engineer"
+	subtitle = "Software engineer"
 
 	# Optional 64x64 avatar image.
 	avatar = ""
