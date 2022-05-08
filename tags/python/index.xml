@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Python on Du, Chengbin's Blog</title><link>https://dcb9.github.io/tags/python/</link><description>Recent content in Python on Du, Chengbin's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>© Copyright Du, Chengbin</copyright><lastBuildDate>Sat, 24 Nov 2018 00:00:00 +0800</lastBuildDate><atom:link href="https://dcb9.github.io/tags/python/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 Python 绘制多项式函数</title><link>https://dcb9.github.io/posts/2018-11-24/</link><pubDate>Sat, 24 Nov 2018 00:00:00 +0800</pubDate><guid>https://dcb9.github.io/posts/2018-11-24/</guid><description>简介 高中你就会接触到多项式和多项式函数，本章教程完全依赖多项式，也就是说，我们将会花一节课的时间去了解多项式。下面是一个 4 次多项式的例子：
+$$ p(x) = x^4 - 4 \cdot x^2 + 3 \cdot x $$
+你会发觉它们跟整数有许多相似之处，本课我们将会定义多种多项式的算术操作，我们的 Polynomial 类也将提供计算多项式的推导和积分的方法，绘制多项式的图像。
+多项式非常漂亮，现在最重要的是如何用 Python 类来实现它们，我们要感谢 Drew Shanon，他让我们使用他的精美的图片，将数学视为艺术！
+数学知识介绍 我们将只会处理含有一个未知数的多项式，含有一个未知数的多项式的一般形式如下：
+$$ a_n \cdot x^n + a_{n-1} \cdot x^{n-1} + &amp;hellip; + a_1 \cdot x + a_0 $$
+\( a_0, a_1, &amp;hellip; a_n \) 为常数，\( x \) 为未知数，未知数也就是它没有一个特定的值，可以用任何数都可以用来替换。
+这个表达式经常用求和符号来表示：
+$$ \sum_{k=0}^{n}a_k \cdot x^k = a_n \cdot x^n + a_{n-1} \cdot x^{n-1} + &amp;hellip; + a_1 \cdot x + a_0 $$</description></item></channel></rss>

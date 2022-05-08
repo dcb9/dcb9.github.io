@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Docker on Du, Chengbin's Blog</title><link>https://dcb9.github.io/tags/docker/</link><description>Recent content in Docker on Du, Chengbin's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>© Copyright Du, Chengbin</copyright><lastBuildDate>Wed, 18 Mar 2015 00:00:00 +0800</lastBuildDate><atom:link href="https://dcb9.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker VS 虚拟机</title><link>https://dcb9.github.io/posts/2015-03-18/</link><pubDate>Wed, 18 Mar 2015 00:00:00 +0800</pubDate><guid>https://dcb9.github.io/posts/2015-03-18/</guid><description>本文翻译自：《Docker: Git for deployment &amp;ndash; Scout》，个人感觉它的内容和标题不对，所以就没有直译过来，要是我理解错了请帮忙纠正。
+我听说了 Docker 多么令人惊叹，但是它并没有征服我的心，直到我提出一个实际的问题：【如果 Scout 使用 Docker 来部署，它会让我们的部署变得更顺利吗？】
+以下是三个案例：
+高效地模拟线上环境 我们线上有 16 台服务器，如果我尝试在本地使用 VirtualBox 配置每个实例 512 MB内存，那么它将占用我笔记本的两倍内存（说明他笔记本只有 4G 内存），VirtualBox 需要有许多多余的开支来管理每个子操作系统，Docker 在这方面是不一样的——容器共享同一个操作系统，更有可能是同样的二进制包文件和库文件，它可以运行在一台 Docker 主机上运行好几百个容器。
+老方法 我不能在本地完全地模拟线上环境，让我们来看一下通过 Vagrant 启动一台机器需要花多久：
+$ time vagrant up Bringing machine &amp;#39;default&amp;#39; up with &amp;#39;virtualbox&amp;#39; provider... [default] Importing base box &amp;#39;squeeze64-ruby193&amp;#39;... ... [default] Booting VM... [default] Waiting for VM to boot. This can take a few minutes. ... real 1m32.052s 启动一个镜像需要一分半钟，如果我需要修改一个配置文件并检测是否能够正常工作，那么需要重启镜像，那又是可怕的一分半钟。
+如果你配置的有错，那将是一个残忍的惩罚。（每次修改就需要一分半钟才能看到结果）
+使用 Docker 后</description></item></channel></rss>

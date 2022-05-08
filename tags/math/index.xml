@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Math on Du, Chengbin's Blog</title><link>https://dcb9.github.io/tags/math/</link><description>Recent content in Math on Du, Chengbin's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>© Copyright Du, Chengbin</copyright><lastBuildDate>Sun, 08 May 2022 02:21:39 +0800</lastBuildDate><atom:link href="https://dcb9.github.io/tags/math/index.xml" rel="self" type="application/rss+xml"/><item><title>除法和减法的关系</title><link>https://dcb9.github.io/posts/2022-05-08/</link><pubDate>Sun, 08 May 2022 02:21:39 +0800</pubDate><guid>https://dcb9.github.io/posts/2022-05-08/</guid><description>同学们知道都乘法和加法之间的关系，乘法是几个相同的数相加的简便运算。对于除法，同学们知道它和乘法的关系，知道除法是乘法的逆运算，那除法和减法之间有什么关系呢？如何从减法来理解除法呢？
+例如24÷3=8，如果从除法是乘法的逆运算角度来看，商8表示的是3的8倍是24.
+也就是说：8个3连续相加，和是24，即3+3+3+3+3+3+3+3=24。
+同学们接着从上面的加法等式出发，可以得出24-3-3-3-3-3-3-3-3=0，也就是说，24连续减去8个3，就可以把自己全部减完。
+于是我们就把 24÷3=8 和 24-3-3-3-3-3-3-3-3=0 除法和减法联系了起来。
+除法可以看作是连续减去相同的数的减法，或者说，与乘法是加法的简便运算一样，除法就是相同减数减法的简便运算。
+被除数就是被减数，除数就是连续被减的相同的数，连续减的次数就是商。
+如果减到最后还有剩余，那这个数就是余数。
+除法和减法的这种联系，从符号的书写就可以看出端倪，乘号和加号接近，而除号和减号更像！
+由此看来,加、减、乘、除虽是四种各自独立的运算,但它们之间又有着十分紧密的联系。
+加法是在计数的基础上发展起来的一种连续性的计数,是最基本的运算。
+减法是加法的逆运算,也就是加法的还原。
+乘法又是加法的发展,是求相同加数加法的简便算法。
+除法是乘法的逆运算,也就是乘法的还原。除法对减法来说,又是减法的发展,是求相同减数减法的简便算法。
+同学们仔细梳理四则运算之间的关系，打通他们之间的联系，这样今后才能更加灵活的处理不同类型的计算和不同场景应用。
+作者：丽老师
+原文链接: 如何从减法的角度去理解除法？
+读后感　 除法运算 =&amp;gt; 减法运算
+减法运算 =&amp;gt; 加法运算
+乘法去处 =&amp;gt; 加法运算
+了解了四则去运算间的关系，我们的计算机就可以以最简洁的方式去实现，只需要实现一套加法运算，即可处理加减乘除这四种运算。</description></item><item><title>使用 Python 绘制多项式函数</title><link>https://dcb9.github.io/posts/2018-11-24/</link><pubDate>Sat, 24 Nov 2018 00:00:00 +0800</pubDate><guid>https://dcb9.github.io/posts/2018-11-24/</guid><description>简介 高中你就会接触到多项式和多项式函数，本章教程完全依赖多项式，也就是说，我们将会花一节课的时间去了解多项式。下面是一个 4 次多项式的例子：
+$$ p(x) = x^4 - 4 \cdot x^2 + 3 \cdot x $$
+你会发觉它们跟整数有许多相似之处，本课我们将会定义多种多项式的算术操作，我们的 Polynomial 类也将提供计算多项式的推导和积分的方法，绘制多项式的图像。
+多项式非常漂亮，现在最重要的是如何用 Python 类来实现它们，我们要感谢 Drew Shanon，他让我们使用他的精美的图片，将数学视为艺术！
+数学知识介绍 我们将只会处理含有一个未知数的多项式，含有一个未知数的多项式的一般形式如下：
+$$ a_n \cdot x^n + a_{n-1} \cdot x^{n-1} + &amp;hellip; + a_1 \cdot x + a_0 $$
+\( a_0, a_1, &amp;hellip; a_n \) 为常数，\( x \) 为未知数，未知数也就是它没有一个特定的值，可以用任何数都可以用来替换。
+这个表达式经常用求和符号来表示：
+$$ \sum_{k=0}^{n}a_k \cdot x^k = a_n \cdot x^n + a_{n-1} \cdot x^{n-1} + &amp;hellip; + a_1 \cdot x + a_0 $$</description></item><item><title>招商银行-E-招贷的年利率是多少</title><link>https://dcb9.github.io/posts/2018-09-08/</link><pubDate>Sat, 08 Sep 2018 00:00:00 +0800</pubDate><guid>https://dcb9.github.io/posts/2018-09-08/</guid><description>以前并未完全了解银行贷款的年利率的计算规则，前两天在 Youtube 上看了李永乐老师讲的《贷款买房，利息怎么算？》，才明白利息的计算方法。
+贷款的还款方式 银行贷款的还款方式有两种：1. 等额本金 2. 等额本息
+等额本金 等额本金又称利随本清、等本不等息还款法。贷款人将本金分摊到每个月内，同时付清上一交易日至本次还款日之间的利息。
+这种还款方式相对等额本息而言，总的利息支出较低，但是前期支付的本金和利息较多，还款负担逐月递减。
+计算公式：
+$$ 月利率 = \frac{年利率}{12} $$
+$$ 每月本金 = \frac{总本金}{贷款月数} $$ $$ 累计已还本金 = 每月本金 x 还款月数 $$ $$ 剩余本金 = 总本金 - 累计已还本金 $$
+$$ 每月利息 = 剩余本金 × 月利率 $$ $$ 每月还本付息(还款)金额 = 每月本金 + 每月利息 $$
+$$ 还款总利息 =\frac{(贷款月数 + 1)x贷款额x月利率}{　2　}$$ $$ 还款总额 = 还款总利息 + 贷款额 $$
+假设贷款 10 万元，年利率为 6%，贷款时间为 12 个月，则：</description></item></channel></rss>

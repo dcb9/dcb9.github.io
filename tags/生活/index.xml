@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>生活 on Du, Chengbin's Blog</title><link>https://dcb9.github.io/tags/%E7%94%9F%E6%B4%BB/</link><description>Recent content in 生活 on Du, Chengbin's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>© Copyright Du, Chengbin</copyright><lastBuildDate>Sat, 08 Sep 2018 00:00:00 +0800</lastBuildDate><atom:link href="https://dcb9.github.io/tags/%E7%94%9F%E6%B4%BB/index.xml" rel="self" type="application/rss+xml"/><item><title>招商银行-E-招贷的年利率是多少</title><link>https://dcb9.github.io/posts/2018-09-08/</link><pubDate>Sat, 08 Sep 2018 00:00:00 +0800</pubDate><guid>https://dcb9.github.io/posts/2018-09-08/</guid><description>以前并未完全了解银行贷款的年利率的计算规则，前两天在 Youtube 上看了李永乐老师讲的《贷款买房，利息怎么算？》，才明白利息的计算方法。
+贷款的还款方式 银行贷款的还款方式有两种：1. 等额本金 2. 等额本息
+等额本金 等额本金又称利随本清、等本不等息还款法。贷款人将本金分摊到每个月内，同时付清上一交易日至本次还款日之间的利息。
+这种还款方式相对等额本息而言，总的利息支出较低，但是前期支付的本金和利息较多，还款负担逐月递减。
+计算公式：
+$$ 月利率 = \frac{年利率}{12} $$
+$$ 每月本金 = \frac{总本金}{贷款月数} $$ $$ 累计已还本金 = 每月本金 x 还款月数 $$ $$ 剩余本金 = 总本金 - 累计已还本金 $$
+$$ 每月利息 = 剩余本金 × 月利率 $$ $$ 每月还本付息(还款)金额 = 每月本金 + 每月利息 $$
+$$ 还款总利息 =\frac{(贷款月数 + 1)x贷款额x月利率}{　2　}$$ $$ 还款总额 = 还款总利息 + 贷款额 $$
+假设贷款 10 万元，年利率为 6%，贷款时间为 12 个月，则：</description></item></channel></rss>

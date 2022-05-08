@@ -1,0 +1,104 @@
+<!doctype html><html>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge"><title>Local development environment -- Vagrant - Du, Chengbin's Blog</title><meta name=viewport content="width=device-width,initial-scale=1">
+<meta itemprop=name content="Local development environment -- Vagrant">
+<meta itemprop=description content="Vagrant 对于本地开发来说真的是非常的棒，一般公司的开发人员都不止一个人，所以要每个开发人员都自己去搭建本地环境，会耗费非常多的时间，甚至还有可能会搭不起来的，就算搭起来了也不够统一，不能够和线上的保持一致。"><meta itemprop=datePublished content="2014-10-12T00:00:00+08:00">
+<meta itemprop=dateModified content="2014-10-12T00:00:00+08:00">
+<meta itemprop=wordCount content="106">
+<meta itemprop=keywords content="Vagrant,"><meta property="og:title" content="Local development environment -- Vagrant">
+<meta property="og:description" content="Vagrant 对于本地开发来说真的是非常的棒，一般公司的开发人员都不止一个人，所以要每个开发人员都自己去搭建本地环境，会耗费非常多的时间，甚至还有可能会搭不起来的，就算搭起来了也不够统一，不能够和线上的保持一致。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dcb9.github.io/posts/2014-10-12-vagrant-local-development-environment/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2014-10-12T00:00:00+08:00">
+<meta property="article:modified_time" content="2014-10-12T00:00:00+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Local development environment -- Vagrant">
+<meta name=twitter:description content="Vagrant 对于本地开发来说真的是非常的棒，一般公司的开发人员都不止一个人，所以要每个开发人员都自己去搭建本地环境，会耗费非常多的时间，甚至还有可能会搭不起来的，就算搭起来了也不够统一，不能够和线上的保持一致。">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/main.css>
+<link rel=stylesheet type=text/css href=https://dcb9.github.iocss/katex.min.css>
+<link id=dark-scheme rel=stylesheet type=text/css href=https://dcb9.github.iocss/dark.css>
+<script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script>
+<script src=https://dcb9.github.iojs/main.js></script><script src=https://dcb9.github.iojs/katex.min.js></script><script src=https://dcb9.github.iojs/auto-render.min.js></script><script src=https://dcb9.github.iojs/custom.js></script>
+</head>
+<body>
+<div class="container wrapper">
+<div class=header>
+<h1 class=site-title><a href=https://dcb9.github.io>Du, Chengbin's Blog</a></h1>
+<div class=site-description><p>A software engineer</p><nav class="nav social">
+<ul class=flat><li><a href=https://github.com/dcb9 title=Github><i data-feather=github></i></a></li><li><a href=https://twitter.com/robertduu title=Twitter><i data-feather=twitter></i></a></li><li><a href=/index.xml title=RSS><i data-feather=rss></i></a></li></ul>
+</nav>
+</div>
+<nav class=nav>
+<ul class=flat>
+<li>
+<a href=/>Home</a>
+</li>
+<li>
+<a href=/posts>All posts</a>
+</li>
+<li>
+<a href=/about>About</a>
+</li>
+<li>
+<a href=/tags>Tags</a>
+</li>
+</ul>
+</nav>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>12</span>
+<span class=rest>Oct 2014</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>Local development environment -- Vagrant</h1>
+</div>
+</div>
+<div class=markdown>
+<p>Vagrant 对于本地开发来说真的是非常的棒，一般公司的开发人员都不止一个人，所以要每个开发人员都自己去搭建本地环境，会耗费非常多的时间，甚至还有可能会搭不起来的，就算搭起来了也不够统一，不能够和线上的保持一致。</p>
+<h2 id=vagrant-是什么呢>Vagrant 是什么呢？</h2>
+<p>它是基于 Virtual box(后面简称 VBox 了)而运行的，其实它就是在使用命令来控制 Vbox，它可以让你非常方便的去配置虚拟机，因为所有的配置都是在配置文件里面。</p>
+<h2 id=各种坑>各种坑</h2>
+<h3 id=一静态文件>一、静态文件</h3>
+<p>安装好 Apache 和 Nginx 首先来测试静态文件(我使用的是 .html 结尾的)，这些文件是从主机共享，然后虚拟机里面挂载的，使用的是Vagrant的：<code>config.vm.synced_folder "/Users/bob/Documents/code/", "/var/www/"</code>，然后我在本地修改这些文件，发现在浏览器上刷新都不变，总是不相信浏览器，于是用命令行的 cURL 去测试，结果还是一样的，后来终于在网上搜到了<a href=http://segmentfault.com/blog/fenbox/1190000000264347>帖子：《使用 Vagrant 打造跨平台开发环境》</a>，它这里说到了， 不然的话它就不变。# Apache 配置添加: EnableSendfile off
+# Nginx 配置添加:sendfile off;
+</p>
+<h3 id=二磁盘满了>二、磁盘满了</h3>
+<p>这个其实不能算 Vagrant 的坑，而是自己不细心，但是放到这也是在提醒自己和读者不要忘记这件事。
+</p>
+<h3 id=三文件权限>三、文件权限</h3>
+<p>在 Windows 上的时候进入虚拟机后发现，共享的文件全部都是 777 的权限，而且还改不过来，这是怎么回事呢。这是 PHP MyAdmin 报出的错误：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>Wrong permissions on configuration file, should not be world writable!
+( ! ) Notice: Array to string conversion in
+/var/www/phpmyadmin/libraries/Error.class.php
+
+通过一番 Google 之后终于找到了问题的解决：http://serverfault.com/questions/398414/vagrant-set-default-share-permissions， 可以在配置文件里面填写：
+
+config.vm.synced_folder &#34;/Users/bob/Documents/code/&#34;, &#34;/var/www/&#34;, :mount_options =&gt; [&#34;dmode=755&#34;,&#34;fmode=644&#34;]
+</code></pre></div><h3 id=四运行-vagrant-up-之后机器起不来>四、运行 vagrant up 之后机器起不来</h3>
+<p>这个问题比较有意思，在我们运行 <code>vagrant up</code> 这个命令的时候它会让 Vbox 去启动这个虚拟机，然后等虚拟机启动完成之后就修改相应的配置，但是却遇到了一个问题，Vbox 撒娇了——就不起来，于是只能打开 Vbox 手动去点启动，发现也启不来，却得到了一个报错：<code>Error VT-x</code>，最终解决也是在 stackoverflow 里面找到的，默认可能 cpus 等于的是 2，但是我们有的机器配置偏低就起不来了，所以把它改成1之后再启动就好了。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>config.vm.provider &#34;virtualbox&#34; do |vb|
+    vb.customize [&#34;modifyvm&#34;, :id, &#34;--cpus&#34;, &#34;1&#34;]
+end
+</code></pre></div>
+</div>
+<div class=tags>
+<ul class=flat>
+<li><a href=/tags/vagrant>Vagrant</a></li>
+</ul>
+</div></div>
+</div>
+<div class="footer wrapper">
+<nav class=nav>
+<div>2022 © Copyright Du, Chengbin | <a href=https://github.com/knadh/hugo-ink>Ink</a> theme on <a href=https://gohugo.io>Hugo</a></div>
+</nav>
+</div>
+<script>feather.replace()</script>
+</body>
+</html>

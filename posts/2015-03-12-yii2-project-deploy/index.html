@@ -1,0 +1,135 @@
+<!doctype html><html>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge"><title>Yii2 项目部署流程 - Du, Chengbin's Blog</title><meta name=viewport content="width=device-width,initial-scale=1">
+<meta itemprop=name content="Yii2 项目部署流程">
+<meta itemprop=description content="网上现在有许多关于在 Yii2 下进行开发的文章，但对于如何把程序优雅地部署到线上介绍的还不是很多，下面我就来介绍一下我自己的部署流程。"><meta itemprop=datePublished content="2015-03-12T00:00:00+08:00">
+<meta itemprop=dateModified content="2015-03-12T00:00:00+08:00">
+<meta itemprop=wordCount content="138">
+<meta itemprop=keywords content="工作,Yii,"><meta property="og:title" content="Yii2 项目部署流程">
+<meta property="og:description" content="网上现在有许多关于在 Yii2 下进行开发的文章，但对于如何把程序优雅地部署到线上介绍的还不是很多，下面我就来介绍一下我自己的部署流程。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dcb9.github.io/posts/2015-03-12-yii2-project-deploy/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2015-03-12T00:00:00+08:00">
+<meta property="article:modified_time" content="2015-03-12T00:00:00+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Yii2 项目部署流程">
+<meta name=twitter:description content="网上现在有许多关于在 Yii2 下进行开发的文章，但对于如何把程序优雅地部署到线上介绍的还不是很多，下面我就来介绍一下我自己的部署流程。">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/main.css>
+<link rel=stylesheet type=text/css href=https://dcb9.github.iocss/katex.min.css>
+<link id=dark-scheme rel=stylesheet type=text/css href=https://dcb9.github.iocss/dark.css>
+<script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script>
+<script src=https://dcb9.github.iojs/main.js></script><script src=https://dcb9.github.iojs/katex.min.js></script><script src=https://dcb9.github.iojs/auto-render.min.js></script><script src=https://dcb9.github.iojs/custom.js></script>
+</head>
+<body>
+<div class="container wrapper">
+<div class=header>
+<h1 class=site-title><a href=https://dcb9.github.io>Du, Chengbin's Blog</a></h1>
+<div class=site-description><p>A software engineer</p><nav class="nav social">
+<ul class=flat><li><a href=https://github.com/dcb9 title=Github><i data-feather=github></i></a></li><li><a href=https://twitter.com/robertduu title=Twitter><i data-feather=twitter></i></a></li><li><a href=/index.xml title=RSS><i data-feather=rss></i></a></li></ul>
+</nav>
+</div>
+<nav class=nav>
+<ul class=flat>
+<li>
+<a href=/>Home</a>
+</li>
+<li>
+<a href=/posts>All posts</a>
+</li>
+<li>
+<a href=/about>About</a>
+</li>
+<li>
+<a href=/tags>Tags</a>
+</li>
+</ul>
+</nav>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>12</span>
+<span class=rest>Mar 2015</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>Yii2 项目部署流程</h1>
+</div>
+</div>
+<div class=markdown>
+<p>网上现在有许多关于在 Yii2 下进行开发的文章，但对于如何把程序优雅地部署到线上介绍的还不是很多，下面我就来介绍一下我自己的部署流程。</p>
+<h2 id=概述>概述</h2>
+<p>本地修改代码 -> 提交至版本控制仓库 -> master 分支有修改时自动部署到服务器</p>
+<h3 id=代码托管到-github>代码托管到 GitHub</h3>
+<p>原来也用过 coding.net，用了两个月发现它在许多地方表现的不是很如意，所以就迁到 GitHub 了。</p>
+<h2 id=修改代码>修改代码</h2>
+<p>本地修改代码时不要直接修改 master 分支的代码，而是切出一个分支来做这个功能，做好之后把这个分支提交到远端仓库，功能完成之后，发起一个 Pull Request（后面就用 PR 代替），由另一个开发来检查一下代码，如果没有问题就合并到 master 分支。</p>
+<p>当你的功能出来之后，需要同步到其它开发者，和线上服务器。你可能修改的代码如下：</p>
+<ul>
+<li>依赖新的软件包 [3]</li>
+<li>修改环境配置信息 [1]</li>
+<li>创建或修改了数据库结构 [2]</li>
+</ul>
+<p>另一个开发是不知道要如何部署的，除非你把全部的部署命令告诉他，于是我们创建一个脚本来解决这个问题，让一切自动完成，其它开发并不需要知道你又做了些什么，只需要做两件事：a. 更新代码 b. 运行部署脚本，线上服务器同样也只需要做这两件事，但脚本肯定不同，因为本地环境会安装许多的 debug 软件，而线上不需要，以及环境初始化的参数也不一样。</p>
+<p>开发环境的部署脚本：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#00f>#!/bin/bash
+</span><span style=color:#00f></span>
+<span style=color:green>#./bin/dev/deploy.sh</span>
+
+composer install <span style=color:green># 它来把 composer 所有的依赖安装好</span>
+./init  --env=Development --overwrite=y  <span style=color:green># 重新初始化环境配置</span>
+
+<span style=color:green># 等等 我们还有许多别的，例如： bower install ，因为我们的静态资源是使用的 bower 来管理的</span>
+</code></pre></div><p>线上部署脚本：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#00f>#!/bin/bash
+</span><span style=color:#00f></span><span style=color:green># file ./bin/prod/deploy.sh</span>
+
+<span style=color:green># ... ...</span>
+composer install --prefer-dist --no-dev --no-progress --optimize-autoloader
+
+<span style=color:green># 初始化 php 环境变量</span>
+./init --env=Production --overwrite=y
+
+<span style=color:green># git submodule</span>
+git submodule init
+git submodule update
+</code></pre></div><h3 id=本地有一个测试环境是很重要的>本地有一个测试环境是很重要的</h3>
+<p>如果本地没有测试环境，那会使开发效率大打折扣，因为每一次都要到线上才能测试，而且很容易会出问题，后果不堪设想，博主现在用的还是 Vagrant， Docker 也挺想尝试，最近赶项目没腾出时间来学习呢。</p>
+<h2 id=使用-dployio-进行自动部署>使用 dploy.io 进行自动部署</h2>
+<p>以前也尝试自己写自动部署的钩子，直到我用了 dploy.io 之后我就不写了，因为 dploy.io 比自己写要好得太多了，它可以监测到哪个项目的哪个分支有改动，然后去做一些什么事情，而且在执行的时候日志都可以完全浏览到，话说它还有回滚功能（虽然没用过），每一次的部署过程都可以回看，让我们了解错在哪里。</p>
+<p>只需要两步就能完成</p>
+<ol>
+<li>配置好 dploy.io 进入需要部署的服务器的权限</li>
+<li>更新的时候需要执行哪些命令</li>
+</ol>
+<p>部署命令是：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>cd projectRoot
+git pull origin master
+./bin/prod/deploy.sh
+<span style=color:green># 这个脚本里面包含了许多内容：</span>
+<span style=color:green># 安装 composer 依赖包，bower 软件包，静态资源发布，项目环境初始化</span>
+</code></pre></div><ol>
+<li>环境配置位于 environments 目录下 dev 为本地测试环境使用的配置文件， prod 为线上环境使用的配置文件。</li>
+<li>数据库结构版本化，可以阅读：《重量级发布再见！数据库版本控制完全指南》，Yii2 通过 migrate 来实现，这个还在探索中。</li>
+<li>我们做项目，而不是做开源产品的话，需要把 composer.lock 文件也加入到版本库里面。它里面记录了每个安装的软件的版本，这样其它机器在部署时，就会安装相同版本的软件包，这样提高了产品的稳定性。</li>
+</ol>
+</div>
+<div class=tags>
+<ul class=flat>
+<li><a href=/tags/%E5%B7%A5%E4%BD%9C>工作</a></li>
+<li><a href=/tags/yii>Yii</a></li>
+</ul>
+</div></div>
+</div>
+<div class="footer wrapper">
+<nav class=nav>
+<div>2022 © Copyright Du, Chengbin | <a href=https://github.com/knadh/hugo-ink>Ink</a> theme on <a href=https://gohugo.io>Hugo</a></div>
+</nav>
+</div>
+<script>feather.replace()</script>
+</body>
+</html>

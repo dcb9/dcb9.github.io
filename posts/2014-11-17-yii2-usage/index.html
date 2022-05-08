@@ -1,0 +1,360 @@
+<!doctype html><html>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge"><title>使用 Yii2 时遇到的实际问题 - Du, Chengbin's Blog</title><meta name=viewport content="width=device-width,initial-scale=1">
+<meta itemprop=name content="使用 Yii2 时遇到的实际问题">
+<meta itemprop=description content="最近一直在学习 Yii2 框架，可能是一直以来对它的青睐，让我难以对其它框架再产生兴趣，学习中遇到了许多问题，于是把问题和解决办法也记录下来，这样方便以后复习和交流。"><meta itemprop=datePublished content="2014-11-17T00:00:00+08:00">
+<meta itemprop=dateModified content="2014-11-17T00:00:00+08:00">
+<meta itemprop=wordCount content="714">
+<meta itemprop=keywords content="Yii,"><meta property="og:title" content="使用 Yii2 时遇到的实际问题">
+<meta property="og:description" content="最近一直在学习 Yii2 框架，可能是一直以来对它的青睐，让我难以对其它框架再产生兴趣，学习中遇到了许多问题，于是把问题和解决办法也记录下来，这样方便以后复习和交流。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dcb9.github.io/posts/2014-11-17-yii2-usage/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2014-11-17T00:00:00+08:00">
+<meta property="article:modified_time" content="2014-11-17T00:00:00+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="使用 Yii2 时遇到的实际问题">
+<meta name=twitter:description content="最近一直在学习 Yii2 框架，可能是一直以来对它的青睐，让我难以对其它框架再产生兴趣，学习中遇到了许多问题，于是把问题和解决办法也记录下来，这样方便以后复习和交流。">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/main.css>
+<link rel=stylesheet type=text/css href=https://dcb9.github.iocss/katex.min.css>
+<link id=dark-scheme rel=stylesheet type=text/css href=https://dcb9.github.iocss/dark.css>
+<script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script>
+<script src=https://dcb9.github.iojs/main.js></script><script src=https://dcb9.github.iojs/katex.min.js></script><script src=https://dcb9.github.iojs/auto-render.min.js></script><script src=https://dcb9.github.iojs/custom.js></script>
+</head>
+<body>
+<div class="container wrapper">
+<div class=header>
+<h1 class=site-title><a href=https://dcb9.github.io>Du, Chengbin's Blog</a></h1>
+<div class=site-description><p>A software engineer</p><nav class="nav social">
+<ul class=flat><li><a href=https://github.com/dcb9 title=Github><i data-feather=github></i></a></li><li><a href=https://twitter.com/robertduu title=Twitter><i data-feather=twitter></i></a></li><li><a href=/index.xml title=RSS><i data-feather=rss></i></a></li></ul>
+</nav>
+</div>
+<nav class=nav>
+<ul class=flat>
+<li>
+<a href=/>Home</a>
+</li>
+<li>
+<a href=/posts>All posts</a>
+</li>
+<li>
+<a href=/about>About</a>
+</li>
+<li>
+<a href=/tags>Tags</a>
+</li>
+</ul>
+</nav>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>17</span>
+<span class=rest>Nov 2014</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>使用 Yii2 时遇到的实际问题</h1>
+</div>
+</div>
+<div class=markdown>
+<p>最近一直在学习 Yii2 框架，可能是一直以来对它的青睐，让我难以对其它框架再产生兴趣，学习中遇到了许多问题，于是把问题和解决办法也记录下来，这样方便以后复习和交流。</p>
+<h2 id=span-idmenua-hrefmenu目录aspan>目录</h2>
+<ul>
+<li><a href=#response_xml>扩展 XmlResponseFormatter</a></li>
+<li><a href=#create_new_app>在原有的 Yii2 框架上，新建一个 api 应用</a></li>
+<li><a href=#config_request_parser>配置 Yii2 request Parser 使之可以通过 Yii::$app->request->post() 来接收 xml 和 json 的数据</a></li>
+<li><a href=#use_timestamp_behavior>使用 TimestampBehavior 来自动填充 created_at 和 updated_at </a></li>
+</ul>
+<h2 id=扩展-xmlresponseformatter>扩展 XmlResponseFormatter</h2>
+<p>在做微信接口测试的时候发现，每次返回数据的时候都是自己写的 xml 信息然后 echo 出来，今天突然看到了 <code>Yii::$app->response->format = Response::FORMAT_XML; </code> 原来通过这个就可以设置返回的数据为 xml ，当然 <code>response</code> 这个类在 Controller 里面是没有加载的，所以首先得加载一下 <code>use yii\web\Response;</code> ，最后把需要返回的数据用数组的形式来返回即可：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php>&lt;?php
+<span style=color:green>// ... ...
+</span><span style=color:green></span><span style=color:#00f>use</span> yii\web\Response;
+
+<span style=color:#00f>public</span> <span style=color:#00f>function</span> actionIndex(){
+	<span style=color:green>// ... ... 原来的逻辑代码
+</span><span style=color:green></span>	Yii::$app-&gt;response-&gt;format = Response::FORMAT_XML;
+	<span style=color:#00f>return</span> [
+            <span style=color:#a31515>&#34;ToUserName&#34;</span>=&gt;$postObject-&gt;FromUserName,
+            <span style=color:#a31515>&#34;FromUserName&#34;</span>=&gt;$postObject-&gt;ToUserName,
+            <span style=color:#a31515>&#34;CreateTime&#34;</span>=&gt;time(),
+            <span style=color:#a31515>&#34;MsgType&#34;</span>=&gt;<span style=color:#a31515>&#34;music&#34;</span>,
+            <span style=color:#a31515>&#34;Music&#34;</span>=&gt;[
+                <span style=color:#a31515>&#34;Title&#34;</span>=&gt;$recognition,
+                <span style=color:#a31515>&#34;Description&#34;</span>=&gt;$decode,
+                <span style=color:#a31515>&#34;MusicUrl&#34;</span>=&gt;$musicurl,
+                <span style=color:#a31515>&#34;HQMusicUrl&#34;</span>=&gt;$musicurl,
+            ]
+        ];
+}
+</code></pre></div><p>这样使用之后发现请求得到的结果是：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:#00f>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+&lt;response&gt;
+	&lt;ToUserName&gt;&lt;SimpleXMLElement&gt;&lt;FromUserName&gt;&lt;SimpleXMLElement/&gt;&lt;/FromUserName&gt;&lt;/SimpleXMLElement&gt;&lt;/ToUserName&gt;
+	&lt;FromUserName&gt;&lt;SimpleXMLElement&gt;&lt;ToUserName&gt;&lt;SimpleXMLElement/&gt;&lt;/ToUserName&gt;&lt;/SimpleXMLElement&gt;&lt;/FromUserName&gt;
+	&lt;CreateTime&gt;1416207112&lt;/CreateTime&gt;
+	&lt;MsgType&gt;music&lt;/MsgType&gt;
+	&lt;Music&gt;
+		&lt;Title&gt;maps maroon5&lt;/Title&gt;
+		&lt;Description&gt;120976464.mp3?xcode=7ba3137f5fd742bcba7a6f5a2ffb7764172503013bacbdc8&lt;/Description&gt;
+		&lt;MusicUrl&gt;http://zhangmenshiting.baidu.com/data2/music/120976464/120976464.mp3?xcode=7ba3137f5fd742bcba7a6f5a2ffb7764172503013bacbdc8&lt;/MusicUrl&gt;
+		&lt;HQMusicUrl&gt;http://zhangmenshiting.baidu.com/data2/music/120976464/120976464.mp3?xcode=7ba3137f5fd742bcba7a6f5a2ffb7764172503013bacbdc8&lt;/HQMusicUrl&gt;
+	&lt;/Music&gt;
+&lt;/response&gt;
+</code></pre></div><p>问题就来了，微信需要的格式是前外层以 <code>&lt;xml>...&lt;/xml></code> 来定义的，后来终于在 Response 里面的 <code>formatters</code> 发现了信息，它里面定义了每个类相应的信息，我们可以通过手动指定一些信息来覆盖掉系统默认的。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php>Yii::$app-&gt;response-&gt;formatters = [Response::FORMAT_XML=&gt; [<span style=color:#a31515>&#39;class&#39;</span>=&gt;yii\web\XmlResponseFormatter<span style=color:#a31515>&#39;， &#39;</span>rootTag<span style=color:#a31515>&#39;=&gt;&#39;</span>xml<span>&#39;</span>];
+</code></pre></div><p>通过这样设置之后，最外层的 response 终于变成了 xml，又发现了一个问题，那就是我的内容里面根本就没有<code>SimpleXMLElement</code>相关的东西，这个怎么会多出来？回看了一下逻辑代码发现有：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php>$postObject = simplexml_load_string($postStr, <span style=color:#a31515>&#39;SimpleXMLElement&#39;</span>, LIBXML_NOCDATA);
+</code></pre></div><p>最后只能在return的时候加上类型转换为字符串，这下终于恢复正常了。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=color:#00f>return</span> [
+	<span style=color:#a31515>&#34;ToUserName&#34;</span>=&gt;(string)$postObject-&gt;FromUserName,
+	<span style=color:#a31515>&#34;FromUserName&#34;</span>=&gt;(string)$postObject-&gt;ToUserName,
+	<span style=color:green>// ...
+</span><span style=color:green></span>]
+</code></pre></div><p>在使用这个的时候有的数据是需要加上 CDataSection(<code>&lt;![CDATA[ ... ]]></code>) 的，因为不然如果内容里面带有了 <code>&lt;</code> 这种就会出问题。这个确实让我头疼了很久，首先看了一下源代码原来的类 <code>XmlResponseFormatter</code>， 确实无法满足相应的需求，满足不了需求就只能扩展了</p>
+<p>step1. 在应用下创建一个 component 目录
+step2. 在component目录下新建一个 MyXmlResponseFormatter.php 的文件
+step3. 实现这个类</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php>&lt;?php
+
+<span style=color:#00f>namespace</span> weixin\component;
+
+<span style=color:#00f>use</span> yii\web\XmlResponseFormatter;
+<span style=color:#00f>use</span> DOMElement;
+<span style=color:#00f>use</span> DOMText;
+<span style=color:#00f>use</span> yii\helpers\StringHelper;
+<span style=color:#00f>use</span> yii\base\Arrayable;
+<span style=color:#00f>use</span> DOMCdataSection;
+
+<span style=color:#00f>class</span> <span style=color:#2b91af>MyXmlResponseFormatter</span> <span style=color:#00f>extends</span> XmlResponseFormatter{
+    <span style=color:#00f>public</span> $rootTag = <span style=color:#a31515>&#34;xml&#34;</span>;  <span style=color:green>// 这里我就可以把 rootTag 的默认值修改成 xml 了
+</span><span style=color:green></span>    <span style=color:#a31515>/**
+</span><span style=color:#a31515>     * 如果需要使用 CDATA 那就需要把原来的数据转成数组，并且数组含有以下key
+</span><span style=color:#a31515>     * ，我们就把这个节点添加成一个 DOMCdataSection
+</span><span style=color:#a31515>     */</span>
+    <span style=color:#00f>const</span> CDATA = <span style=color:#a31515>&#39;---cdata---&#39;</span>;  <span style=color:green>// 这个是是否使用CDATA 的下标
+</span><span style=color:green></span>     <span style=color:#a31515>/**
+</span><span style=color:#a31515>     * @param DOMElement $element
+</span><span style=color:#a31515>     * @param mixed $data
+</span><span style=color:#a31515>     */</span>
+    <span style=color:#00f>protected</span> <span style=color:#00f>function</span> buildXml($element, $data)
+    {
+        <span style=color:#00f>if</span> (is_object($data)) {
+            <span style=color:green>// 这里保持原来的代码不变
+</span><span style=color:green></span>        } <span style=color:#00f>elseif</span> (is_array($data)) {
+            <span style=color:#00f>foreach</span> ($data <span style=color:#00f>as</span> $name =&gt; $value) {
+                <span style=color:#00f>if</span> (is_int($name) &amp;&amp; is_object($value)) {
+                    $this-&gt;buildXml($element, $value);
+                } <span style=color:#00f>elseif</span> (is_array($value) || is_object($value)) {
+                    $child = <span style=color:#00f>new</span> DOMElement(is_int($name) ? $this-&gt;itemTag : $name);
+                    $element-&gt;appendChild($child);
+                    <span style=color:green>// 主要就是修改这一个点，如果值是一个数组，并且含有 CDATA 的，那么就直接创建一个 CdataSection 节点，
+</span><span style=color:green></span>                    <span style=color:green>// 而不把它本身当作列表再回调。
+</span><span style=color:green></span>                    <span style=color:#00f>if</span>(array_key_exists(self::CDATA, $value)){
+                        $child-&gt;appendChild(<span style=color:#00f>new</span> DOMCdataSection((string) $value[0]));
+                    }<span style=color:#00f>else</span>{
+                        $this-&gt;buildXml($child, $value);
+                    }
+                } <span style=color:#00f>else</span> {
+                    $child = <span style=color:#00f>new</span> DOMElement(is_int($name) ? $this-&gt;itemTag : $name);
+                    $element-&gt;appendChild($child);
+                    $child-&gt;appendChild(<span style=color:#00f>new</span> DOMText((string) $value));
+                }
+            }
+        } <span style=color:#00f>else</span> {
+            $element-&gt;appendChild(<span style=color:#00f>new</span> DOMText((string) $data));
+        }
+    }
+}
+</code></pre></div><p>step4. 修改默认的 xml 解析所使用的类为新建的扩展类</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php>Yii::$app-&gt;response-&gt;formatters = [
+	Response::FORMAT_XML=&gt; [<span style=color:#a31515>&#39;class&#39;</span>=&gt;<span style=color:#a31515>&#39;weixin\component\MyXmlResponseFormatter&#39;</span>]
+];
+</code></pre></div><p>step5. 如果说字符串需要使用 CDATA 的时候需要设置</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=color:#00f>use</span> weixin\component\MyXmlResponseFormatter <span style=color:#00f>as</span> MXRF;
+
+<span style=color:#00f>return</span> [
+<span style=color:#a31515>&#34;ToUserName&#34;</span>=&gt;[$postObj-&gt;FromUserName,MXRF::CDATA=&gt;<span style=color:#00f>true</span>],
+<span style=color:#a31515>&#34;FromUserName&#34;</span>=&gt;[$postObj-&gt;ToUserName,MXRF::CDATA=&gt;<span style=color:#00f>true</span>],
+<span style=color:#a31515>&#34;CreateTime&#34;</span>=&gt;time(),
+<span style=color:#a31515>&#34;MsgType&#34;</span>=&gt;<span style=color:#a31515>&#34;music&#34;</span>,
+<span style=color:#a31515>&#34;Music&#34;</span>=&gt;[
+    <span style=color:#a31515>&#34;Title&#34;</span>=&gt;[$recognition,MXRF::CDATA=&gt;<span style=color:#00f>true</span>],
+    <span style=color:#a31515>&#34;Description&#34;</span>=&gt;[$decode,MXRF::CDATA=&gt;<span style=color:#00f>true</span>],
+    <span style=color:#a31515>&#34;MusicUrl&#34;</span>=&gt;[$musicurl,MXRF::CDATA=&gt;<span style=color:#00f>true</span>],
+    <span style=color:#a31515>&#34;HQMusicUrl&#34;</span>=&gt;[$musicurl,MXRF::CDATA=&gt;<span style=color:#00f>true</span>],
+]
+];
+</code></pre></div><p>经过本次的修改算是对如何修改和扩展Yii2 有了一定的认识。</p>
+<h2 id=span-idcreate_new_appa-hrefcreate_new_app在原有的yii2框架上新建一个api应用aspan>在原有的Yii2框架上，新建一个api应用</h2>
+<p>在做东西的时候需要清晰的结构和逻辑，这样做出来的东西相对来说会比较漂亮，所以为了api我们可能得新建一个应用，这里面全是api相关的程序，我通过Google “<code>yii2 create new application</code>”，“<code>yii2 add new application</code>”，都没有找到相要的答案，于是只能开动自己的脑筋了。</p>
+<p><code>$ cp -a environments/dev/frontend environments/dev/api</code></p>
+<p><code>$ cp -a environments/prod/frontend environments/prod/api</code></p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=color:green># file: environments/index.php
+</span><span style=color:green></span>&lt;?php
+<span style=color:green>// 这里仅说明了我添加了哪些信息，不需要删除任何信息，只需要添加。
+</span><span style=color:green></span><span style=color:#00f>return</span> [
+    <span style=color:#a31515>&#39;Development&#39;</span> =&gt; [
+        <span style=color:#a31515>&#39;setWritable&#39;</span> =&gt; [
+        	<span style=color:green>// ... 在原来的后面添加上
+</span><span style=color:green></span>            <span style=color:#a31515>&#39;api/runtime&#39;</span>,
+            <span style=color:#a31515>&#39;api/web/assets&#39;</span>
+        ],
+        <span style=color:#a31515>&#39;setCookieValidationKey&#39;</span> =&gt; [
+            <span style=color:green>// ... 在原来的后面添加上
+</span><span style=color:green></span>            <span style=color:#a31515>&#39;api/config/main-local.php&#39;</span>,
+        ],
+    ],
+    <span style=color:#a31515>&#39;Production&#39;</span> =&gt; [
+       	<span style=color:green>// 这里和上面一样的添加
+</span><span style=color:green></span>    ],
+];
+</code></pre></div><p>创建相应的目录：
+<code>$ mkdir -p api/{assets,config,controllers,models,runtime,web/assets}</code>
+<code>$ touch api/{assets,config,controllers,models,runtime,web/assets}/.gitkeep</code></p>
+<p>复制配置文件：
+<code>$ cp -a frontend/config/params.php frontend/config/main.php frontend/config/bootstrap.php frontend/config/.gitignore api/config</code>
+<code>$ cp frontend/runtime/.gitignore api/runtime/</code>
+<code>$ cp frontend/web/.gitignore api/web</code></p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=color:green># file api/config/main.php
+</span><span style=color:green></span>
+<span style=color:#00f>return</span> [
+	<span style=color:#a31515>&#39;id&#39;</span> =&gt; <span style=color:#a31515>&#39;app-api&#39;</span>,
+	<span style=color:green>// ...
+</span><span style=color:green></span>	<span style=color:#a31515>&#39;controllerNamespace&#39;</span> =&gt; <span style=color:#a31515>&#39;api\controllers&#39;</span>,
+]
+
+<span style=color:green># file common/config/bootstrap.php
+</span><span style=color:green></span>Yii::setAlias(<span style=color:#a31515>&#39;api&#39;</span>, dirname(dirname(__DIR__)) . <span style=color:#a31515>&#39;/api&#39;</span>);
+
+<span style=color:green>// 配置的其它信息看自己的需求而定
+</span></code></pre></div><p><code>$ ./init</code></p>
+<p>新建一个Controller来测试一下：</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=color:green># file: api/controllers/SiteController.php
+</span><span style=color:green></span>&lt;?php
+<span style=color:#00f>namespace</span> api\controllers;
+
+<span style=color:#00f>use</span> yii\web\Controller;
+
+<span style=color:#00f>class</span> <span style=color:#2b91af>SiteController</span> <span style=color:#00f>extends</span> Controller {
+    <span style=color:#00f>public</span> $layout = <span style=color:#00f>false</span>;
+
+    <span style=color:#00f>public</span> <span style=color:#00f>function</span> actionIndex(){
+        <span style=color:#00f>return</span> <span style=color:#a31515>&#34;test&#34;</span>;
+    }
+}
+</code></pre></div><p>然后通过浏览器访问相应的地址 http://hostname/api/web/index.php?r=site/index 能出来 test 则代表 ok 啦，以上步骤都是一步步的尝试和查看源代码得来的，可能会有不规范的地方，若有不对的地方请到 Github （<a href=https://github.com/dcb9/dcb9.github.io/blob/master/_posts/2014-11-17-yii2-usage.md>yii2-usage</a>）上留言。</p>
+<h2 id=span-idconfig_request_parsera-hrefconfig_request_parser配置yii2-request-parser使之可以通过yiiapp-request-post来接收-xml-和-json的数据aspan>配置Yii2 request Parser使之可以通过Yii::$app->request->post()来接收 xml 和 json的数据</h2>
+<p>大家都知道 <code>Yii2</code> 接收 <code>POST</code> 数据是使用 <code>Yii::$app->request->post();</code>，但是如果发送过来的数据格式是 <code>json</code> 或 <code>xml</code> 的时候，通过这个方法就无法获取到数据了，<code>Yii2</code> 这么强大的组件型框架肯定想到了这一点。</p>
+<p>对于 <code>json</code> 的解析 <code>Yii2</code> 已经写好了 [[JsonResponseFormatter]] ，在配置文件里面配置一下即可使用。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=color:green># file app/config/main.php
+</span><span style=color:green></span>
+<span style=color:#a31515>&#39;components&#39;</span> =&gt;[
+	<span style=color:#a31515>&#39;request&#39;</span> =&gt; [
+    <span style=color:#a31515>&#39;parsers&#39;</span> =&gt; [
+        <span style=color:#a31515>&#39;application/json&#39;</span> =&gt; <span style=color:#a31515>&#39;yii\web\JsonParser&#39;</span>,
+        <span style=color:#a31515>&#39;text/json&#39;</span> =&gt; <span style=color:#a31515>&#39;yii\web\JsonParser&#39;</span>,
+    ],
+],
+],
+</code></pre></div><p>配置好之后访问提交过来的数据就太简单啦</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=color:green># json raw data
+</span><span style=color:green></span>{<span style=color:#a31515>&#34;username&#34;</span>: <span style=color:#a31515>&#34;bob&#34;</span>}
+
+<span style=color:green># access data
+</span><span style=color:green></span>$post_data = Yii::$app-&gt;request-&gt;post();
+<span style=color:#00f>echo</span> $post_data[<span style=color:#a31515>&#34;username&#34;</span>];
+
+<span style=color:green># or
+</span><span style=color:green></span><span style=color:#00f>echo</span> Yii::$app-&gt;request-&gt;post(<span style=color:#a31515>&#34;username&#34;</span>);
+</code></pre></div><p>通过框架找到了 JsonParser 所在的目录发现了一个接口 [[RequestParserInterface]] ，并在 JsonParser 的同级目录下未找到 XmlParser 的类，基于 Yii2 组件框架，于是自己来写一个 Parser 用来解析 xml 数据，只需要实现接口提供的方法即可 [[RequestParserInterface::parse()]] ，这里最主要的是将 xml 的数据转换成数组的一个过程，通过 Google 找了很多 &ldquo;xml to array&rdquo;，大部分的解析结果我并不满意，要么是功能不完整，要么就是结果不准确，但最终我还是找到了比较完善的 &ldquo;xml to array&rdquo; 的类 <a href=http://www.bin-co.com/php/scripts/xml2array/>xml2array</a>，创建一个类，实现 xml2array 的功能。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=color:green># file: common/tools/Xml2Array.php  目录不存在的话需要创建
+</span><span style=color:green></span>
+&lt;?php
+<span style=color:#00f>namespace</span> common\tools;
+
+<span style=color:#00f>class</span> <span style=color:#2b91af>Xml2Array</span>
+{
+	<span style=color:green>// 把那个网站上的方法复制过来，并在方法前面加上 public static 把方法名换成 go
+</span><span style=color:green></span>	<span style=color:green>// 注释部分建议也复制过来，这对以后追溯代码的出处很有用。
+</span><span style=color:green></span>	<span style=color:green>// 替换之后的基本格式为：
+</span><span style=color:green></span>	<span style=color:#00f>public</span> <span style=color:#00f>static</span> <span style=color:#00f>function</span> go($contents, $get_attributes=1, $priority = <span style=color:#a31515>&#39;tag&#39;</span>)
+	{
+		... ...
+	}
+}
+
+
+<span style=color:green># file common/components/XmlRequestParser.php
+</span><span style=color:green></span><span style=color:#00f>namespace</span> common\components;
+
+<span style=color:#00f>use</span> yii\web\RequestParserInterface;
+<span style=color:#00f>use</span> common\tools\Xml2Array;
+
+<span style=color:#00f>class</span> <span style=color:#2b91af>XmlRequestParser</span> <span style=color:#00f>implements</span>  RequestParserInterface
+{
+
+    <span style=color:#00f>public</span> <span style=color:#00f>function</span> parse($rawBody, $contentType)
+    {
+        $content = Xml2Array::go($rawBody);
+
+        <span style=color:#00f>return</span> array_pop($content);
+    }
+}
+
+<span style=color:green># file app/config/main.php
+</span><span style=color:green></span>
+<span style=color:#a31515>&#39;components&#39;</span> =&gt;[
+	<span style=color:#a31515>&#39;request&#39;</span> =&gt; [
+    <span style=color:#a31515>&#39;parsers&#39;</span> =&gt; [
+        <span style=color:#a31515>&#39;text/xml&#39;</span> =&gt; <span style=color:#a31515>&#39;common\components\XmlRequestParser&#39;</span>,
+        <span style=color:#a31515>&#39;application/xml&#39;</span> =&gt; <span style=color:#a31515>&#39;common\components\XmlRequestParser&#39;</span>,
+
+        <span style=color:#a31515>&#39;application/json&#39;</span> =&gt; <span style=color:#a31515>&#39;yii\web\JsonParser&#39;</span>,
+        <span style=color:#a31515>&#39;text/json&#39;</span> =&gt; <span style=color:#a31515>&#39;yii\web\JsonParser&#39;</span>,
+    ],
+],
+],
+</code></pre></div><p>经过上面的三步之后，就可以直接访问提交过来的 xml 数据了。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml># raw data
+&lt;xml&gt;&lt;username&gt;<span style=color:#00f>&lt;![CDATA[bob]]&gt;</span>&lt;/username&gt;&lt;/xml&gt;
+
+# access data
+Yii::$app-&gt;request-&gt;post(&#39;username&#39;);
+</code></pre></div><p>这样不管别人传过来的数据是 html、json、xml 格式都可以非常方便的获取了，在和各种接口打交道的时候用上这个可以方便太多了。</p>
+<h2 id=span-iduse_timestamp_behaviora-hrefuse_timestamp_behavior使用-timestampbehavior-来自动填充-created_at-和-updated_at-的一个坑aspan>使用 TimestampBehavior 来自动填充 created_at 和 updated_at 的一个坑</h2>
+<p><code>Yii2</code> 官方默认提供了一个 <code>TimestampBehavior</code> 来方便我们来自动填充 <code>created_at</code> 和 <code>updated_at</code> ，它会自动在你插入新数据的时候帮你填充这两个值为当前时间，当然你也可以设置成别的时间，当你更新数据的时候它会自动把 <code>updated_at</code> 改成最后更新的时间。</p>
+<p>我创建了一个 <code>user_weixin</code> 表，然后设置 <code>created_at</code> 和 <code>updated_at</code> 两个字段为 <code>datetime</code> 类型，并在相应的 Model 里面使用上 <code>TimestampBehavior</code></p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=color:green># FILE app/models/UserWeixin.php
+</span><span style=color:green></span>
+&lt;?php
+... ...
+<span style=color:#00f>use</span> yii\behaviors\TimestampBehavior;
+
+<span style=color:#00f>class</span> <span style=color:#2b91af>UserWeixin</span> <span style=color:#00f>extends</span> ActiveRecord {
+
+	<span style=color:#00f>public</span> <span style=color:#00f>function</span> behaviors(){
+		<span style=color:#00f>return</span> [TimestampBehavior::className()];
+	}
+}
+</code></pre></div><p>然后正常的调用保存数据，发现那两个字段的值均为 &lsquo;0000-00-00 00:00:00&rsquo;，看到这个感觉甚是奇怪，去看了一下默认生成的用户模型，<code>common/models/User.php</code>，发现它也没有做其它的别的操作就可以的啊，我这样为什么不行呢，去看了一下表结构，发现系统创建的 <code>user</code> 表的两个字段是使用的 <code>int</code> 类型，而不是 <code>datetime</code>，于是把 <code>user_weixin</code> 表的两个字段也改成了 <code>int</code> 类型，再测试一次发现好了。</p>
+<p>不甘心的我去看了一下 <code>TimestampBehavior</code> 类的注释，发现确实没有说明这个问题，<em>所以大家在声明 created_at 和 updated_at 字段类型的时候需要注意一下</em>。</p>
+</div>
+<div class=tags>
+<ul class=flat>
+<li><a href=/tags/yii>Yii</a></li>
+</ul>
+</div></div>
+</div>
+<div class="footer wrapper">
+<nav class=nav>
+<div>2022 © Copyright Du, Chengbin | <a href=https://github.com/knadh/hugo-ink>Ink</a> theme on <a href=https://gohugo.io>Hugo</a></div>
+</nav>
+</div>
+<script>feather.replace()</script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!doctype html><html>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge"><title>学习 PHP 程序新东西的另一种方法 - Du, Chengbin's Blog</title><meta name=viewport content="width=device-width,initial-scale=1">
+<meta itemprop=name content="学习 PHP 程序新东西的另一种方法">
+<meta itemprop=description content="昨天在学习 `SplDoublyLinkedList` 的时候发现一个有趣的现象，比如"><meta itemprop=datePublished content="2015-02-05T00:00:00+08:00">
+<meta itemprop=dateModified content="2015-02-05T00:00:00+08:00">
+<meta itemprop=wordCount content="355">
+<meta itemprop=keywords content="PHP,"><meta property="og:title" content="学习 PHP 程序新东西的另一种方法">
+<meta property="og:description" content="昨天在学习 `SplDoublyLinkedList` 的时候发现一个有趣的现象，比如">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dcb9.github.io/posts/2015-02-05-another-way-to-learning-program/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2015-02-05T00:00:00+08:00">
+<meta property="article:modified_time" content="2015-02-05T00:00:00+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="学习 PHP 程序新东西的另一种方法">
+<meta name=twitter:description content="昨天在学习 `SplDoublyLinkedList` 的时候发现一个有趣的现象，比如">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/main.css>
+<link rel=stylesheet type=text/css href=https://dcb9.github.iocss/katex.min.css>
+<link id=dark-scheme rel=stylesheet type=text/css href=https://dcb9.github.iocss/dark.css>
+<script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script>
+<script src=https://dcb9.github.iojs/main.js></script><script src=https://dcb9.github.iojs/katex.min.js></script><script src=https://dcb9.github.iojs/auto-render.min.js></script><script src=https://dcb9.github.iojs/custom.js></script>
+</head>
+<body>
+<div class="container wrapper">
+<div class=header>
+<h1 class=site-title><a href=https://dcb9.github.io>Du, Chengbin's Blog</a></h1>
+<div class=site-description><p>A software engineer</p><nav class="nav social">
+<ul class=flat><li><a href=https://github.com/dcb9 title=Github><i data-feather=github></i></a></li><li><a href=https://twitter.com/robertduu title=Twitter><i data-feather=twitter></i></a></li><li><a href=/index.xml title=RSS><i data-feather=rss></i></a></li></ul>
+</nav>
+</div>
+<nav class=nav>
+<ul class=flat>
+<li>
+<a href=/>Home</a>
+</li>
+<li>
+<a href=/posts>All posts</a>
+</li>
+<li>
+<a href=/about>About</a>
+</li>
+<li>
+<a href=/tags>Tags</a>
+</li>
+</ul>
+</nav>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>05</span>
+<span class=rest>Feb 2015</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>学习 PHP 程序新东西的另一种方法</h1>
+</div>
+</div>
+<div class=markdown>
+<p>昨天在学习 <code>SplDoublyLinkedList</code> 的时候发现一个有趣的现象，比如</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>$obj = new SplDoublyLinkedList();
+$obj-&gt;push(&#39;string&#39;);
+</code></pre></div><p>这时候想判断 <code>$obj</code> 里面到底有没有值，或是不是一个，并且里面的值为 &lsquo;string&rsquo;，我们通常会:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>print_r($obj);
+</code></pre></div><p>然后通过肉眼去看打印出来的，确实与我们想的一致，那么我们就会认为是成功的。如果不一致就会认为是失败的。</p>
+<p>仔细想想，这种与我们要做的测试程序不是一模一样嘛，只不过测试程序是用来检测我们的代码有没有问题，但现在由于代码是 PHP 官网这种权威组织写的，我们可以认为都是对的，现在要是写测试程序的话，就是另一层函义了，不是测试他们的代码是否有问题，而是代表我们对这个功能的认识。</p>
+<p>经常我们会用 <code>print_r</code> 来打印，有时候自己会主观的认为是这样是那样，然后看的也不一定很仔细，然后就认为是对的，最后实际使用时发现不是的想的那样（我有亲身经历），写测试就是让程序来判断，我们的想法是不是有问题，哪里出错了，最主要它还可以把当时的思路保持下来，以后再继续回顾。</p>
+<p>以下是我在学习 <code>SplDoublyLinkedList</code> 时写的一些测试，以后看到这个测试类，就知道了 <code>SplDoublyLinkedList</code> 该怎么用了。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php>&lt;?php
+
+<span style=color:#00f>class</span> <span style=color:#2b91af>SplDoublyLinkedListTest</span> <span style=color:#00f>extends</span> PHPUnit_Framework_TestCase
+{
+    <span style=color:#00f>public</span> <span style=color:#00f>function</span> testSplDoublyLinkedListPart1()
+    {
+        $obj = <span style=color:#00f>new</span> SplDoublyLinkedList();
+        <span style=color:green>// Pushes value at the end of the doubly linked list.
+</span><span style=color:green></span>        $obj-&gt;push(0);
+        $obj-&gt;push(1);
+        $obj-&gt;push(2);
+
+        <span style=color:green>// Prepends value at the beginning of the doubly linked list.
+</span><span style=color:green></span>        $obj-&gt;unshift(10);
+        $obj-&gt;unshift(11);
+
+        <span style=color:green>/*
+</span><span style=color:green>         * 因为指针还未初始化
+</span><span style=color:green>         * 所以
+</span><span style=color:green>         * 1. 当前指针是否有效为 FALSE
+</span><span style=color:green>         * 2. 直接获取当前指针的值会是 NULL
+</span><span style=color:green>         */</span>
+        $this-&gt;assertEquals(<span style=color:#00f>FALSE</span>, $obj-&gt;valid());
+        $this-&gt;assertEquals(<span style=color:#00f>NULL</span>, $obj-&gt;current());
+
+        $obj-&gt;rewind();
+        <span style=color:green>// 将指针重置之后，第一个肯定是 11 ，因为它是在最后执行了一个
+</span><span style=color:green></span>        <span style=color:green>// 将 11 插入到链表最前面的一个函数 unshift
+</span><span style=color:green></span>        $this-&gt;assertEquals(11, $obj-&gt;current());
+
+        $obj-&gt;next();
+        <span style=color:green>// 11 下面应该是 10
+</span><span style=color:green></span>        $this-&gt;assertEquals(10, $obj-&gt;current());
+
+        <span style=color:green>// (下一个 下一个 上一个) === (下一个)
+</span><span style=color:green></span>        $obj-&gt;next(); <span style=color:green>// 0
+</span><span style=color:green></span>        $obj-&gt;next(); <span style=color:green>// 1
+</span><span style=color:green></span>        $obj-&gt;prev(); <span style=color:green>// 0
+</span><span style=color:green></span>        $this-&gt;assertEquals(0, $obj-&gt;current());
+
+        $obj-&gt;next(); <span style=color:green>// 1
+</span><span style=color:green></span>        $obj-&gt;next(); <span style=color:green>// 2
+</span><span style=color:green></span>        $obj-&gt;next(); <span style=color:green>// 已经超过最大的了，使用 valid 判断应该是 false
+</span><span style=color:green></span>        $this-&gt;assertEquals(<span style=color:#00f>false</span>, $obj-&gt;valid());
+    }
+
+    <span style=color:#00f>public</span> <span style=color:#00f>function</span> testSplDoublyLinkedListPart2()
+    {
+        $obj = <span style=color:#00f>new</span> SplDoublyLinkedList();
+        <span style=color:green>// Pushes value at the end of the doubly linked list.
+</span><span style=color:green></span>        $obj-&gt;push(0);
+        $obj-&gt;push(1);
+        $obj-&gt;push(2);
+
+        <span style=color:green>// Prepends value at the beginning of the doubly linked list.
+</span><span style=color:green></span>        $obj-&gt;unshift(10);
+        $obj-&gt;unshift(11);
+
+        <span style=color:green>//  Peeks at the node from the end of the doubly linked list
+</span><span style=color:green></span>        <span style=color:green>//  Return: The value of the last node.
+</span><span style=color:green></span>        <span style=color:green>//  获取最后一个节点的值
+</span><span style=color:green></span>        $this-&gt;assertEquals(2, $obj-&gt;top());
+
+        <span style=color:green>// Peeks at the node from the beginning of the doubly linked list
+</span><span style=color:green></span>        <span style=color:green>// Return: The value of the first node.
+</span><span style=color:green></span>        <span style=color:green>// 获取第一个节点的值
+</span><span style=color:green></span>        $this-&gt;assertEquals(11, $obj-&gt;bottom());
+    }
+
+    <span style=color:#00f>public</span> <span style=color:#00f>function</span> testIsEmpty(){
+        $obj = <span style=color:#00f>new</span> SplDoublyLinkedList();
+
+        $this-&gt;assertEquals(<span style=color:#00f>true</span>, $obj-&gt;isEmpty());
+
+        $obj-&gt;unshift(<span style=color:#a31515>&#39;string&#39;</span>);
+        <span style=color:green>// 这里已经有值了就应该是 false
+</span><span style=color:green></span>        $this-&gt;assertEquals(<span style=color:#00f>false</span>, $obj-&gt;isEmpty());
+
+        <span style=color:green>// 这时再使用 pop 弹出最后一个就应该是 &#39;string&#39;
+</span><span style=color:green></span>        $this-&gt;assertEquals(<span style=color:#a31515>&#39;string&#39;</span>, $obj-&gt;pop());
+
+    }
+
+    <span style=color:#a31515>/**
+</span><span style=color:#a31515>     * 如果是空的时候试图 pop 弹出最后一个节点的值则会 抛出一个 RuntimeException
+</span><span style=color:#a31515>     *
+</span><span style=color:#a31515>     * @expectedException RuntimeException
+</span><span style=color:#a31515>     */</span>
+    <span style=color:#00f>public</span> <span style=color:#00f>function</span> testRuntimeException(){
+        $obj = <span style=color:#00f>new</span> SplDoublyLinkedList();
+        $obj-&gt;pop();
+    }
+
+    <span style=color:#00f>public</span> <span style=color:#00f>function</span> testOffset(){
+        $obj = <span style=color:#00f>new</span> SplDoublyLinkedList();
+        $obj-&gt;push(<span style=color:#a31515>&#39;one&#39;</span>);
+        $obj-&gt;push(<span style=color:#a31515>&#39;two&#39;</span>);
+        $obj-&gt;unshift(<span style=color:#a31515>&#39;three&#39;</span>);
+
+        <span style=color:green>// 下标是从0 开始的 所以现在3 应该是不存在的
+</span><span style=color:green></span>        $this-&gt;assertEquals(<span style=color:#00f>false</span>, $obj-&gt;offsetExists(3));
+
+        <span style=color:green>// 下标为2 的应该是存在的
+</span><span style=color:green></span>        $this-&gt;assertEquals(<span style=color:#00f>true</span>, $obj-&gt;offsetExists(2));
+
+        $this-&gt;assertEquals(<span style=color:#a31515>&#39;two&#39;</span>, $obj-&gt;offsetGet(2));
+
+        <span style=color:green>// 删除下标为0 的值
+</span><span style=color:green></span>        $obj-&gt;offsetUnset(0);
+        <span style=color:green>// 删除为 0 的值之后，后面的都会向前移一位
+</span><span style=color:green></span>        <span style=color:green>// 所以现在的顺序为： one two
+</span><span style=color:green></span>        $obj-&gt;rewind();
+        $this-&gt;assertEquals(<span style=color:#a31515>&#39;one&#39;</span>, $obj-&gt;current());
+        $this-&gt;assertEquals(0, $obj-&gt;key());
+
+        $obj-&gt;next();
+        $this-&gt;assertEquals(<span style=color:#a31515>&#39;two&#39;</span>, $obj-&gt;current());
+        $this-&gt;assertEquals(1, $obj-&gt;key());
+        <span style=color:green>// 并且总个数为 2
+</span><span style=color:green></span>        $this-&gt;assertEquals(2, $obj-&gt;count());
+    }
+
+    <span style=color:#00f>public</span> <span style=color:#00f>function</span> testAdd(){
+        $obj = <span style=color:#00f>new</span> SplDoublyLinkedList();
+        $obj-&gt;push(<span style=color:#a31515>&#39;one&#39;</span>);
+        $obj-&gt;push(<span style=color:#a31515>&#39;two&#39;</span>);
+        $obj-&gt;push(<span style=color:#a31515>&#39;three&#39;</span>);
+        $obj-&gt;unshift(<span style=color:#a31515>&#39;four&#39;</span>);
+        $obj-&gt;add(1, <span style=color:#a31515>&#39;five&#39;</span>);
+
+        <span style=color:green>// 这时候的顺序应该是：
+</span><span style=color:green></span>        <span style=color:green>// four five one two three
+</span><span style=color:green></span>
+        $obj-&gt;rewind();
+        $this-&gt;assertEquals(<span style=color:#a31515>&#39;four&#39;</span>, $obj-&gt;current());
+        $obj-&gt;next();
+        $this-&gt;assertEquals(<span style=color:#a31515>&#39;five&#39;</span>, $obj-&gt;current());
+        $obj-&gt;next();
+        $this-&gt;assertEquals(<span style=color:#a31515>&#39;one&#39;</span>, $obj-&gt;current());
+        $obj-&gt;next();
+        $this-&gt;assertEquals(<span style=color:#a31515>&#39;two&#39;</span>, $obj-&gt;current());
+        $obj-&gt;next();
+        $this-&gt;assertEquals(<span style=color:#a31515>&#39;three&#39;</span>, $obj-&gt;current());
+    }
+}
+</code></pre></div>
+</div>
+<div class=tags>
+<ul class=flat>
+<li><a href=/tags/php>PHP</a></li>
+</ul>
+</div></div>
+</div>
+<div class="footer wrapper">
+<nav class=nav>
+<div>2022 © Copyright Du, Chengbin | <a href=https://github.com/knadh/hugo-ink>Ink</a> theme on <a href=https://gohugo.io>Hugo</a></div>
+</nav>
+</div>
+<script>feather.replace()</script>
+</body>
+</html>

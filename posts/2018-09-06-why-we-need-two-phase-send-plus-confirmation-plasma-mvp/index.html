@@ -1,0 +1,193 @@
+<!doctype html><html>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge"><title>Plasma MVP 为什么需要发送交易后再生成 confirmation signature？ - Du, Chengbin's Blog</title><meta name=viewport content="width=device-width,initial-scale=1">
+<meta itemprop=name content="Plasma MVP 为什么需要发送交易后再生成 confirmation signature？">
+<meta itemprop=description content="以下内容翻译自 Ethereum Research ”[Why do/don’t we need two phase sends plus confirmation](https://ethresear.ch/t/why-do-dont-we-need-two-phase-sends-plus-confirmation/1866/14)” 的回复。 Generally, there are two major reasons why it’s necessary to have the two-phase send + conf in Plasma.  Plasma MVP 为什么有必要使用 send + confirm，主要有两个原因"><meta itemprop=datePublished content="2018-09-06T00:00:00+08:00">
+<meta itemprop=dateModified content="2018-09-06T00:00:00+08:00">
+<meta itemprop=wordCount content="834">
+<meta itemprop=keywords content="翻译,Ethereum,"><meta property="og:title" content="Plasma MVP 为什么需要发送交易后再生成 confirmation signature？">
+<meta property="og:description" content="以下内容翻译自 Ethereum Research ”[Why do/don’t we need two phase sends plus confirmation](https://ethresear.ch/t/why-do-dont-we-need-two-phase-sends-plus-confirmation/1866/14)” 的回复。 Generally, there are two major reasons why it’s necessary to have the two-phase send + conf in Plasma.  Plasma MVP 为什么有必要使用 send + confirm，主要有两个原因">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dcb9.github.io/posts/2018-09-06-why-we-need-two-phase-send-plus-confirmation-plasma-mvp/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2018-09-06T00:00:00+08:00">
+<meta property="article:modified_time" content="2018-09-06T00:00:00+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Plasma MVP 为什么需要发送交易后再生成 confirmation signature？">
+<meta name=twitter:description content="以下内容翻译自 Ethereum Research ”[Why do/don’t we need two phase sends plus confirmation](https://ethresear.ch/t/why-do-dont-we-need-two-phase-sends-plus-confirmation/1866/14)” 的回复。 Generally, there are two major reasons why it’s necessary to have the two-phase send + conf in Plasma.  Plasma MVP 为什么有必要使用 send + confirm，主要有两个原因">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/main.css>
+<link rel=stylesheet type=text/css href=https://dcb9.github.iocss/katex.min.css>
+<link id=dark-scheme rel=stylesheet type=text/css href=https://dcb9.github.iocss/dark.css>
+<script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script>
+<script src=https://dcb9.github.iojs/main.js></script><script src=https://dcb9.github.iojs/katex.min.js></script><script src=https://dcb9.github.iojs/auto-render.min.js></script><script src=https://dcb9.github.iojs/custom.js></script>
+</head>
+<body>
+<div class="container wrapper">
+<div class=header>
+<h1 class=site-title><a href=https://dcb9.github.io>Du, Chengbin's Blog</a></h1>
+<div class=site-description><p>A software engineer</p><nav class="nav social">
+<ul class=flat><li><a href=https://github.com/dcb9 title=Github><i data-feather=github></i></a></li><li><a href=https://twitter.com/robertduu title=Twitter><i data-feather=twitter></i></a></li><li><a href=/index.xml title=RSS><i data-feather=rss></i></a></li></ul>
+</nav>
+</div>
+<nav class=nav>
+<ul class=flat>
+<li>
+<a href=/>Home</a>
+</li>
+<li>
+<a href=/posts>All posts</a>
+</li>
+<li>
+<a href=/about>About</a>
+</li>
+<li>
+<a href=/tags>Tags</a>
+</li>
+</ul>
+</nav>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>06</span>
+<span class=rest>Sep 2018</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>Plasma MVP 为什么需要发送交易后再生成 confirmation signature？</h1>
+</div>
+</div>
+<div class=markdown>
+<p>以下内容翻译自 Ethereum Research ”<a href=https://ethresear.ch/t/why-do-dont-we-need-two-phase-sends-plus-confirmation/1866/14>Why do/don’t we need two phase sends plus confirmation</a>” 的回复。</p>
+<p>Generally, there are two major reasons why it’s necessary to have the two-phase send + conf in Plasma.</p>
+<p>Plasma MVP 为什么有必要使用 send + confirm，主要有两个原因：</p>
+<p>The first reason is specific to Plasma MVP and arises because Plasma MVP allows for fungible coins/tokens. Basically, if we don’t have confirmations, then an operator can place a user’s valid transactions after the operator’s invalid transactions in a block. This is a problem because exits in Plasma MVP are processed in time order. I published a brief write-up on why this time-order processing is necessary <a href=https://github.com/omisego/research/blob/master/plasma/plasma-mvp/explore/priority.md>here 8</a>.</p>
+<p>原因一、 因为 Plasma MVP 规范允许 fungible（同质）coins/tokens。从根本上讲，如果没有 confirmations, 那侧链管理员就可以在打包块的时，将用户有效的交易放到管理员的交易的后面。这样就会有问题了，因为 Plasma MVP 退出是按时间顺序来处理的，作者发了一篇短文章来说明为什么按时间顺序的处理是必须的。<a href=https://github.com/omisego/research/blob/master/plasma/plasma-mvp/explore/priority.md>exit priority</a></p>
+<p>Let’s illustrate this first problem with a scenario where the operator steals funds. Assume the contract only holds 10 ETH in total.</p>
+<p>让我们来举例说明这个问题，假设合约里面现在有 10 ETH，管理员想把这笔钱偷走。</p>
+<ol>
+<li>Alice broadcasts a transaction spending 10 ETH to Bob.</li>
+<li>The operator creates an invalid transaction creating 10 ETH for themselves “out of nowhere” and places it at the first index in a block (“transaction #0”).</li>
+<li>The operator places Alice’s transaction at the second index in the block (“transaction #1”).</li>
+<li>The operator publishes this block.</li>
+<li>Bob sees the invalid transaction and submits his exit.</li>
+<li>The operator submits an exit for the invalid transaction.</li>
+<li>The operator’s exit processes before Bob’s exit, so the contract is now empty.</li>
+<li>Bob’s exit cannot be processed because the contract has no funds remaining.</li>
+</ol>
+<p>&ndash;</p>
+<ol>
+<li>A 广播了个交易，A 转给 B 10 个 ETH</li>
+<li>管理员创建一个无效的交易将 10 个 ETH转给他自己，并把这笔交易放到块的第一个 (“transaction #0”)</li>
+<li>管理员将 A 的交易放到块的第二个 (“transaction #1)</li>
+<li>管理员将块递交到主链</li>
+<li>B 看了无效的交易并申请退出</li>
+<li>此时管理员也申请退出他刚才的无效交易</li>
+<li>管理员的退出程序会在 B 退出之前完成，所以合约里面就没有钱了</li>
+<li>B 的退出将能处理，因为合约里面已经没有钱了</li>
+</ol>
+<p>Now, let’s see what happens when we require confirmations:</p>
+<p>让我们来看看如果我们加上 confirmations 之后会发生什么：</p>
+<ol>
+<li>Alice broadcasts a transaction spending 10 ETH to Bob.</li>
+<li>The operator creates an invalid transaction creating 10 ETH for themselves “out of nowhere” and places it at the first index in a block (“transaction #0”).</li>
+<li>The operator places Alice’s transaction at the second index in the block (“transaction #1”).</li>
+<li>The operator publishes this block.</li>
+<li>Alice sees the invalid transaction and refuses to sign a confirmation on her transaction to Bob.</li>
+<li>The operator submits an exit for the invalid transaction.</li>
+<li>Alice exits from her (still technically unspent) 10 ETH UTXO which existed before the operator’s invalid UTXO.</li>
+<li>The operator’s exit cannot be processed because the contract has no funds remaining.</li>
+</ol>
+<p>&ndash;</p>
+<ol>
+<li>A 广播了个交易，A 转给 B 10 个 ETH</li>
+<li>管理员创建一个无效的交易将 10 个 ETH转给他自己，并把这笔交易放到块的第一个 (“transaction #0”)</li>
+<li>管理员将 A 的交易放到块的第二个 (“transaction #1)</li>
+<li>管理员将块递交到主链</li>
+<li>A 看到了这个无效的交易，并且拒绝给他的交易生成 confirmation</li>
+<li>管理员申请退出他刚才生成的无效交易</li>
+<li>A 申请退出他之前的 10 个未花费的 UTXO（也就是转给 B 之前的 10 个 ETH，这笔交易从技术的角度上讲还没完成，因为他并没有为刚才的交易生成 confirmation ），这个将会在管理员的无效 UTXO 之前处理</li>
+<li>管理员的退出不能被处理因为合约里面已经没有余额了</li>
+</ol>
+<p>Note that this situation is not a problem in Plasma Cash because coins are unique and non-fungible - the operator can’t just create valid UTXOs “out of nowhere” like they can in Plasma MVP. The operator could create a transaction that appears to give them ownership of a specific coin, but that doesn’t impact the ability for the owners of any other coin to exit.</p>
+<p>提示该情况不会成为 Plasma Cash 的一个问题，因为币是独一无二和非同质的，管理员无法像在 Plasma MVP 一样创建无效的 UTXO。管理员可以创建一笔交易，好像是给他们某个币的所有权，但是那不能影响，币的所有权人退出的能力。</p>
+<p>Now let’s talk about the other potential scenario. This is basically what I mentioned in my reply to Dan above, and it’s less of an attack vector than an annoyance:</p>
+<p>现在让我们来谈谈另一个潜在的情景，基本就是我在上面回复 Dan 提到的。它的攻击性比麻烦要少（我感觉主要是因为，没有哪个侧链的管理员为了获得一点挑战的资金，而冒不诚信的风险）。</p>
+<ol>
+<li>Alice broadcasts a transaction spending 10 ETH to Bob.</li>
+<li>The operator places Alice’s transaction somewhere in the block.</li>
+<li>The operator publishes the root of this block to the root chain but withholds the actual block information.</li>
+<li>Alice doesn’t know if her transaction to Bob was actually included in the block or not. Bob doesn’t have enough information to exit because he doesn’t know the index of the transaction in the block.</li>
+<li>Alice must attempt to exit from her old UTXO.</li>
+<li>The operator knows that Alice’s old UTXO is spent, so they challenge Alice’s exit with her transaction to Bob (revealing the index).</li>
+<li>Bob now knows the transaction index, so Bob can exit.</li>
+</ol>
+<p>&ndash;</p>
+<ol>
+<li>A 广播了个交易，A 转给 B 10 个 ETH</li>
+<li>管理员将 A 的交易放到块中</li>
+<li>管理员递交该块到主链，但是隐瞒了块的真实信息</li>
+<li>A 不知道她的转给 B 的这笔交易有没有被打包到块里面，B 也没有足够的信息申请退出，因为他不知道该笔交易的在块中的位置</li>
+<li>A 尝试退出她旧的 UTXO</li>
+<li>管理员知道 A 的这个旧 UTXO 已经花出去了，他使用 A 向 B 转帐的这笔交易向 A 的退出发起挑战</li>
+<li>B 知道这个交易的位置，他可以申请退出了</li>
+</ol>
+<p>This doesn’t change anything security-wise, but it’s not particularly convenient to have this exit-challenge-exit process. Additionally, Alice will always lose her bond for her original exit. Here’s how it plays out with confirmations:</p>
+<p>这不会改变安全性，但是这个 退出( A 的退出) - 挑战(管理员的挑战）- 退出（B 的退出） 流程并不是特别方便。 此外，A 永远会失去他的退出奖金。 以下是使用 confirmations 的方式：</p>
+<ol>
+<li>
+<p>Alice broadcasts a transaction spending 10 ETH to Bob.</p>
+</li>
+<li>
+<p>The operator places Alice’s transaction somewhere in the block.</p>
+</li>
+<li>
+<p>The operator publishes the root of this block to the root chain but withholds the actual block information.</p>
+</li>
+<li>
+<p>Alice doesn’t know if her transaction to Bob was actually included in the block or not. Alice doesn’t broadcast a confirmation signature.</p>
+</li>
+<li>
+<p>Alice exits from her old UTXO.</p>
+</li>
+<li>
+<p>The operator cannot challenge with Alice’s spend to Bob because the operator doesn’t have the required confirmation signature.</p>
+</li>
+<li>
+<p>A 广播了个交易，A 转给 B 10 个 ETH</p>
+</li>
+<li>
+<p>管理员将 A 的交易放到块中</p>
+</li>
+<li>
+<p>管理员递交该块到主链，但是隐瞒了块的真实信息</p>
+</li>
+<li>
+<p>A 不知道她的转给 B 的这笔交易有没有被打包到块里面，A 不广播确认的签名</p>
+</li>
+<li>
+<p>A 退出之前的旧 UTXO</p>
+</li>
+<li>
+<p>管理员不能使用 A 转给 B 的这笔交易来挑战 A，因为管理员没有 confirmation signature</p>
+</li>
+</ol>
+</div>
+<div class=tags>
+<ul class=flat>
+<li><a href=/tags/%E7%BF%BB%E8%AF%91>翻译</a></li>
+<li><a href=/tags/ethereum>Ethereum</a></li>
+</ul>
+</div></div>
+</div>
+<div class="footer wrapper">
+<nav class=nav>
+<div>2022 © Copyright Du, Chengbin | <a href=https://github.com/knadh/hugo-ink>Ink</a> theme on <a href=https://gohugo.io>Hugo</a></div>
+</nav>
+</div>
+<script>feather.replace()</script>
+</body>
+</html>

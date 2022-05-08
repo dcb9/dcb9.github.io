@@ -1,0 +1,121 @@
+<!doctype html><html>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge"><title>对于一台新服务器权限的配置 - Du, Chengbin's Blog</title><meta name=viewport content="width=device-width,initial-scale=1">
+<meta itemprop=name content="对于一台新服务器权限的配置">
+<meta itemprop=description content="作为一个程序员，在网站没有运维的情况下，也要有能够搭建应用的能力，由于不是专业的运维所以考虑的问题可能不够全面，只顾着把应用搭起来，权限管理非常地松，认为只要登陆 `root` 可以运行命令就行了，这样的话会有很多后患的，有的时候只是未爆发出来，当爆发出来就已经晚了。"><meta itemprop=datePublished content="2015-05-29T00:00:00+08:00">
+<meta itemprop=dateModified content="2015-05-29T00:00:00+08:00">
+<meta itemprop=wordCount content="126">
+<meta itemprop=keywords content="工作,"><meta property="og:title" content="对于一台新服务器权限的配置">
+<meta property="og:description" content="作为一个程序员，在网站没有运维的情况下，也要有能够搭建应用的能力，由于不是专业的运维所以考虑的问题可能不够全面，只顾着把应用搭起来，权限管理非常地松，认为只要登陆 `root` 可以运行命令就行了，这样的话会有很多后患的，有的时候只是未爆发出来，当爆发出来就已经晚了。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dcb9.github.io/posts/2015-05-29-init-permission-for-new-app-server/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2015-05-29T00:00:00+08:00">
+<meta property="article:modified_time" content="2015-05-29T00:00:00+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="对于一台新服务器权限的配置">
+<meta name=twitter:description content="作为一个程序员，在网站没有运维的情况下，也要有能够搭建应用的能力，由于不是专业的运维所以考虑的问题可能不够全面，只顾着把应用搭起来，权限管理非常地松，认为只要登陆 `root` 可以运行命令就行了，这样的话会有很多后患的，有的时候只是未爆发出来，当爆发出来就已经晚了。">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/main.css>
+<link rel=stylesheet type=text/css href=https://dcb9.github.iocss/katex.min.css>
+<link id=dark-scheme rel=stylesheet type=text/css href=https://dcb9.github.iocss/dark.css>
+<script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script>
+<script src=https://dcb9.github.iojs/main.js></script><script src=https://dcb9.github.iojs/katex.min.js></script><script src=https://dcb9.github.iojs/auto-render.min.js></script><script src=https://dcb9.github.iojs/custom.js></script>
+</head>
+<body>
+<div class="container wrapper">
+<div class=header>
+<h1 class=site-title><a href=https://dcb9.github.io>Du, Chengbin's Blog</a></h1>
+<div class=site-description><p>A software engineer</p><nav class="nav social">
+<ul class=flat><li><a href=https://github.com/dcb9 title=Github><i data-feather=github></i></a></li><li><a href=https://twitter.com/robertduu title=Twitter><i data-feather=twitter></i></a></li><li><a href=/index.xml title=RSS><i data-feather=rss></i></a></li></ul>
+</nav>
+</div>
+<nav class=nav>
+<ul class=flat>
+<li>
+<a href=/>Home</a>
+</li>
+<li>
+<a href=/posts>All posts</a>
+</li>
+<li>
+<a href=/about>About</a>
+</li>
+<li>
+<a href=/tags>Tags</a>
+</li>
+</ul>
+</nav>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>29</span>
+<span class=rest>May 2015</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>对于一台新服务器权限的配置</h1>
+</div>
+</div>
+<div class=markdown>
+<p>作为一个程序员，在网站没有运维的情况下，也要有能够搭建应用的能力，由于不是专业的运维所以考虑的问题可能不够全面，只顾着把应用搭起来，权限管理非常地松，认为只要登陆 <code>root</code> 可以运行命令就行了，这样的话会有很多后患的，有的时候只是未爆发出来，当爆发出来就已经晚了。</p>
+<p>以下是我对一台新服务器的权限的实例，欢迎大家拍砖。</p>
+<p>一、技术人员通过自己的普通用户权限进入系统，然后如果要运行需要 <code>root</code> 执行的就用 <code>sudo</code> 去执行就好，如果有多人要登录，则每人配一个帐号。</p>
+<p>二、服务器上应该禁止密码登录，因为密码登录有一定的漏洞，有的技术人员设的密码跟没搞过计算机一样来个 <code>123456</code>，这个密码就相当于是个后门了。</p>
+<p>三、由于每个人都有了帐号，那么更理所当然的要把 <code>root</code> 用户禁止登录，通过经验得知，如果不禁止，有的人还要登 <code>root</code>，原因可能有以下三点</p>
+<ol>
+<li>不明白为什么要有普通帐号</li>
+<li>对安全看的太轻，认为每次都要 <code>sudo</code> 去运行一个 <code>root</code> 权限才执行的命令很麻烦
+用户管理</li>
+<li>可能不懂权限，或许听说过，但绝对没用过</li>
+</ol>
+<p>四、修改默认 <code>ssh</code> 端口</p>
+<h2 id=添加帐号>添加帐号</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ useradd bob
+$ mkdir -p /home/bob
+$ chown -R bob.bob /home/bob
+
+$ gpasswd -a bob sudo // 给用户有 sudo 的权限
+$ passwd bob  设置一个密码，这个是作为当用户想要 sudo 去执行 root 执行的时候使用的
+</code></pre></div><h2 id=本地配置免密码登录>本地配置免密码登录</h2>
+<p>本地 <code>ssh-keygen</code> 生成一串密钥</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>本地 $ ssh-keygen
+  /Users/bob/.ssh/some-app-server_id_rsa
+  本地 $ ssh-copy-id -i .ssh/some-app-server_rsa bob@remote-server-address
+
+</code></pre></div><p>配置ssh 客户端，方便以后连接服务器。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>  本地 $ vim ~/.ssh/config
+  Host some-app-server
+    Hostname remote-server-address
+    User bob
+    Port 19422
+    IdentityFile ~/.ssh/some-app-server_id_rsa
+
+</code></pre></div><p>以后连接服务器就可以直接 <code>$ ssh some-app-server</code> 就可以用你的权限登录进去了。</p>
+<h2 id=配置-ssh-服务端>配置 ssh 服务端</h2>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>$ vi /etc/ssh/sshd_config
+PasswordAuthentication no //禁止使用基于口令认证的方式登陆
+PubkeyAuthentication yes //允许使用基于密钥认证的方式登陆
+Port 19422 // 把 ssh 端口改成 19422 这个别固定，你可以随便用，本地要连接服务器，本地的端口得保持一致。
+PermitRootLogin no // 不允许 root 远程登录
+
+重户服务器 $ reboot 使配置生效
+</code></pre></div><p>本人再推荐一个 <code>zsh</code> 和 <code>oh-my-zsh</code> 有了这个，命令行就智能了好多，操作起来非常地方便，有兴趣的自己去找找文档。</p>
+</div>
+<div class=tags>
+<ul class=flat>
+<li><a href=/tags/%E5%B7%A5%E4%BD%9C>工作</a></li>
+</ul>
+</div></div>
+</div>
+<div class="footer wrapper">
+<nav class=nav>
+<div>2022 © Copyright Du, Chengbin | <a href=https://github.com/knadh/hugo-ink>Ink</a> theme on <a href=https://gohugo.io>Hugo</a></div>
+</nav>
+</div>
+<script>feather.replace()</script>
+</body>
+</html>

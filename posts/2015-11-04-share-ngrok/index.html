@@ -1,0 +1,165 @@
+<!doctype html><html>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge"><title>另一个国内的 Ngrok 服务器分享 - Du, Chengbin's Blog</title><meta name=viewport content="width=device-width,initial-scale=1">
+<meta itemprop=name content="另一个国内的 Ngrok 服务器分享">
+<meta itemprop=description content="ngrok 2.0 开始收费了，国内好几个 ngrok 倒下了，于是搭了一个供大家玩耍，只要还有钱就会给服务器续费的！"><meta itemprop=datePublished content="2015-11-04T00:00:00+08:00">
+<meta itemprop=dateModified content="2015-11-04T00:00:00+08:00">
+<meta itemprop=wordCount content="129">
+<meta itemprop=keywords content><meta property="og:title" content="另一个国内的 Ngrok 服务器分享">
+<meta property="og:description" content="ngrok 2.0 开始收费了，国内好几个 ngrok 倒下了，于是搭了一个供大家玩耍，只要还有钱就会给服务器续费的！">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dcb9.github.io/posts/2015-11-04-share-ngrok/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2015-11-04T00:00:00+08:00">
+<meta property="article:modified_time" content="2015-11-04T00:00:00+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="另一个国内的 Ngrok 服务器分享">
+<meta name=twitter:description content="ngrok 2.0 开始收费了，国内好几个 ngrok 倒下了，于是搭了一个供大家玩耍，只要还有钱就会给服务器续费的！">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/main.css>
+<link rel=stylesheet type=text/css href=https://dcb9.github.iocss/katex.min.css>
+<link id=dark-scheme rel=stylesheet type=text/css href=https://dcb9.github.iocss/dark.css>
+<script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script>
+<script src=https://dcb9.github.iojs/main.js></script><script src=https://dcb9.github.iojs/katex.min.js></script><script src=https://dcb9.github.iojs/auto-render.min.js></script><script src=https://dcb9.github.iojs/custom.js></script>
+</head>
+<body>
+<div class="container wrapper">
+<div class=header>
+<h1 class=site-title><a href=https://dcb9.github.io>Du, Chengbin's Blog</a></h1>
+<div class=site-description><p>A software engineer</p><nav class="nav social">
+<ul class=flat><li><a href=https://github.com/dcb9 title=Github><i data-feather=github></i></a></li><li><a href=https://twitter.com/robertduu title=Twitter><i data-feather=twitter></i></a></li><li><a href=/index.xml title=RSS><i data-feather=rss></i></a></li></ul>
+</nav>
+</div>
+<nav class=nav>
+<ul class=flat>
+<li>
+<a href=/>Home</a>
+</li>
+<li>
+<a href=/posts>All posts</a>
+</li>
+<li>
+<a href=/about>About</a>
+</li>
+<li>
+<a href=/tags>Tags</a>
+</li>
+</ul>
+</nav>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>04</span>
+<span class=rest>Nov 2015</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>另一个国内的 Ngrok 服务器分享</h1>
+</div>
+</div>
+<div class=markdown>
+<p>ngrok 2.0 开始收费了，国内好几个 ngrok 倒下了，于是搭了一个供大家玩耍，只要还有钱就会给服务器续费的！</p>
+<h3 id=使用方法>使用方法</h3>
+<ul>
+<li>下载客户端 MAC Linux Windows</li>
+<li>创建配置文件 <em>ngrok.cfg</em></li>
+</ul>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>server_addr: &#34;tunnel.phpor.me:4443&#34;
+trust_host_root_certs: false
+</code></pre></div><ul>
+<li>运行 <code>$ ngrok -config ngrok.cfg -subdomain example 8080</code></li>
+</ul>
+<h3 id=news>News</h3>
+<ul>
+<li>2016-03-30</li>
+</ul>
+<blockquote>
+<p>腾讯机房提示 phpor.me 域名未备案，将于 4 月 1 日禁止访问，惊恐之下去 ICP 查了下，备案确实被注销了，北京地区不能备案 .me 的域名，于是不备案了放到海外机房。</p>
+</blockquote>
+<ul>
+<li>2016-02-07</li>
+</ul>
+<blockquote>
+<p>02-05 3:44 ~ 02-07 23:16 故障</p>
+</blockquote>
+<ul>
+<li>2015-12-28</li>
+</ul>
+<blockquote>
+<p>20: 54 ~ 21: 27 故障</p>
+</blockquote>
+<ul>
+<li>2015-12-24</li>
+</ul>
+<blockquote>
+<p>好消息好消息，现在已经使用 DaoCloud + 腾讯云方式来部署了</p>
+</blockquote>
+<blockquote>
+<p>中间遇到了 N 多的坑，来吐槽两个</p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>由于制作 ngrok 服务端的镜像是只有程序，没有可执行文件，需要在启动容器的时候去生成，但是腾讯云又无法连接 Google 和 GitHub，所以只能想办法把安装 Build 到镜像里面了，幸好 DaoCloud 在构建的时候是可以下载的，构建好了也没有报错。</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>但是线上的容器启动时就是没有可执行的 ngrokd 命令，我在本地拉取镜像，然后发现确实没有这个命令，但是重新执行一下就有这个命令了，于是我在 Dockerfile 里面又写了一遍安装命令，再测试一遍发现还是如此。最后没有办法我就在本地把 ngrokd 这个文件生成好，然后拷贝到镜像里面去，直接执行这个二进制文件就完全正常了。</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>后来去翻了 tutum/ngrok 的 Dockerfile 源码，才发现原来他把 ngrokd 的这个目录设置成了 VOLUME，导致每次启动容器的时候这个里面的文件就空了。</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>大家要是想搭建 Docker 版的 Ngrok 服务端可以参考：<a href=https://github.com/dcb9/docker/tree/master/ngrok-server>ngrokd-docker</a>，直接拷贝过去，把证书替换一下就可以用了。现在的 docker-compose.yml 内容如下：</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml>ngrok:
+ image: YOUR_IMAGE_URL
+ net: host
+ environment:
+ - DOMAIN=tunnel.phpor.me
+</code></pre></div></blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<hr>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>不知道大家发现没有，其实证书这样子放在代码库里面太危险了，这种就应该拉出去枪毙，但是呢，我的部署点在 DaoCloud 上面，那里部署就只能用环境变量的形式，需要对容器的网络设置为 host，就只能用应用编排了。其实可以把证书放到环境变量里面，注入进去就好了，这样就不用存在代码库里面了，但是 DaoCloud 这边对应用编排的时候好像有对单行的长度做一定的限制，导致一个环境变量应该是在一行的变成了两行！！！</p>
+</blockquote>
+</blockquote>
+<ul>
+<li>2015-12-17</li>
+</ul>
+<blockquote>
+<p>Bob 的 Ngrok 服务一直是放在某云上面的，一个月是 90 RMB ，现在是第二个月了，费用还是很贵的。</p>
+</blockquote>
+<blockquote>
+<p>昨天 DaoCloud 上对老用户年终大回馈，可以免费领腾讯的优惠券， Bob 一共抽了 700 块左右的钱（个人帐号+公司组织帐号+兄弟的帐号 一般人只能拿到 200 左右的优惠券吧），已经够用一年的了，从下个月开始服务转移到腾讯云上，部署的方式也会改成 DaoCloud 的方式——容器大法，所以请大家放心使用！</p>
+</blockquote>
+<blockquote>
+<p>最后还是非常感谢 DaoCloud，所有的 V 友建议都是了解一下，对自己百利而有一害（中毒太深）！</p>
+</blockquote>
+</div>
+<div class=tags>
+</div></div>
+</div>
+<div class="footer wrapper">
+<nav class=nav>
+<div>2022 © Copyright Du, Chengbin | <a href=https://github.com/knadh/hugo-ink>Ink</a> theme on <a href=https://gohugo.io>Hugo</a></div>
+</nav>
+</div>
+<script>feather.replace()</script>
+</body>
+</html>

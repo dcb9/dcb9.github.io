@@ -1,1 +1,426 @@
-1.html
+<!doctype html><html>
+<head>
+<meta name=generator content="Hugo 0.91.2">
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge"><title>Du, Chengbin's Blog - A software engineer </title><meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=alternate type=application/rss+xml href=https://dcb9.github.io/index.xml title="Du, Chengbin's Blog">
+<meta itemprop=name content="Du, Chengbin's Blog">
+<meta itemprop=description content><meta property="og:title" content="Du, Chengbin's Blog">
+<meta property="og:description" content>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dcb9.github.io/">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Du, Chengbin's Blog">
+<meta name=twitter:description content>
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/main.css>
+<link rel=stylesheet type=text/css href=https://dcb9.github.iocss/katex.min.css>
+<link id=dark-scheme rel=stylesheet type=text/css href=https://dcb9.github.iocss/dark.css>
+<script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script>
+<script src=https://dcb9.github.iojs/main.js></script><script src=https://dcb9.github.iojs/katex.min.js></script><script src=https://dcb9.github.iojs/auto-render.min.js></script><script src=https://dcb9.github.iojs/custom.js></script>
+</head>
+<body>
+<div class="container wrapper">
+<div class=header>
+<h1 class=site-title><a href=https://dcb9.github.io>Du, Chengbin's Blog</a></h1>
+<div class=site-description><p>A software engineer</p><nav class="nav social">
+<ul class=flat><li><a href=https://github.com/dcb9 title=Github><i data-feather=github></i></a></li><li><a href=https://twitter.com/robertduu title=Twitter><i data-feather=twitter></i></a></li><li><a href=/index.xml title=RSS><i data-feather=rss></i></a></li></ul>
+</nav>
+</div>
+<nav class=nav>
+<ul class=flat>
+<li>
+<a href=/>Home</a>
+</li>
+<li>
+<a href=/posts>All posts</a>
+</li>
+<li>
+<a href=/about>About</a>
+</li>
+<li>
+<a href=/tags>Tags</a>
+</li>
+</ul>
+</nav>
+</div>
+<div class="recent-posts section">
+<div class=posts>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>08</span>
+<span class=rest>May 2022</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2022-05-08/>除法和减法的关系</a>
+</h4>
+<span class=description>
+同学们知道都乘法和加法之间的关系，乘法是几个相同的数相加的简便运算。对于除法，同学们知道它和乘法的关系，知道除法是乘法的逆运算，那除法和减法之间有什么关系呢？如何从减法来理解除法呢？
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>24</span>
+<span class=rest>Nov 2018</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2018-11-24/>使用 Python 绘制多项式函数</a>
+</h4>
+<span class=description>
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>26</span>
+<span class=rest>Oct 2018</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2018-10-26-payment-channel-references/>Payment channel 支付通道参考资料</a>
+</h4>
+<span class=description>
+最近在学习支付通道，所以罗列一下相关参考资料
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>08</span>
+<span class=rest>Sep 2018</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2018-09-08/>招商银行-E-招贷的年利率是多少</a>
+</h4>
+<span class=description>
+以前并未完全了解银行贷款的年利率的计算规则，前两天在 Youtube 上看了李永乐老师讲的[《贷款买房，利息怎么算？》](https://www.youtube.com/watch?v=T6FBfNpiBYw)，才明白利息的计算方法。
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>06</span>
+<span class=rest>Sep 2018</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2018-09-06-why-we-need-two-phase-send-plus-confirmation-plasma-mvp/>Plasma MVP 为什么需要发送交易后再生成 confirmation signature？</a>
+</h4>
+<span class=description>
+以下内容翻译自 Ethereum Research ”[Why do/don’t we need two phase sends plus confirmation](https://ethresear.ch/t/why-do-dont-we-need-two-phase-sends-plus-confirmation/1866/14)” 的回复。 Generally, there are two major reasons why it’s necessary to have the two-phase send + conf in Plasma. Plasma MVP 为什么有必要使用 send + confirm，主要有两个原因
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>31</span>
+<span class=rest>Mar 2017</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2017-03-31-track-and-replay-http-request/>如何从服务端跟踪所有 HTTP 请求，并方便回放？</a>
+</h4>
+<span class=description>
+客户端工程师：“xxx 接口坏了，我的程序都没动过”，后端经常会收到这样的质问，但是我们现在如何重现这个问题？有以下几种情况： 一、后端测试了一下发现没有问题 二、测试了也有问题
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>09</span>
+<span class=rest>Mar 2017</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2017-03-09-aps-cer-to-pem/>Apple Push Services .cer to .pem</a>
+</h4>
+<span class=description>
+Download certificates file, and install into your KeyChain **`login`** group (if you install into `system` group that you can't export p12).
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>04</span>
+<span class=rest>Sep 2016</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2016-09-04/>Alexander Makarov 于 CLOUDWAYS 的面试</a>
+</h4>
+<span class=description>
+&lt;a target="_blank" href="https://github.com/samdark">Alexander Makarov&lt;/a> 是一个高级工程师并且他是 &lt;a target="_blank" href="http://www.yiiframework.com/">Yii 框架&lt;/a>的核心贡献者之一，同时他还是 &lt;a target="_blank" href="https://github.com/samdark/yii2-cookbook">Yii 2.0 Cookbook&lt;/a> 的作者
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>29</span>
+<span class=rest>Nov 2015</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2015-11-29-tcp-proxy-for-api-white-list/>本地开发——TCP Proxy 解决 API 必须绑定 IP 白名单才能访问的问题</a>
+</h4>
+<span class=description>
+本次对接一个票务系统的时候，**他们那边的 API 访问需要在白名单的才可以访问**，当时我就提出了个问题。
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>04</span>
+<span class=rest>Nov 2015</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2015-11-04-share-ngrok/>另一个国内的 Ngrok 服务器分享</a>
+</h4>
+<span class=description>
+ngrok 2.0 开始收费了，国内好几个 ngrok 倒下了，于是搭了一个供大家玩耍，只要还有钱就会给服务器续费的！
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>29</span>
+<span class=rest>May 2015</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2015-05-29-init-permission-for-new-app-server/>对于一台新服务器权限的配置</a>
+</h4>
+<span class=description>
+作为一个程序员，在网站没有运维的情况下，也要有能够搭建应用的能力，由于不是专业的运维所以考虑的问题可能不够全面，只顾着把应用搭起来，权限管理非常地松，认为只要登陆 `root` 可以运行命令就行了，这样的话会有很多后患的，有的时候只是未爆发出来，当爆发出来就已经晚了。
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>18</span>
+<span class=rest>Mar 2015</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2015-03-18/>Docker VS 虚拟机</a>
+</h4>
+<span class=description>
+我听说了 `Docker` 多么令人惊叹，但是它并没有征服我的心，直到我提出一个实际的问题：【如果 Scout 使用 Docker 来部署，它会让我们的部署变得更顺利吗？】
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>12</span>
+<span class=rest>Mar 2015</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2015-03-12-yii2-project-deploy/>Yii2 项目部署流程</a>
+</h4>
+<span class=description>
+网上现在有许多关于在 Yii2 下进行开发的文章，但对于如何把程序优雅地部署到线上介绍的还不是很多，下面我就来介绍一下我自己的部署流程。
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>05</span>
+<span class=rest>Feb 2015</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2015-02-05-another-way-to-learning-program/>学习 PHP 程序新东西的另一种方法</a>
+</h4>
+<span class=description>
+昨天在学习 `SplDoublyLinkedList` 的时候发现一个有趣的现象，比如
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>27</span>
+<span class=rest>Dec 2014</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2014-12-27-ssh-agent-guide/>ssh-agent 使用指南</a>
+</h4>
+<span class=description>
+不知道你有没有遇到这样的情况，有二台以上的服务器(服务器系统是 windows 的不要往下看)需要管理，如果说你有这种情况，而且还没有用到 `ssh-agent` 的话，那么这篇文章就是为你而写。
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>02</span>
+<span class=rest>Dec 2014</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2014-12-02-join-idarex/>加入 iDareX 团队</a>
+</h4>
+<span class=description>
+今年 11 月 24 日正式加入 iDareX 团队，该团队非常有活力，可能是因为本来大家就爱运动的原因 ^_^, 团队里竟然还有开飞机的，还有方面的大牛，俗话说：“三人行，必有我师焉”，现在这里每个人都有N多长处，一时半会儿真心学不完啊。
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>17</span>
+<span class=rest>Nov 2014</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2014-11-17-yii2-usage/>使用 Yii2 时遇到的实际问题</a>
+</h4>
+<span class=description>
+最近一直在学习 Yii2 框架，可能是一直以来对它的青睐，让我难以对其它框架再产生兴趣，学习中遇到了许多问题，于是把问题和解决办法也记录下来，这样方便以后复习和交流。
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>15</span>
+<span class=rest>Nov 2014</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2014-11-15/>高可用的 Web 架构</a>
+</h4>
+<span class=description>
+最近工作需要，画了一幅比较典型的高可用 Web 架构图，这中间都是开源产品
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>05</span>
+<span class=rest>Nov 2014</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2014-11-05-resume/>Robert's Resume</a>
+</h4>
+<span class=description>
+从事互联网开发马上 3 年时间，就职于盛大旗下的晋江文学城，主要工作是：维护 50 多台服务器、找性能欠佳的程序，并将其重新设计和改进、在公司自主发起多项任务并顺利完成：CTB 文本论坛成功转到 Discuz! &lt;sup>&lt;a href="#info1">[1]&lt;/a>&lt;/sup>、本地测试环境的搭建、抛弃系统的计划任务，搭建计划任务管理系统。今年一月领导任命为技术小组组长，对任务的分配及工作流程有清析的认识。
+</span>
+</div>
+</div>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>12</span>
+<span class=rest>Oct 2014</span>
+</div>
+</div>
+<div class=matter>
+<h4 class="title small">
+<a href=/posts/2014-10-12-vagrant-local-development-environment/>Local development environment -- Vagrant</a>
+</h4>
+<span class=description>
+Vagrant 对于本地开发来说真的是非常的棒，一般公司的开发人员都不止一个人，所以要每个开发人员都自己去搭建本地环境，会耗费非常多的时间，甚至还有可能会搭不起来的，就算搭起来了也不够统一，不能够和线上的保持一致。
+</span>
+</div>
+</div>
+</div>
+<ul class=pagination>
+<li class="page-item page-prev">
+</li>
+<li class="page-item page-next">
+<a href=/page/2/ class=page-link aria-label=Next><span aria-hidden=true>Next page →</span></a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="footer wrapper">
+<nav class=nav>
+<div>2022 © Copyright Du, Chengbin | <a href=https://github.com/knadh/hugo-ink>Ink</a> theme on <a href=https://gohugo.io>Hugo</a></div>
+</nav>
+</div>
+<script>feather.replace()</script>
+</body>
+</html>

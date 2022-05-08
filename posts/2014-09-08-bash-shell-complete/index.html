@@ -1,0 +1,128 @@
+<!doctype html><html>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge"><title>Bash complete for DSH - Du, Chengbin's Blog</title><meta name=viewport content="width=device-width,initial-scale=1">
+<meta itemprop=name content="Bash complete for DSH">
+<meta itemprop=description content="我们有许多的服务器需要管理，所以就会使用到一个软件 dsh 来批量操作多台机器。默认是这样子的 $ dsh 各种参数加选项（但其实我们用的参数和选项的值永远都是那几个，连位置都不变 ） 指定组名 &#34;需要执行的命令&#34;，由于组名是定义在 /etc/dsh/group 目录下面的，所以在默认的 bash shell 里面，当我想让它自动补全组名的时候是不可以的。"><meta itemprop=datePublished content="2014-09-08T00:00:00+08:00">
+<meta itemprop=dateModified content="2014-09-08T00:00:00+08:00">
+<meta itemprop=wordCount content="197">
+<meta itemprop=keywords content="Shell,"><meta property="og:title" content="Bash complete for DSH">
+<meta property="og:description" content="我们有许多的服务器需要管理，所以就会使用到一个软件 dsh 来批量操作多台机器。默认是这样子的 $ dsh 各种参数加选项（但其实我们用的参数和选项的值永远都是那几个，连位置都不变 ） 指定组名 &#34;需要执行的命令&#34;，由于组名是定义在 /etc/dsh/group 目录下面的，所以在默认的 bash shell 里面，当我想让它自动补全组名的时候是不可以的。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dcb9.github.io/posts/2014-09-08-bash-shell-complete/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2014-09-08T00:00:00+08:00">
+<meta property="article:modified_time" content="2014-09-08T00:00:00+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Bash complete for DSH">
+<meta name=twitter:description content="我们有许多的服务器需要管理，所以就会使用到一个软件 dsh 来批量操作多台机器。默认是这样子的 $ dsh 各种参数加选项（但其实我们用的参数和选项的值永远都是那几个，连位置都不变 ） 指定组名 &#34;需要执行的命令&#34;，由于组名是定义在 /etc/dsh/group 目录下面的，所以在默认的 bash shell 里面，当我想让它自动补全组名的时候是不可以的。">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/main.css>
+<link rel=stylesheet type=text/css href=https://dcb9.github.iocss/katex.min.css>
+<link id=dark-scheme rel=stylesheet type=text/css href=https://dcb9.github.iocss/dark.css>
+<script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script>
+<script src=https://dcb9.github.iojs/main.js></script><script src=https://dcb9.github.iojs/katex.min.js></script><script src=https://dcb9.github.iojs/auto-render.min.js></script><script src=https://dcb9.github.iojs/custom.js></script>
+</head>
+<body>
+<div class="container wrapper">
+<div class=header>
+<h1 class=site-title><a href=https://dcb9.github.io>Du, Chengbin's Blog</a></h1>
+<div class=site-description><p>A software engineer</p><nav class="nav social">
+<ul class=flat><li><a href=https://github.com/dcb9 title=Github><i data-feather=github></i></a></li><li><a href=https://twitter.com/robertduu title=Twitter><i data-feather=twitter></i></a></li><li><a href=/index.xml title=RSS><i data-feather=rss></i></a></li></ul>
+</nav>
+</div>
+<nav class=nav>
+<ul class=flat>
+<li>
+<a href=/>Home</a>
+</li>
+<li>
+<a href=/posts>All posts</a>
+</li>
+<li>
+<a href=/about>About</a>
+</li>
+<li>
+<a href=/tags>Tags</a>
+</li>
+</ul>
+</nav>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>08</span>
+<span class=rest>Sep 2014</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>Bash complete for DSH</h1>
+</div>
+</div>
+<div class=markdown>
+<p>我们有许多的服务器需要管理，所以就会使用到一个软件 dsh 来批量操作多台机器。默认是这样子的 $ dsh 各种参数加选项（但其实我们用的参数和选项的值永远都是那几个，连位置都不变 ） 指定组名 &ldquo;需要执行的命令&rdquo;，由于组名是定义在 /etc/dsh/group 目录下面的，所以在默认的 bash shell 里面，当我想让它自动补全组名的时候是不可以的。</p>
+<h3 id=目标>目标</h3>
+<ol>
+<li>使用 DSH 这个命令来控制多台服务器</li>
+<li>在使用 DSH 的时候，组名如果能够自动补全就好了（因为我在/etc/dsh/group/ 下有 groupA groupB groupC）</li>
+</ol>
+<h3 id=实现思路>实现思路</h3>
+<ol>
+<li>dsh 使用的远程 shell 为 bash shell （其它的 shell 没玩过）</li>
+<li>在连接机器的时候如果这台机器未在 .ssh/known_hosts 里面，希望系统能够自动输入 yes 不然太麻烦啦！</li>
+<li>通过 Bash shell 的 complete 来实现自定义tab键补全的功能</li>
+</ol>
+<h3 id=实现步骤>实现步骤</h3>
+<p>创建一个替代默认的 dsh 的脚本，放到 /usr/local/bin/ 目录下</p>
+<p># file: dsh.sh</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>GROUP=<span style=color:#a31515>&#34;</span>$1<span style=color:#a31515>&#34;</span>
+COMMAND=<span style=color:#a31515>&#34;</span>$2<span style=color:#a31515>&#34;</span>
+dsh -o <span style=color:#a31515>&#39;-o StrictHostKeyChecking=no&#39;</span> -c  -M -g <span style=color:#a31515>&#34;</span>$GROUP<span style=color:#a31515>&#34;&#34;</span>$COMMAND<span style=color:#a31515>&#34;</span>  <span style=color:green># 这些参数我们使用的时候都是不变的</span>
+</code></pre></div><p>为这个脚本创建 键补全的 complete 程序
+这个程序也放在 /usr/local/bin/ 目录下，这样方便以后的查看，或另一个人也能明白这个是干嘛的</p>
+<p># file: dsh.sh-complete</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:green># dsh.sh parameter-completion</span>
+_UseDsh.sh ()   <span style=color:green>#  By convention, the function name</span>
+{                 <span style=color:green>#+ starts with an underscore.</span>
+    local cur
+    <span style=color:green># Pointer to current completion word.</span>
+    <span style=color:green># By convention, it&#39;s named &#34;cur&#34; but this isn&#39;t strictly necessary.</span>
+    COMPREPLY=()   <span style=color:green># Array variable storing the possible completions.</span>
+    cur=<span style=color:#a31515>${</span>COMP_WORDS[COMP_CWORD]<span style=color:#a31515>}</span>
+    <span style=color:#00f>case</span> <span style=color:#a31515>&#34;</span>$cur<span style=color:#a31515>&#34;</span> in
+    *)
+        COMPREPLY=( <span style=color:#00f>$(</span> compgen -W <span style=color:#a31515>&#39;`cd /etc/dsh/group ; ls $cur* 2&amp;gt; /dev/null`&#39;</span> <span style=color:#00f>)</span> );;
+    <span style=color:#00f>esac</span>
+    <span style=color:#00f>return</span> 0
+}
+complete -F _UseDsh.sh dsh.sh
+</code></pre></div><p>在用户登录到这台机器的时候自动 source 这一个为 dsh.sh 的 complete 的程序。</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ echo <span style=color:#a31515>&#34;source /usr/local/bin/dsh.sh-complete&#34;</span>&gt;&gt;/etc/bash/bashrc
+</code></pre></div><h3 id=测试>测试</h3>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ dsh.sh&lt;tab&gt;&lt;tab&gt; （就能自动补全以下的组）
+number26PhysicalServers number27PhysicalServers
+最终运行的命令为：
+查看这个组下面的机器的内核版本
+$ dsh.sh number26PhysicalServers <span style=color:#a31515>&#34;uname -a&#34;</span>
+</code></pre></div><h3 id=说明>说明</h3>
+<ul>
+<li>number26PhysicalServers number27PhysicalServers 这两个组是我事先创建好的。</li>
+<li>我这个说的是 dsh 加上 bash shell complete 的应用，如果对这两个不懂需要了解这相关的知识</li>
+<li>关于 bash shell complete 的两个文章链接，写的非常简洁易懂，建议需要的话仔细阅读，将会受益匪浅：<a href=http://tldp.org/LDP/abs/html/tabexpansion.html>《Appendix J. An Introduction to Programmable Completion》</a>、<a href=http://www.debian-administration.org/article/316/An_introduction_to_bash_completion_part_1>《An introduction to bash completion》</a></li>
+</ul>
+</div>
+<div class=tags>
+<ul class=flat>
+<li><a href=/tags/shell>Shell</a></li>
+</ul>
+</div></div>
+</div>
+<div class="footer wrapper">
+<nav class=nav>
+<div>2022 © Copyright Du, Chengbin | <a href=https://github.com/knadh/hugo-ink>Ink</a> theme on <a href=https://gohugo.io>Hugo</a></div>
+</nav>
+</div>
+<script>feather.replace()</script>
+</body>
+</html>
