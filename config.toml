@@ -1,4 +1,4 @@
-baseURL = "https://dcb9.github.io"
+baseURL = "https://dcb9.github.io/"
 languageCode = "en-us"
 title = "Du, Chengbin's Blog"
 theme = "ink"
