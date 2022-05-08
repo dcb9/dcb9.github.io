@@ -16,17 +16,17 @@
 <meta name=twitter:title content="Yii在Web分布式下将Session存储到Memcached">
 <meta name=twitter:description content="当网站的访问越来越大的时候一台机器无法支持迸发，或都是为了做到去单点，都需要在后端搭建一个集群来处理用户的请求，由于传统的PHP Session是文件级的存储，那么如果一个用户在第一次登录的时候这个Session文件存在 A 服务器上，而第二次的时候被分到了B 服务器上，则又认为他没有登录了（当然配置好负载均衡的是可以让同一个用户永远在同一台机器上的，这个的可以略过。。。），所以我们需要将它存在一个别的地方，我选的是Memcached，存在这里面，当然后期可能会选择Redis因为它在取值方面可以更精确，省内网带宽。">
 <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css>
-<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/normalize.css>
-<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.iocss/main.css>
-<link rel=stylesheet type=text/css href=https://dcb9.github.iocss/katex.min.css>
-<link id=dark-scheme rel=stylesheet type=text/css href=https://dcb9.github.iocss/dark.css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.io/css/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.io/css/main.css>
+<link rel=stylesheet type=text/css href=https://dcb9.github.io/css/katex.min.css>
+<link id=dark-scheme rel=stylesheet type=text/css href=https://dcb9.github.io/css/dark.css>
 <script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script>
-<script src=https://dcb9.github.iojs/main.js></script><script src=https://dcb9.github.iojs/katex.min.js></script><script src=https://dcb9.github.iojs/auto-render.min.js></script><script src=https://dcb9.github.iojs/custom.js></script>
+<script src=https://dcb9.github.io/js/main.js></script><script src=https://dcb9.github.io/js/katex.min.js></script><script src=https://dcb9.github.io/js/auto-render.min.js></script><script src=https://dcb9.github.io/js/custom.js></script>
 </head>
 <body>
 <div class="container wrapper">
 <div class=header>
-<h1 class=site-title><a href=https://dcb9.github.io>Du, Chengbin's Blog</a></h1>
+<h1 class=site-title><a href=https://dcb9.github.io/>Du, Chengbin's Blog</a></h1>
 <div class=site-description><p>A software engineer</p><nav class="nav social">
 <ul class=flat><li><a href=https://github.com/dcb9 title=Github><i data-feather=github></i></a></li><li><a href=https://twitter.com/robertduu title=Twitter><i data-feather=twitter></i></a></li><li><a href=/index.xml title=RSS><i data-feather=rss></i></a></li></ul>
 </nav>
