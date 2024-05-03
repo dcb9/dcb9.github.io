@@ -65,7 +65,9 @@
 <p>我听说了 <code>Docker</code> 多么令人惊叹，但是它并没有征服我的心，直到我提出一个实际的问题：【如果 Scout 使用 Docker 来部署，它会让我们的部署变得更顺利吗？】</p>
 <p>以下是三个案例：</p>
 <h3 id=高效地模拟线上环境>高效地模拟线上环境</h3>
-<p><img src=0.png alt></p>
+<p>
+<img src=0.png alt>
+</p>
 <p>我们线上有 16 台服务器，如果我尝试在本地使用 <code>VirtualBox</code> 配置每个实例 512 MB内存，那么它将占用我笔记本的两倍内存（说明他笔记本只有 4G 内存），<code>VirtualBox</code> 需要有许多多余的开支来管理每个子操作系统，<code>Docker</code> 在这方面是不一样的——容器共享同一个操作系统，更有可能是同样的二进制包文件和库文件，它可以运行在一台 <code>Docker</code> 主机上运行好几百个容器。</p>
 <h4 id=老方法>老方法</h4>
 <p>我不能在本地完全地模拟线上环境，让我们来看一下通过 <code>Vagrant</code> 启动一台机器需要花多久：</p>
@@ -93,7 +95,9 @@ real  1m32.052s
 </code></pre></div><p>只需要两秒钟就完成了容器的启动和 supervisor 的启动（用来启动 Rails 应用的管理程序）</p>
 <p>总之，<code>Docker</code> 能够让你在测试机上完全地模拟线上环境，它是如此的简单，让我可以真正地进行全站测试了。</p>
 <h3 id=更简单快速地创建镜像>更简单快速地创建镜像</h3>
-<p><img src=1.png alt></p>
+<p>
+<img src=1.png alt>
+</p>
 <h4 id=传统方法>传统方法</h4>
 <p>如果你用脚本从一个基本的镜像创建一个虚拟机镜像（例如：在 <code>Ubuntu</code> 上创建 <code>Rails stack</code>），若想把这个都做的正确是非常痛苦的，除非你经常的在做这个，看看安装 <code>Ruby</code> 依赖的一些信息吧：</p>
 <div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span>$</span> time apt-get install -y -q ruby1.9.1 ruby1.9.1-dev rubygems1.9.1 irb1.9.1 build-essential libopenssl-ruby1.9.1 libssl-dev zlib1g-dev
@@ -142,7 +146,9 @@ real    0m0.848s
 做的如此神奇，是因为 <code>Docker</code> 使用了 <code>AuFS</code> 文件系统（union file system）</p>
 <p>总之，<code>Docker</code> 让我们反复地创建一个镜像不再那么痛苦，对于已经成功的后面就不需要再等了。I&rsquo;m not perfect and Docker doesn&rsquo;t punish me when I make mistakes.</p>
 <h3 id=部署镜像不更新基础设施>部署镜像，不更新基础设施</h3>
-<p><img src=2.png alt></p>
+<p>
+<img src=2.png alt>
+</p>
 <p>传统的做法</p>
 <p><a href=https://scoutapp.com/>Scout</a>和其它部署一样，很长的时间在运行虚拟机，使用 <code>Puppet</code> 来更新所有的基础设施，但是经常会非常的痛苦。</p>
 <p>如果我们部署更新到我们的栈，<code>Puppet</code> 会在每台虚拟机运行更新，这会花去许多的时间——即使是一个小小的改变，<code>Puppet</code> 需要检查所其它所有的都检查一遍。在部署的时间会出问题：如果我们安装 <code>Memcached</code> 时网络有点问题，<code>apt-get install memcached</code> 就会执行失败。</p>

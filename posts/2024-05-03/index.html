@@ -1,0 +1,188 @@
+<!doctype html><html>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge"><title>打造私人影院 - Du, Chengbin's Blog</title><meta name=viewport content="width=device-width,initial-scale=1">
+<meta itemprop=name content="打造私人影院">
+<meta itemprop=description content="分享使用 OpenWRT + Alist(baidu cloud) + Jellyfin + TinyMediaManager 打造的私人影院"><meta itemprop=datePublished content="2024-05-03T11:00:00+08:00">
+<meta itemprop=dateModified content="2024-05-03T11:00:00+08:00">
+<meta itemprop=wordCount content="318">
+<meta itemprop=keywords content="影视,"><meta property="og:title" content="打造私人影院">
+<meta property="og:description" content="分享使用 OpenWRT + Alist(baidu cloud) + Jellyfin + TinyMediaManager 打造的私人影院">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dcb9.github.io/posts/2024-05-03/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2024-05-03T11:00:00+08:00">
+<meta property="article:modified_time" content="2024-05-03T11:00:00+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="打造私人影院">
+<meta name=twitter:description content="分享使用 OpenWRT + Alist(baidu cloud) + Jellyfin + TinyMediaManager 打造的私人影院">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.io/css/normalize.css>
+<link rel=stylesheet type=text/css media=screen href=https://dcb9.github.io/css/main.css>
+<link rel=stylesheet type=text/css href=https://dcb9.github.io/css/katex.min.css>
+<link id=dark-scheme rel=stylesheet type=text/css href=https://dcb9.github.io/css/dark.css>
+<script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script>
+<script src=https://dcb9.github.io/js/main.js></script><script src=https://dcb9.github.io/js/katex.min.js></script><script src=https://dcb9.github.io/js/auto-render.min.js></script><script src=https://dcb9.github.io/js/custom.js></script>
+</head>
+<body>
+<div class="container wrapper">
+<div class=header>
+<h1 class=site-title><a href=https://dcb9.github.io/>Du, Chengbin's Blog</a></h1>
+<div class=site-description><p>Software engineer</p><nav class="nav social">
+<ul class=flat><li><a href=https://github.com/dcb9 title=Github><i data-feather=github></i></a></li><li><a href=https://twitter.com/robertduu title=Twitter><i data-feather=twitter></i></a></li><li><a href=/index.xml title=RSS><i data-feather=rss></i></a></li></ul>
+</nav>
+</div>
+<nav class=nav>
+<ul class=flat>
+<li>
+<a href=/>Home</a>
+</li>
+<li>
+<a href=/posts>All posts</a>
+</li>
+<li>
+<a href=/about>About</a>
+</li>
+<li>
+<a href=/tags>Tags</a>
+</li>
+</ul>
+</nav>
+</div>
+<div class=post>
+<div class=post-header>
+<div class=meta>
+<div class=date>
+<span class=day>03</span>
+<span class=rest>May 2024</span>
+</div>
+</div>
+<div class=matter>
+<h1 class=title>打造私人影院</h1>
+</div>
+</div>
+<div class=markdown>
+<p>分享使用 OpenWRT + Alist(百度网盘) + Jellyfin + TinyMediaManager 打造的私人影院，这不是一个 step-by-step 的教程，而是一些 Gist + 成果展示的分享，更多搭建过程参考结尾的<a href=#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0>#参考文章</a></p>
+<h4 id=windows-挂载-alist-webdav-到本地盘符给-tmm-搜刮>Windows 挂载 Alist webdav 到本地盘符，给 TMM 搜刮</h4>
+<p>修改注册表 <code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WebClient\Parameters</code> 把 <code>BasicAuthLevel</code> 设置为 2</p>
+<ul>
+<li>0 = Basic authentication is disabled</li>
+<li>1 = Basic authentication is enabled for SSL web sites only</li>
+<li>2 = Basic authentication is enabled for SSL and non-SSL web sites</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>windows powershell $ net stop webclient
+windows powershell $ net start webclient
+windows powershell $ net use Z: http://192.168.1.1@5244/dav
+</code></pre></div><p>
+<figure>
+<img src=./tiny-media-manager.png alt="&amp;ldquo;Tiny Media Manager&amp;rdquo;">
+<figcaption>Tiny Media Manager</figcaption>
+</figure>
+</p>
+<h4 id=router-版本信息>Router 版本信息</h4>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>router $ ubus call system board
+{
+        <span style=color:#a31515>&#34;kernel&#34;</span>: <span style=color:#a31515>&#34;5.15.148&#34;</span>,
+        <span style=color:#a31515>&#34;hostname&#34;</span>: <span style=color:#a31515>&#34;OpenWrt&#34;</span>,
+        <span style=color:#a31515>&#34;system&#34;</span>: <span style=color:#a31515>&#34;ARMv8 Processor rev 4&#34;</span>,
+        <span style=color:#a31515>&#34;model&#34;</span>: <span style=color:#a31515>&#34;FriendlyElec NanoPi R4S&#34;</span>,
+        <span style=color:#a31515>&#34;board_name&#34;</span>: <span style=color:#a31515>&#34;friendlyarm,nanopi-r4s&#34;</span>,
+        <span style=color:#a31515>&#34;rootfs_type&#34;</span>: <span style=color:#a31515>&#34;squashfs&#34;</span>,
+        <span style=color:#a31515>&#34;release&#34;</span>: {
+                <span style=color:#a31515>&#34;distribution&#34;</span>: <span style=color:#a31515>&#34;1004&#34;</span>,
+                <span style=color:#a31515>&#34;version&#34;</span>: <span style=color:#a31515>&#34;23.05-SNAPSHOT&#34;</span>,
+                <span style=color:#a31515>&#34;revision&#34;</span>: <span style=color:#a31515>&#34;02.12.2024&#34;</span>,
+                <span style=color:#a31515>&#34;target&#34;</span>: <span style=color:#a31515>&#34;rockchip/armv8&#34;</span>,
+                <span style=color:#a31515>&#34;description&#34;</span>: <span style=color:#a31515>&#34;OpenWrt 02.12.2024 by Kiddin&#39;&#34;</span>
+        }
+}
+</code></pre></div><h4 id=rclone-挂载alist-webdav-中的百度网盘的命令>rclone 挂载Alist webdav 中的百度网盘的命令</h4>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>router $ rclone mount alist:/baidu1 /mnt/baidu1 <span style=color:#a31515>\
+</span><span style=color:#a31515></span>  --vfs-cache-mode writes <span style=color:#a31515>\
+</span><span style=color:#a31515></span>  --vfs-cache-max-size 1024M <span style=color:#a31515>\
+</span><span style=color:#a31515></span>  --cache-dir /mnt/mmcblk1p3/mnt_baidu1_cache <span style=color:#a31515>\
+</span><span style=color:#a31515></span>  --header <span style=color:#a31515>&#34;Referer:https://pan.baidu.com/&#34;</span> <span style=color:#a31515>\
+</span><span style=color:#a31515></span>  --header <span style=color:#a31515>&#34;User-Agent:pan.baidu.com&#34;</span> <span style=color:#a31515>\
+</span><span style=color:#a31515></span>  --daemon
+</code></pre></div><h4 id=docker-启动-jellyfin-server>Docker 启动 Jellyfin Server</h4>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>router $ docker run -d <span style=color:#a31515>\
+</span><span style=color:#a31515></span> --name=jellyfin <span style=color:#a31515>\
+</span><span style=color:#a31515></span> --hostname=jellyfin <span style=color:#a31515>\
+</span><span style=color:#a31515></span> --pull=always <span style=color:#a31515>\
+</span><span style=color:#a31515></span> --privileged <span style=color:#a31515>\
+</span><span style=color:#a31515></span> --volume /mnt/mmcblk1p3/jellyfin/config:/config <span style=color:#a31515>\
+</span><span style=color:#a31515></span> --volume /mnt/mmcblk1p3/jellyfin/cache:/cache <span style=color:#a31515>\
+</span><span style=color:#a31515></span> --volume /mnt/baidu1:/media/baidu1 <span style=color:#a31515>\
+</span><span style=color:#a31515></span> --net=host <span style=color:#a31515>\
+</span><span style=color:#a31515></span> --restart=on-failure <span style=color:#a31515>\
+</span><span style=color:#a31515></span> jellyfin/jellyfin
+</code></pre></div><h4 id=jellyfin-server-版本信息>Jellyfin Server 版本信息</h4>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>router $ docker logs jellyfin | head -n 11 
+[17:45:10] [INF] [1] Main: Jellyfin version: 10.8.13
+[17:45:10] [INF] [1] Main: Environment Variables: [<span style=color:#a31515>&#34;[DOTNET_SYSTEM_GLOBALIZATION_INVARIANT, 1]&#34;</span>, <span style=color:#a31515>&#34;[JELLYFIN_DATA_DIR, /config]&#34;</span>, <span style=color:#a31515>&#34;[JELLYFIN_CACHE_DIR, /cache]&#34;</span>, <span style=color:#a31515>&#34;[JELLYFIN_FFMPEG, /usr/lib/jellyfin-ffmpeg/ffmpeg]&#34;</span>, <span style=color:#a31515>&#34;[JELLYFIN_LOG_DIR, /config/log]&#34;</span>, <span style=color:#a31515>&#34;[JELLYFIN_WEB_DIR, /jellyfin/jellyfin-web]&#34;</span>, <span style=color:#a31515>&#34;[JELLYFIN_CONFIG_DIR, /config/config]&#34;</span>]
+[17:45:10] [INF] [1] Main: Arguments: [<span style=color:#a31515>&#34;/jellyfin/jellyfin.dll&#34;</span>]
+[17:45:10] [INF] [1] Main: Operating system: Linux
+[17:45:10] [INF] [1] Main: Architecture: Arm64
+[17:45:10] [INF] [1] Main: 64-Bit Process: True
+[17:45:10] [INF] [1] Main: User Interactive: True
+[17:45:10] [INF] [1] Main: Processor count: 6
+[17:45:10] [INF] [1] Main: Program data path: /config
+[17:45:10] [INF] [1] Main: Web resources path: /jellyfin/jellyfin-web
+[17:45:10] [INF] [1] Main: Application directory: /jellyfin/
+</code></pre></div><p>
+<figure>
+<img src=./page1.png alt="&amp;ldquo;home page 1&amp;rdquo;">
+<figcaption>home page 1</figcaption>
+</figure>
+<figure>
+<img src=./page2.png alt="&amp;ldquo;home page 2&amp;rdquo;">
+<figcaption>home page 2</figcaption>
+</figure>
+<figure>
+<img src=./page3.png alt="&amp;ldquo;home page 3&amp;rdquo;">
+<figcaption>home page 3</figcaption>
+</figure>
+</p>
+<p>
+<figure>
+<img src=./music-videos.png alt="&amp;ldquo;Music videos&amp;rdquo;">
+<figcaption>Music videos</figcaption>
+</figure>
+<figure>
+<img src=./star-war-collection.png alt="&amp;ldquo;Star war collection&amp;rdquo;">
+<figcaption>Star war collection</figcaption>
+</figure>
+<figure>
+<img src=./tv-series.png alt="&amp;ldquo;TV Series&amp;rdquo;">
+<figcaption>TV Series</figcaption>
+</figure>
+<figure>
+<img src=./taylor-swift.png alt="&amp;ldquo;TAYLOR SWIFT | THE ERAS TOUR&amp;rdquo;">
+<figcaption>TAYLOR SWIFT | THE ERAS TOUR</figcaption>
+</figure>
+<figure>
+<img src=./bluey.png alt="&amp;ldquo;Cartoon: Bluey&amp;rdquo;">
+<figcaption>Cartoon: Bluey</figcaption>
+</figure>
+</p>
+<h2 id=参考文章>参考文章:</h2>
+<ul>
+<li><a href=https://zhuanlan.zhihu.com/p/673925871>使用jellyfin和ttm在Windows系统上搭建本地私人影院</a></li>
+<li><a href=https://leovan.me/cn/2023/01/build-home-media-center-with-jellyfin-on-openwrt/>在 OpenWrt 中安装 Jellyfin 搭建家庭影音中心</a></li>
+<li><a href=https://echo.xuchaoji.com/index.php/archives/400/>在windows系统上挂载alist网盘的webDav</a></li>
+<li><a href=https://learn.microsoft.com/en-us/iis/publish/using-webdav/using-the-webdav-redirector>Using the WebDAV Redirector</a></li>
+</ul>
+</div>
+<div class=tags>
+<ul class=flat>
+<li><a href=/tags/%E5%BD%B1%E8%A7%86>影视</a></li>
+</ul>
+</div></div>
+</div>
+<div class="footer wrapper">
+<nav class=nav>
+<div>2024 © Copyright Du, Chengbin | <a href=https://github.com/knadh/hugo-ink>Ink</a> theme on <a href=https://gohugo.io>Hugo</a></div>
+</nav>
+</div>
+<script>feather.replace()</script>
+</body>
+</html>

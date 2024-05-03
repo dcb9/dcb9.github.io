@@ -3,7 +3,7 @@
 <meta charset=utf-8>
 <meta http-equiv=x-ua-compatible content="IE=edge"><title>使用 Python 绘制多项式函数 - Du, Chengbin's Blog</title><meta name=viewport content="width=device-width,initial-scale=1">
 <meta itemprop=name content="使用 Python 绘制多项式函数">
-<meta itemprop=description content="简介 高中你就会接触到多项式和多项式函数，本章教程完全依赖多项式，也就是说，我们将会花一节课的时间去了解多项式。下面是一个 4 次多项式的例子：
+<meta itemprop=description content="简介  高中你就会接触到多项式和多项式函数，本章教程完全依赖多项式，也就是说，我们将会花一节课的时间去了解多项式。下面是一个 4 次多项式的例子：
 $$ p(x) = x^4 - 4 \cdot x^2 + 3 \cdot x $$
 你会发觉它们跟整数有许多相似之处，本课我们将会定义多种多项式的算术操作，我们的 Polynomial 类也将提供计算多项式的推导和积分的方法，绘制多项式的图像。
 多项式非常漂亮，现在最重要的是如何用 Python 类来实现它们，我们要感谢 Drew Shanon，他让我们使用他的精美的图片，将数学视为艺术！
@@ -15,7 +15,7 @@ $$ \sum_{k=0}^{n}a_k \cdot x^k = a_n \cdot x^n + a_{n-1} \cdot x^{n-1} + &mldr; 
 <meta itemprop=dateModified content="2018-11-24T00:00:00+08:00">
 <meta itemprop=wordCount content="1106">
 <meta itemprop=keywords content="Python,Math,翻译,"><meta property="og:title" content="使用 Python 绘制多项式函数">
-<meta property="og:description" content="简介 高中你就会接触到多项式和多项式函数，本章教程完全依赖多项式，也就是说，我们将会花一节课的时间去了解多项式。下面是一个 4 次多项式的例子：
+<meta property="og:description" content="简介  高中你就会接触到多项式和多项式函数，本章教程完全依赖多项式，也就是说，我们将会花一节课的时间去了解多项式。下面是一个 4 次多项式的例子：
 $$ p(x) = x^4 - 4 \cdot x^2 + 3 \cdot x $$
 你会发觉它们跟整数有许多相似之处，本课我们将会定义多种多项式的算术操作，我们的 Polynomial 类也将提供计算多项式的推导和积分的方法，绘制多项式的图像。
 多项式非常漂亮，现在最重要的是如何用 Python 类来实现它们，我们要感谢 Drew Shanon，他让我们使用他的精美的图片，将数学视为艺术！
@@ -30,7 +30,7 @@ $$ \sum_{k=0}^{n}a_k \cdot x^k = a_n \cdot x^n + a_{n-1} \cdot x^{n-1} + &mldr; 
 <meta property="article:modified_time" content="2018-11-24T00:00:00+08:00">
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="使用 Python 绘制多项式函数">
-<meta name=twitter:description content="简介 高中你就会接触到多项式和多项式函数，本章教程完全依赖多项式，也就是说，我们将会花一节课的时间去了解多项式。下面是一个 4 次多项式的例子：
+<meta name=twitter:description content="简介  高中你就会接触到多项式和多项式函数，本章教程完全依赖多项式，也就是说，我们将会花一节课的时间去了解多项式。下面是一个 4 次多项式的例子：
 $$ p(x) = x^4 - 4 \cdot x^2 + 3 \cdot x $$
 你会发觉它们跟整数有许多相似之处，本课我们将会定义多种多项式的算术操作，我们的 Polynomial 类也将提供计算多项式的推导和积分的方法，绘制多项式的图像。
 多项式非常漂亮，现在最重要的是如何用 Python 类来实现它们，我们要感谢 Drew Shanon，他让我们使用他的精美的图片，将数学视为艺术！
@@ -86,7 +86,9 @@ $$ \sum_{k=0}^{n}a_k \cdot x^k = a_n \cdot x^n + a_{n-1} \cdot x^{n-1} + &mldr; 
 </div>
 <div class=markdown>
 <h2 id=简介>简介</h2>
-<p><img src=0.jpg alt></p>
+<p>
+<img src=0.jpg alt>
+</p>
 <p>高中你就会接触到<strong>多项式</strong>和<strong>多项式函数</strong>，本章教程完全依赖多项式，也就是说，我们将会花一节课的时间去了解多项式。下面是一个 4 次多项式的例子：</p>
 <p>$$ p(x) = x^4 - 4 \cdot x^2 + 3 \cdot x $$</p>
 <p>你会发觉它们跟整数有许多相似之处，本课我们将会定义多种多项式的算术操作，我们的 Polynomial 类也将提供计算多项式的推导和积分的方法，绘制多项式的图像。</p>
@@ -189,7 +191,9 @@ F = p(X)
 
 plt.plot(X,F)
 plt.show()
-</code></pre></div><p><img src=1.png alt></p>
+</code></pre></div><p>
+<img src=1.png alt>
+</p>
 <p>还可以定义多项式的加法和减法，我们需要做的就是对两个多项式的相同指数的系数做加法或减法。</p>
 <p>若有以下多项式函数</p>
 <p>$$ f(x) = \sum_{k=0}^{n}a_k \cdot x^k $$</p>
@@ -289,7 +293,9 @@ plt.plot(X, F_sum, label=<span style=color:#a31515>&#34;F_sum&#34;</span>)
 plt.plot(X, F_diff, label=<span style=color:#a31515>&#34;F_diff&#34;</span>)
 plt.legend()
 plt.show()
-</code></pre></div><p><img src=2.png alt></p>
+</code></pre></div><p>
+<img src=2.png alt>
+</p>
 <p>添加求微分到 Polynomial 类非常简单，数学的定义如下：</p>
 <p>$$ f'(x) = \sum_{k=0}^{n}k \cdot a_k \cdot x^{k-1} $$</p>
 <p>若</p>
@@ -373,7 +379,9 @@ plt.plot(X, F, label=<span style=color:#a31515>&#34;F&#34;</span>)
 plt.plot(X, F_derivative, label=<span style=color:#a31515>&#34;F_der&#34;</span>)
 plt.legend()
 plt.show()
-</code></pre></div><p><img src=3.png alt></p>
+</code></pre></div><p>
+<img src=3.png alt>
+</p>
 <p>再来几组：</p>
 <div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>p = Polynomial(1, 1, 1, 1, 1)
 p2 = Polynomial(1, 2, 3)
