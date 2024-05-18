@@ -5,7 +5,7 @@
 <meta itemprop=name content="打造私人影院">
 <meta itemprop=description content="分享使用 OpenWRT + Alist(baidu cloud) + Jellyfin + TinyMediaManager 打造的私人影院"><meta itemprop=datePublished content="2024-05-03T11:00:00+08:00">
 <meta itemprop=dateModified content="2024-05-03T11:00:00+08:00">
-<meta itemprop=wordCount content="318">
+<meta itemprop=wordCount content="410">
 <meta itemprop=keywords content="影视,"><meta property="og:title" content="打造私人影院">
 <meta property="og:description" content="分享使用 OpenWRT + Alist(baidu cloud) + Jellyfin + TinyMediaManager 打造的私人影院">
 <meta property="og:type" content="article">
@@ -113,8 +113,38 @@ windows powershell $ net use Z: http://192.168.1.1@5244/dav
 </span><span style=color:#a31515></span> --volume /mnt/mmcblk1p3/jellyfin/cache:/cache <span style=color:#a31515>\
 </span><span style=color:#a31515></span> --volume /mnt/baidu1:/media/baidu1 <span style=color:#a31515>\
 </span><span style=color:#a31515></span> --net=host <span style=color:#a31515>\
-</span><span style=color:#a31515></span> --restart=on-failure <span style=color:#a31515>\
+</span><span style=color:#a31515></span> --restart=unless-stopped <span style=color:#a31515>\
 </span><span style=color:#a31515></span> jellyfin/jellyfin
+</code></pre></div><h4 id=添加自启动脚本>添加自启动脚本</h4>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>router $ cat /etc/init.d/zz-b-jellyfin 
+<span style=color:green>#!/bin/sh /etc/rc.common</span>
+ 
+START=99
+<span style=color:green># :!: If multiple init scripts have the same start value, the call order is determined by the alphabetical order of the init script&#39;s names.</span>
+STOP=0
+ 
+start() {        
+        echo <span style=color:#a31515>&#34;start jellyfin&#34;</span>
+        /usr/bin/rclone <span style=color:#a31515>\
+</span><span style=color:#a31515></span>                --config /root/.config/rclone/rclone.conf <span style=color:#a31515>\
+</span><span style=color:#a31515></span>                mount alist:/baidu1 /mnt/baidu1 <span style=color:#a31515>\
+</span><span style=color:#a31515></span>                --vfs-cache-mode writes  <span style=color:#a31515>\
+</span><span style=color:#a31515></span>                --vfs-cache-max-size 1024M   <span style=color:#a31515>\
+</span><span style=color:#a31515></span>                --cache-dir /mnt/mmcblk1p3/mnt_baidu1_cache   <span style=color:#a31515>\
+</span><span style=color:#a31515></span>                --header <span style=color:#a31515>&#34;Referer:https://pan.baidu.com/&#34;</span>    <span style=color:#a31515>\
+</span><span style=color:#a31515></span>                --header <span style=color:#a31515>&#34;User-Agent:pan.baidu.com&#34;</span>   <span style=color:#a31515>\
+</span><span style=color:#a31515></span>                --allow-non-empty --daemon
+        docker start jellyfin
+}                 
+ 
+stop() {          
+        echo <span style=color:#a31515>&#34;stop jellyfin&#34;</span>
+        docker stop jellyfin
+        /usr/bin/umount /mnt/baidu1
+}
+
+router $ chmod a+x /etc/init.d/zz-b-jellyfin
+router $ /etc/init.d/zz-b-jellyfin enable
 </code></pre></div><h4 id=jellyfin-server-版本信息>Jellyfin Server 版本信息</h4>
 <div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>router $ docker logs jellyfin | head -n 11 
 [17:45:10] [INF] [1] Main: Jellyfin version: 10.8.13
@@ -170,6 +200,7 @@ windows powershell $ net use Z: http://192.168.1.1@5244/dav
 <li><a href=https://leovan.me/cn/2023/01/build-home-media-center-with-jellyfin-on-openwrt/>在 OpenWrt 中安装 Jellyfin 搭建家庭影音中心</a></li>
 <li><a href=https://echo.xuchaoji.com/index.php/archives/400/>在windows系统上挂载alist网盘的webDav</a></li>
 <li><a href=https://learn.microsoft.com/en-us/iis/publish/using-webdav/using-the-webdav-redirector>Using the WebDAV Redirector</a></li>
+<li><a href=https://openwrt.org/docs/techref/initscripts>Init scripts documentation</a></li>
 </ul>
 </div>
 <div class=tags>
