@@ -66,9 +66,44 @@ router $ docker run -d \
  --volume /mnt/mmcblk1p3/jellyfin/cache:/cache \
  --volume /mnt/baidu1:/media/baidu1 \
  --net=host \
- --restart=on-failure \
+ --restart=unless-stopped \
  jellyfin/jellyfin
 ```
+
+#### 添加自启动脚本
+
+```bash
+router $ cat /etc/init.d/zz-b-jellyfin 
+#!/bin/sh /etc/rc.common
+ 
+START=99
+# :!: If multiple init scripts have the same start value, the call order is determined by the alphabetical order of the init script's names.
+STOP=0
+ 
+start() {        
+        echo "start jellyfin"
+        /usr/bin/rclone \
+                --config /root/.config/rclone/rclone.conf \
+                mount alist:/baidu1 /mnt/baidu1 \
+                --vfs-cache-mode writes  \
+                --vfs-cache-max-size 1024M   \
+                --cache-dir /mnt/mmcblk1p3/mnt_baidu1_cache   \
+                --header "Referer:https://pan.baidu.com/"    \
+                --header "User-Agent:pan.baidu.com"   \
+                --allow-non-empty --daemon
+        docker start jellyfin
+}                 
+ 
+stop() {          
+        echo "stop jellyfin"
+        docker stop jellyfin
+        /usr/bin/umount /mnt/baidu1
+}
+
+router $ chmod a+x /etc/init.d/zz-b-jellyfin
+router $ /etc/init.d/zz-b-jellyfin enable
+```
+
 
 #### Jellyfin Server 版本信息
 ```bash
@@ -101,3 +136,4 @@ router $ docker logs jellyfin | head -n 11
 - [在 OpenWrt 中安装 Jellyfin 搭建家庭影音中心](https://leovan.me/cn/2023/01/build-home-media-center-with-jellyfin-on-openwrt/)
 - [在windows系统上挂载alist网盘的webDav](https://echo.xuchaoji.com/index.php/archives/400/)
 - [Using the WebDAV Redirector](https://learn.microsoft.com/en-us/iis/publish/using-webdav/using-the-webdav-redirector)
+- [Init scripts documentation](https://openwrt.org/docs/techref/initscripts)
