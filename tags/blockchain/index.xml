@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>blockchain on Du, Chengbin's Blog</title><link>https://dcb9.github.io/tags/blockchain/</link><description>Recent content in blockchain on Du, Chengbin's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>© Copyright Du, Chengbin</copyright><lastBuildDate>Thu, 19 Sep 2024 20:00:00 +0800</lastBuildDate><atom:link href="https://dcb9.github.io/tags/blockchain/index.xml" rel="self" type="application/rss+xml"/><item><title>TON 生态开发</title><link>https://dcb9.github.io/posts/2024-09-19/</link><pubDate>Thu, 19 Sep 2024 20:00:00 +0800</pubDate><guid>https://dcb9.github.io/posts/2024-09-19/</guid><description>TON 区块链架构 Ethereum 可以理解为单体应用，所有的数据都存在一个数据库中（一台电脑），所有的交易都是顺序执行。
+TON 类似与一个微服务架构，使用分片技术(Sharding)，数据存储在不同的分片中（多台电脑），获取数据需要通过异步的消息传递，所有交易并行执行。
+什么是分片技术 Sharding?
+Sharding 技术主要是用来解决水平扩展的问题，垂直扩展可以理解为在一台电脑上加内存，cpu，硬盘等硬件，但这些目前都有瓶颈，不存在一台电脑能存储所有的数据，水平扩展可以让多台电脑协作存储相关的数据。水平扩展后每个 Shard 可以独立的接收查询和修改，可以减小系统负载，提升整体的负载能力。
+TON Blockchain 会随着负载以及用户的增长，动态地拆分成多个Shardchain，如果生成的 Shardchain 依然负载较高，则可以继续拆分。当负载下降后多个 Shardchain 会合并（collapse）。系统保持 Shardchain 在一个合理的数量。
+理论上一个 workchain(=basechain) 可以有 2⁶⁰ 个 shardchains，一个 shardchain 至少需要一个 validator，目前有406 个 active validators，所以最多可以有 406 个 shardchain
+启动一个 Workchain需要技术和经济支撑，还需要得到 2/3 的验证人的支持，当前设计支持最多 2³² 条 workchain，理论上一个 workchain 可以有 2⁶⁰ 个 shardchains
+Masterchain 为所有链的源头：
+存储区块链网络的配置信息 实现所有消息的一个路由功能，让消息可以在不同的 workchains, shardchain 之间进行传递 聚合所有 workchain 的数据，就数据层面来看类似 Ethereum L1，把 workchain 当 L2 所有活跃验证人信息，包括 stake 的信息 架构的变化导致合约的规则也跟着变化：</description></item></channel></rss>
