@@ -38,7 +38,7 @@ at both ends of the mountain, the peak and the bottom. My grandparents'
 house is located in the middle of the
 mountain.
 
-<div style="width: 200px; float: right; margin-left: 1.5em;">
+<div style="width: 350px; float: right; margin-left: 1.5em;">
 <img src="image2.jpeg"
      alt="Image description"
      style="
@@ -107,7 +107,7 @@ that potatoes and corn need to be planted together. So that the corn
 leaves will prevent the hot sunlight from reaching the potato plants. I
 would feel delighted when it comes to harvest.
 
-<div style="width: 200px; float: left; margin-right: 1.5em">
+<div style="width: 300px; float: left; margin-right: 1.5em">
 <img src="image4.jpeg"
      alt="Image description"
      style="
@@ -122,7 +122,7 @@ would feel delighted when it comes to harvest.
   color: #666;
   margin-top: 8px;
 ">
-  Figure 3. The front yard of the house
+  Figure 4. My grandma collects potatoes
 </p>
 </div>
 
