@@ -1,5 +1,5 @@
 baseURL = "https://dcb9.github.io/"
-languageCode = "en-us"
+locale = "en-us"
 title = "Du, Chengbin's Blog"
 theme = "ink"
 paginate = 20
@@ -11,7 +11,11 @@ pygmentscodefences = true
 pygmentscodefencesguesssyntax = true
 
 googleAnalytics = ""
-disqusShortname = ""
+
+# Disqus comments are enabled by setting a shortname here.
+# [services]
+#   [services.disqus]
+#     shortname = ""
 
 [params]
 	subtitle = "Software engineer"
