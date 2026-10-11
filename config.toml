@@ -67,3 +67,8 @@ url = "/index.xml"
 
 [taxonomies]
    tag = "tags"
+
+[markup]
+[markup.goldmark]
+[markup.goldmark.renderer]
+  unsafe = true
