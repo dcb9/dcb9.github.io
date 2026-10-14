@@ -1,0 +1,1532 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Medical Word Roots and Affixes</title>
+<style>
+:root {
+  --bg: #f6f8fb;
+  --card: #fff;
+  --text: #1f2937;
+  --muted: #64748b;
+  --line: #dbe3ee;
+  --accent: #2457a6;
+  --accent2: #eaf1fb;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.wrap { max-width: 1100px; margin: auto; padding: 32px 22px 64px; }
+header { margin-bottom: 22px; }
+h1 { font-size: 2rem; margin: 0 0 6px; }
+.sub { color: var(--muted); margin: 0; }
+
+/* ---- search + A-Z nav ------------------------------------------------ */
+.tools {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(246, 248, 251, .96);
+  backdrop-filter: blur(8px);
+  padding: 14px 0 12px;
+}
+.search {
+  width: 100%;
+  padding: 13px 15px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 1rem;
+  background: white;
+  outline: none;
+}
+.search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px #2457a618; }
+.az { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.az a {
+  display: inline-flex;
+  min-width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--accent);
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font-weight: 650;
+}
+.count { font-size: .9rem; color: var(--muted); margin-top: 9px; }
+
+/* ---- browse list ----------------------------------------------------- */
+.group { margin-top: 28px; scroll-margin-top: 130px; }
+.group h2 {
+  font-size: 1.35rem;
+  border-bottom: 2px solid var(--line);
+  padding-bottom: 7px;
+  margin: 0 0 10px;
+}
+.group-count { font-weight: 400; color: var(--muted); font-size: .9rem; }
+/* Two columns of entry cards on wide screens. `break-inside: avoid` keeps each
+   card whole instead of splitting it across the column boundary. */
+.group-body { column-count: 2; column-gap: 16px; }
+.entry {
+  display: grid;
+  grid-template-columns: minmax(150px, 220px) 1fr auto;
+  gap: 16px;
+  align-items: start;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 13px 15px;
+  /* Bottom margin only, so a card starting a new column does not inherit a
+     leading margin and the vertical rhythm stays even. */
+  margin: 0 0 7px;
+  break-inside: avoid;
+}
+/* Terms are selected, not linked: selecting one opens the lookup menu. There is
+   deliberately no click handler, so the I-beam cursor is the hint that a term
+   is text to drag across, exactly like the meaning beside it. */
+.term {
+  display: block;
+  font-weight: 750;
+  color: #173f7a;
+  font-size: 1.02rem;
+  cursor: text;
+  /* Selectable, so a word can still be copied by hand. */
+  -webkit-user-select: text;
+  user-select: text;
+}
+/* The keyboard cannot drag across a word, so a focused term keeps a visible
+   ring for the Enter/Space shortcut handled below. */
+.term:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.meaning { font-weight: 500; }
+/* Meanings listing several numbered senses ("1. … 2. …") read better one sense
+   per line; a real <ol> gives the same 1. 2. 3. markers the source uses. */
+.senses { margin: 0; padding-left: 1.3em; }
+.senses li { margin: 0; }
+.examples { color: var(--muted); font-size: .93rem; margin-top: 3px; }
+.page {
+  font-size: .78rem;
+  color: var(--muted);
+  white-space: nowrap;
+  background: var(--accent2);
+  padding: 3px 7px;
+  border-radius: 99px;
+}
+.empty { display: none; padding: 28px; text-align: center; color: var(--muted); }
+
+.note {
+  margin-top: 24px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--accent);
+  background: white;
+  color: var(--muted);
+  font-size: .9rem;
+}
+.note a { color: var(--accent); font-weight: 650; }
+
+/* ---- mode switch ----------------------------------------------------- */
+.modebar { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.modebtn, .flash-btn {
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--accent);
+  border-radius: 8px;
+  padding: 9px 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.modebtn.active, .flash-btn.primary {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+/* ---- mode panels (Flashcards, Other Resources) ----------------------- */
+.mode-panel {
+  display: none;
+  margin: 22px 0 28px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px;
+}
+.mode-panel.active { display: block; }
+/* Other Resources is a plain list — one entry per row, no cards. Each row is
+   separated by a hairline instead of being boxed. */
+.resource-list { display: block; margin-top: 10px; }
+.resource {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 12px 2px;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: inherit;
+}
+.resource:last-child { border-bottom: none; }
+.resource:hover h3 { color: var(--accent); text-decoration: underline; }
+/* Basis 0 (not auto) so the label never wraps onto its own line: flex wrapping
+   is decided from the base size, before any shrinking. */
+.resource > div { flex: 1 1 0; min-width: 0; }
+.resource h3 { margin: 0 0 3px; font-size: 1.02rem; color: #173f7a; }
+.resource p { margin: 0; color: var(--muted); font-size: .92rem; }
+.resource-site { font-weight: 500; color: var(--muted); font-size: .82rem; }
+.resource-go { color: var(--accent); font-weight: 700; font-size: .9rem; white-space: nowrap; }
+
+/* ---- flashcards ------------------------------------------------------ */
+.flash-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.flash-head h2, .flash-head h3 { margin: 0; font-size: 1.3rem; }
+.flash-actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0 16px; }
+.letter-picker { display: flex; flex-wrap: wrap; gap: 7px; margin: 14px 0; }
+.letter-picker label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  font-weight: 750;
+  cursor: pointer;
+}
+.letter-picker input { position: absolute; opacity: 0; pointer-events: none; }
+.letter-picker label:has(input:checked) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+.flashcard {
+  min-height: 250px;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  background: var(--bg);
+}
+.flashcard:focus { outline: 3px solid #2457a630; outline-offset: 2px; }
+/* The card is click-to-reveal, so it opts out of text selection — except the
+   term itself, which is selected to look it up. */
+.flashcard .fc-term { -webkit-user-select: text; user-select: text; }
+.fc-label {
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 800;
+}
+.fc-term { font-size: 2rem; font-weight: 800; color: #173f7a; margin: 10px 0; }
+.fc-answer { display: none; }
+.flashcard.revealed .fc-answer { display: block; }
+.fc-meaning { font-size: 1.18rem; font-weight: 650; }
+.fc-examples { color: var(--muted); margin-top: 8px; }
+.fc-hint { color: var(--muted); font-size: .85rem; margin-top: 18px; }
+.fc-status { color: var(--muted); font-size: .9rem; }
+.score { display: flex; gap: 8px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
+.score button { min-width: 120px; }
+
+@media (max-width: 900px) {
+  .group-body { column-count: 1; }
+}
+
+/* ---- lookup menu + viewer -------------------------------------------- */
+/* The menu is fixed to the viewport and placed from the script, next to the
+   term it belongs to. */
+.lookup-menu {
+  position: fixed;
+  z-index: 40;
+  min-width: 210px;
+  max-width: 290px;
+  padding: 5px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  box-shadow: 0 10px 26px #0f172a26;
+}
+.lookup-menu[hidden] { display: none; }
+.lookup-menu-head {
+  padding: 5px 9px 7px;
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.lookup-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent);
+  cursor: pointer;
+}
+.lookup-menu button:hover, .lookup-menu button:focus-visible { background: var(--accent2); outline: none; }
+
+/* Panel over the page, so the term stays visible behind it. */
+.viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(15, 23, 42, .5);
+  display: flex;
+  padding: 3vh 3vw;
+}
+.viewer[hidden] { display: none; }
+.viewer-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1300px;
+  margin: auto;
+  max-height: 94vh;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px #0f172a4d;
+}
+.viewer-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px 10px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.viewer-title { font-weight: 700; color: #173f7a; min-width: 0; }
+/* Site switch: only visible once a lookup has been opened, and only when there
+   is more than one site to switch between. */
+.viewer-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-right: auto; }
+.viewer-tabs:empty { display: none; }
+.viewer-tab {
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--accent);
+  border-radius: 7px;
+  padding: 6px 11px;
+  font: inherit;
+  font-size: .86rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.viewer-tab:hover, .viewer-tab:focus-visible { background: var(--accent2); }
+.viewer-tab.active { background: var(--accent); border-color: var(--accent); color: white; }
+.viewer-newtab {
+  border: 1px solid var(--accent);
+  background: white;
+  color: var(--accent);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font: inherit;
+  font-size: .88rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.viewer-newtab:hover, .viewer-newtab:focus-visible { background: var(--accent2); }
+.viewer-close {
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--muted);
+  border-radius: 7px;
+  width: 30px;
+  height: 30px;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.viewer-close:hover { background: var(--accent2); color: var(--accent); }
+.viewer-body { flex: 1 1 auto; min-height: 65vh; }
+.viewer-body iframe { width: 100%; height: 100%; min-height: 65vh; border: 0; display: block; }
+
+@media (max-width: 650px) {
+  .wrap { padding: 22px 14px 48px; }
+  h1 { font-size: 1.6rem; }
+  .entry { grid-template-columns: 1fr; }
+  .page { justify-self: start; }
+  .az a { min-width: 30px; height: 30px; }
+}
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>Medical Word Roots and Affixes</h1>
+      <p class="sub">Searchable study edition - organized alphabetically by group.</p>
+    </header>
+
+    <div class="tools">
+      <input id="q" class="search" type="search" placeholder="Search a root, meaning, or example... (press / to focus)" autocomplete="off">
+      <nav class="az" id="az" aria-label="Alphabetical groups"></nav>
+      <div class="count" id="count"></div>
+    </div>
+
+    <div class="modebar">
+      <button type="button" class="modebtn active" id="browseMode">Browse &amp; Search</button>
+      <button type="button" class="modebtn" id="flashMode">Flashcards</button>
+      <button type="button" class="modebtn" id="resourcesMode">Other Resources</button>
+    </div>
+
+    <section id="flashPanel" class="mode-panel" aria-label="Flashcard study">
+      <div class="flash-head">
+        <h2>Flashcard Practice</h2>
+        <div class="fc-status" id="fcStatus2">Choose letter groups to begin.</div>
+      </div>
+      <p class="sub">Choose all available letter groups or only the groups you want to test. Cards are shuffled randomly.</p>
+      <div class="flash-actions">
+        <button type="button" class="flash-btn" id="selectAll">Select all</button>
+        <button type="button" class="flash-btn" id="clearAll">Clear all</button>
+        <button type="button" class="flash-btn primary" id="startQuiz">Start / Reshuffle</button>
+      </div>
+      <div class="letter-picker" id="letterPicker"></div>
+      <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Flashcard. Activate to reveal answer">
+        <div class="fc-label">Medical root / affix</div>
+        <div class="fc-term" id="fcTerm">Select letters and start</div>
+        <div class="fc-answer" id="fcAnswer">
+          <div class="fc-meaning" id="fcMeaning"></div>
+          <div class="fc-examples" id="fcExamples"></div>
+        </div>
+        <div class="fc-hint" id="fcHint">Click the card to reveal the meaning.</div>
+      </div>
+      <div class="score">
+        <button type="button" class="flash-btn" id="againBtn" disabled>Again</button>
+        <button type="button" class="flash-btn primary" id="knowBtn" disabled>I knew it</button>
+        <button type="button" class="flash-btn" id="nextBtn" disabled>Next card</button>
+      </div>
+    </section>
+
+    <section id="resourcesPanel" class="mode-panel" aria-label="Other resources">
+      <div class="flash-head">
+        <h2>Other Resources</h2>
+        <div class="fc-status"></div>
+      </div>
+
+      <div class="resource-list">
+        <a class="resource" href="https://www.englishhints.com/medical-prefixes.html"
+           target="_blank" rel="noopener">
+          <div>
+            <h3>30+ Medical Prefixes &amp; Roots Worth Learning</h3>
+            <p>A short, high-yield list of the most common prefixes and roots with clear examples.</p>
+            <div class="resource-site">englishhints.com</div>
+          </div>
+          <span class="resource-go">Visit &rarr;</span>
+        </a>
+        <a class="resource" href="https://globalrph.com/medical-terms-introduction/"
+           target="_blank" rel="noopener">
+          <div>
+            <h3>Medical Terms: Prefixes, Roots and Suffixes (Comprehensive List)</h3>
+            <p>A much longer reference covering prefixes, roots and suffixes, plus combining forms.</p>
+            <div class="resource-site">globalrph.com</div>
+          </div>
+          <span class="resource-go">Visit &rarr;</span>
+        </a>
+        <a class="resource" href="https://quizlet.com/search?query=Medical-Prefix%2C-Suffix-%26-Root-Words&amp;type=all"
+           target="_blank" rel="noopener">
+          <div>
+            <h3>Quizlet: Medical Prefix, Suffix &amp; Root Word Sets</h3>
+            <p>Ready-made study sets and quizzes from other learners for extra drilling.</p>
+            <div class="resource-site">quizlet.com</div>
+          </div>
+          <span class="resource-go">Visit &rarr;</span>
+        </a>
+        <a class="resource" href="https://www.youtube.com/watch?v=-rBPejaTKWo"
+           target="_blank" rel="noopener">
+          <div>
+            <h3>100 Most Common Medical Prefixes | Medical Terminology Made Easy</h3>
+            <p>A walkthrough video covering the most common prefixes with pronunciation and examples.</p>
+            <div class="resource-site">youtube.com</div>
+          </div>
+          <span class="resource-go">Watch &rarr;</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Browse list: one section per letter, rendered from DATA. -->
+    <div id="browse"></div>
+    <div id="empty" class="empty">No matching roots or affixes found.</div>
+
+    <p class="note">
+      Spotted something incorrect or missing? Please reach out at
+      <span class="contact-email" id="contactEmail"
+            data-email-reversed="moc.liamg@uudtrebor"></span>.
+    </p>
+  </main>
+
+  <!-- Lookup menu: filled and positioned by the script when a term is selected. -->
+  <div id="lookupMenu" class="lookup-menu" role="menu" aria-label="Look up this term" hidden></div>
+
+  <!-- Lookup viewer: the chosen site, inside an iframe rather than a new tab. -->
+  <div id="lookupViewer" class="viewer" hidden>
+    <div class="viewer-panel" role="dialog" aria-modal="true" aria-label="Dictionary lookup">
+      <div class="viewer-bar">
+        <span class="viewer-title" id="viewerTitle"></span>
+        <div class="viewer-tabs" id="viewerTabs" role="tablist" aria-label="Lookup site"></div>
+        <button type="button" class="viewer-newtab" id="viewerOpen">Open in new tab</button>
+        <button type="button" class="viewer-close" id="viewerClose" aria-label="Close the lookup viewer">&times;</button>
+      </div>
+      <div class="viewer-body">
+        <iframe id="viewerFrame" title="Dictionary lookup" referrerpolicy="no-referrer"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+      </div>
+    </div>
+  </div>
+<script>
+/* ===========================================================================
+ * Study set. The only place roots and affixes are written down: the A-Z nav,
+ * the browse list, the search index and the flashcard deck are all derived
+ * from this object. Add an entry here and it shows up everywhere.
+ * =========================================================================== */
+const DATA = {
+  "groups": [
+    {
+      "letter": "A",
+      "entries": [
+        { "term": "a-", "meaning": "no, not, without", "examples": "atom, agranulocyte", "page": 1 },
+        { "term": "ab-", "meaning": "away", "examples": "abducens, abduction", "page": 1 },
+        { "term": "acetabulo-", "meaning": "small cup", "examples": "acetabulum", "page": 1 },
+        { "term": "acro-", "meaning": "tip, extremity, peak", "examples": "acromion, acromegaly", "page": 1 },
+        { "term": "ad-", "meaning": "to, toward, near", "examples": "adsorption, adrenal", "page": 1 },
+        { "term": "adeno-", "meaning": "gland", "examples": "lymphadenitis, adenohypophysis", "page": 1 },
+        { "term": "aero-", "meaning": "air, oxygen", "examples": "aerobic, anaerobic", "page": 1 },
+        { "term": "af-", "meaning": "toward", "examples": "afferent", "page": 1 },
+        { "term": "ag-", "meaning": "together", "examples": "agglutination", "page": 1 },
+        { "term": "-al", "meaning": "pertaining to", "examples": "parietal, pharyngeal, temporal", "page": 1 },
+        { "term": "ala-", "meaning": "wing", "examples": "ala nasi", "page": 1 },
+        { "term": "albi-", "meaning": "white", "examples": "albicans, linea alba, albino", "page": 1 },
+        { "term": "algi-", "meaning": "pain", "examples": "analgesic, myalgia", "page": 1 },
+        { "term": "aliment-", "meaning": "nourishment", "examples": "alimentary", "page": 1 },
+        { "term": "allo-", "meaning": "other, different", "examples": "allele, allograft", "page": 1 },
+        { "term": "amphi-", "meaning": "both, either", "examples": "amphiphilic, amphiarthrosis", "page": 1 },
+        { "term": "an-", "meaning": "without", "examples": "anaerobic, anemic", "page": 1 },
+        { "term": "ana-", "meaning": "1. up, build up (anabolic, anaphylaxis) 2. apart (anaphase, anatomy) 3. back", "examples": "anastomosis", "page": 1 },
+        { "term": "andro-", "meaning": "male", "examples": "androgen", "page": 1 },
+        { "term": "angi-", "meaning": "vessel", "examples": "angiogram, angioplasty, hemangioma", "page": 1 },
+        { "term": "ante-", "meaning": "before, in front", "examples": "antebrachium", "page": 1 },
+        { "term": "antero-", "meaning": "forward", "examples": "anterior, anterograde", "page": 1 },
+        { "term": "anti-", "meaning": "against", "examples": "antidiuretic, antibody, antagonist", "page": 1 },
+        { "term": "apo-", "meaning": "from, off, away, above", "examples": "apocrine, aponeurosis", "page": 1 },
+        { "term": "arbor-", "meaning": "tree", "examples": "arboreal, arborization", "page": 1 },
+        { "term": "artic-", "meaning": "1. joint (articulation) 2. speech", "examples": "articulate", "page": 1 },
+        { "term": "-ary", "meaning": "pertaining to", "examples": "axillary, coronary", "page": 1 },
+        { "term": "-ase", "meaning": "enzyme", "examples": "polymerase, kinase, amylase", "page": 1 },
+        { "term": "ast-, astro-", "meaning": "star", "examples": "aster, astrocyte", "page": 1 },
+        { "term": "-ata, -ate", "meaning": "1. possessing (hamate, corniculate) 2. plural of -a", "examples": "stomata, carcinomata", "page": 1 },
+        { "term": "athero-", "meaning": "fat", "examples": "atheroma, atherosclerosis", "page": 1 },
+        { "term": "atrio-", "meaning": "entryway", "examples": "atrium, atrioventricular", "page": 1 },
+        { "term": "auri-", "meaning": "ear", "examples": "auricle, binaural", "page": 1 },
+        { "term": "auto-", "meaning": "self", "examples": "autolysis, autoimmune", "page": 1 },
+        { "term": "axi-", "meaning": "axis, straight line", "examples": "axial, axoneme, axon", "page": 1 }
+      ]
+    },
+    {
+      "letter": "B",
+      "entries": [
+        { "term": "baro-", "meaning": "pressure", "examples": "baroreceptor, hyperbaric", "page": 1 },
+        { "term": "bene-", "meaning": "good, well", "examples": "benign, beneficial", "page": 1 },
+        { "term": "bi-", "meaning": "two", "examples": "bipedal, biceps, bifid", "page": 1 },
+        { "term": "bili-", "meaning": "bile", "examples": "biliary, bilirubin", "page": 1 },
+        { "term": "bio-", "meaning": "life, living", "examples": "biology, biopsy, microbial", "page": 1 },
+        { "term": "blasto-", "meaning": "precursor, bud, producer", "examples": "fibroblast, osteoblast, blastomere", "page": 1 },
+        { "term": "brachi-", "meaning": "arm", "examples": "brachium, brachialis, antebrachium", "page": 1 },
+        { "term": "brady-", "meaning": "slow", "examples": "bradycardia, bradypnea", "page": 1 },
+        { "term": "bucco-", "meaning": "cheek", "examples": "buccal, buccinator", "page": 1 },
+        { "term": "burso-", "meaning": "purse", "examples": "bursa, bursitis", "page": 1 }
+      ]
+    },
+    {
+      "letter": "C",
+      "entries": [
+        { "term": "calc-", "meaning": "calcium, stone", "examples": "calcaneus, hypocalcemia", "page": 1 },
+        { "term": "callo-", "meaning": "thick", "examples": "callus, callosum", "page": 1 },
+        { "term": "calori-", "meaning": "heat", "examples": "calorie, calorimetry, calorigenic", "page": 1 },
+        { "term": "calv-, calvari-", "meaning": "bald, skull", "examples": "calvaria", "page": 1 },
+        { "term": "calyx-", "meaning": "cup, vessel, chalice", "examples": "glycocalyx, renal calyx", "page": 1 },
+        { "term": "capito-", "meaning": "head", "examples": "capitis, capitate, capitulum", "page": 1 },
+        { "term": "capni-", "meaning": "smoke, carbon dioxide", "examples": "hypocapnia", "page": 1 },
+        { "term": "carcino-", "meaning": "cancer", "examples": "carcinogen, carcinoma", "page": 1 },
+        { "term": "cardi-", "meaning": "heart", "examples": "cardiac, cardiology, pericardium", "page": 1 },
+        { "term": "carot-", "meaning": "1. carrot (carotene) 2. stupor", "examples": "carotid", "page": 1 },
+        { "term": "carpo-", "meaning": "wrist", "examples": "carpus, metacarpal", "page": 1 },
+        { "term": "case-", "meaning": "cheese", "examples": "caseosa, casein", "page": 1 },
+        { "term": "cata-", "meaning": "down, break down", "examples": "catabolism", "page": 1 },
+        { "term": "cauda-", "meaning": "tail", "examples": "cauda equina, caudate nucleus", "page": 1 },
+        { "term": "-cel", "meaning": "little", "examples": "pedicel", "page": 1 },
+        { "term": "celi-", "meaning": "belly, abdomen", "examples": "celiac", "page": 1 },
+        { "term": "centri-", "meaning": "center, middle", "examples": "centromere, centriole", "page": 1 },
+        { "term": "cephalo-", "meaning": "head", "examples": "cephalic, encephalitis", "page": 1 },
+        { "term": "cervi-", "meaning": "neck, narrow part", "examples": "cervix, cervical", "page": 1 },
+        { "term": "chiasm-", "meaning": "cross, X", "examples": "optic chiasm", "page": 1 },
+        { "term": "choano-", "meaning": "funnel", "examples": "choana", "page": 1 },
+        { "term": "chole-", "meaning": "bile", "examples": "cholecystokinin, cholelithotripsy", "page": 1 },
+        { "term": "chondro-", "meaning": "1. grain (mitochondria) 2. cartilage, gristle", "examples": "chondrocyte, perichondrium", "page": 1 },
+        { "term": "chromo-", "meaning": "color", "examples": "dichromat, chromatin, cytochrome", "page": 1 },
+        { "term": "chrono-", "meaning": "time", "examples": "chronotropic, chronic", "page": 1 },
+        { "term": "cili-", "meaning": "eyelash", "examples": "cilium, superciliary", "page": 1 },
+        { "term": "circ-", "meaning": "about, around", "examples": "circadian, circumduction", "page": 1 },
+        { "term": "cis-", "meaning": "cut", "examples": "incision, incisor", "page": 1 },
+        { "term": "cistern-, cisterna-", "meaning": "reservoir", "examples": "Golgi cistern, cisterna chyli", "page": 1 },
+        { "term": "clast-", "meaning": "break down, destroy", "examples": "osteoclast", "page": 1 },
+        { "term": "clavi-", "meaning": "hammer, club, key", "examples": "clavicle, supraclavicular", "page": 1 },
+        { "term": "-cle", "meaning": "little", "examples": "tubercle, corpuscle", "page": 1 },
+        { "term": "cleido-", "meaning": "clavicle", "examples": "sternocleidomastoid", "page": 1 },
+        { "term": "cnemo-", "meaning": "lower leg", "examples": "gastrocnemius", "page": 1 },
+        { "term": "co-", "meaning": "together", "examples": "coenzyme, cotransport", "page": 1 },
+        { "term": "collo-", "meaning": "1. hill (colliculus) 2. glue", "examples": "colloid, collagen", "page": 1 },
+        { "term": "contra-", "meaning": "opposite", "examples": "contralateral", "page": 1 },
+        { "term": "corni-", "meaning": "horn", "examples": "cornified, corniculate, cornu", "page": 1 },
+        { "term": "corono-", "meaning": "crown", "examples": "coronary, corona, coronal", "page": 1 },
+        { "term": "corpo-", "meaning": "body", "examples": "corpus luteum, corpora quadrigemina", "page": 1 },
+        { "term": "corti-", "meaning": "bark, rind", "examples": "cortex, cortical", "page": 1 },
+        { "term": "costa-", "meaning": "rib", "examples": "intercostal, subcostal", "page": 1 },
+        { "term": "coxa-", "meaning": "hip", "examples": "os coxae, coxal", "page": 1 },
+        { "term": "crani-", "meaning": "helmet", "examples": "cranium, epicranius", "page": 1 },
+        { "term": "cribri-", "meaning": "sieve, strainer", "examples": "cribriform, area cribrosa", "page": 1 },
+        { "term": "crino-", "meaning": "separate, secrete", "examples": "holocrine, endocrinology", "page": 1 },
+        { "term": "crista-", "meaning": "crest", "examples": "crista galli, mitochondrial crista", "page": 1 },
+        { "term": "crito-", "meaning": "to separate", "examples": "hematocrit", "page": 1 },
+        { "term": "cruci-", "meaning": "cross", "examples": "cruciate ligament", "page": 1 },
+        { "term": "-cule, -cul", "meaning": "small", "examples": "canaliculus, trabecula, auricular", "page": 1 },
+        { "term": "cune-", "meaning": "wedge", "examples": "cuneiform, cuneatus", "page": 1 },
+        { "term": "cutane-, cuti-", "meaning": "skin", "examples": "subcutaneous, cuticle", "page": 1 },
+        { "term": "cysto-", "meaning": "bladder", "examples": "cystitis, cholecystectomy", "page": 1 },
+        { "term": "cyto-", "meaning": "cell", "examples": "cytology, cytokinesis, monocyte", "page": 1 }
+      ]
+    },
+    {
+      "letter": "D",
+      "entries": [
+        { "term": "de-", "meaning": "down", "examples": "defecate, deglutition, dehydration", "page": 2 },
+        { "term": "demi-", "meaning": "half", "examples": "demifacet, demilune", "page": 2 },
+        { "term": "den-, denti-", "meaning": "tooth", "examples": "dentition, dens, dental", "page": 2 },
+        { "term": "dendro-", "meaning": "tree, branch", "examples": "dendrite, oligodendrocyte", "page": 2 },
+        { "term": "derma-, dermato-", "meaning": "skin", "examples": "dermatology, hypodermic", "page": 2 },
+        { "term": "desmo-", "meaning": "band, bond, ligament", "examples": "desmosome, syndesmosis", "page": 2 },
+        { "term": "dia-", "meaning": "1. across, through, separate (diaphragm, dialysis) 2. day", "examples": "circadian", "page": 2 },
+        { "term": "dis-", "meaning": "1. apart (dissect, dissociate) 2. opposite, absence", "examples": "disinfect, disability", "page": 2 },
+        { "term": "diure-", "meaning": "pass through, urinate", "examples": "diuretic, diuresis", "page": 2 },
+        { "term": "dorsi-", "meaning": "back", "examples": "dorsal, dorsum, latissimus dorsi", "page": 2 },
+        { "term": "duc-", "meaning": "to carry", "examples": "duct, adduction, abducens", "page": 2 },
+        { "term": "dys-", "meaning": "bad, abnormal, painful", "examples": "dyspnea, dystrophy", "page": 2 }
+      ]
+    },
+    {
+      "letter": "E",
+      "entries": [
+        { "term": "e-", "meaning": "out", "examples": "ejaculate, eversion", "page": 2 },
+        { "term": "-eal", "meaning": "pertaining to", "examples": "arboreal, pineal", "page": 2 },
+        { "term": "ec-, ecto-", "meaning": "outside, out of, external", "examples": "ectopic, ectoderm, splenectomy", "page": 2 },
+        { "term": "ef-", "meaning": "out of", "examples": "efferent, effusion", "page": 2 },
+        { "term": "-elle", "meaning": "small", "examples": "fontanelle, organelle, micelle", "page": 2 },
+        { "term": "electro-", "meaning": "electricity", "examples": "electrocardiogram, electrolyte", "page": 2 },
+        { "term": "em-", "meaning": "in, within", "examples": "embolism, embedded", "page": 2 },
+        { "term": "emesi-, emeti-", "meaning": "vomiting", "examples": "emetic, hyperemesis", "page": 2 },
+        { "term": "-emia", "meaning": "blood condition", "examples": "anemia, hypoxemia", "page": 2 },
+        { "term": "en-", "meaning": "in, into", "examples": "enzyme, parenchyma", "page": 2 },
+        { "term": "encephalo-", "meaning": "brain", "examples": "encephalitis, telencephalon", "page": 2 },
+        { "term": "enchymo-", "meaning": "poured in", "examples": "mesenchyme, parenchyma", "page": 2 },
+        { "term": "endo-", "meaning": "within, into, internal", "examples": "endocrine, endocytosis", "page": 2 },
+        { "term": "entero-", "meaning": "gut, intestine", "examples": "mesentery, myenteric", "page": 2 },
+        { "term": "epi-", "meaning": "upon, above", "examples": "epidermis, epiphysis, epididymis", "page": 2 },
+        { "term": "ergo-", "meaning": "work, energy, action", "examples": "allergy, adrenergic, synergist", "page": 2 },
+        { "term": "erith-, erythro-", "meaning": "red", "examples": "erythema, erythrocyte", "page": 2 },
+        { "term": "esthesio-", "meaning": "sensation, feeling", "examples": "anesthesia, somesthetic", "page": 2 },
+        { "term": "eu-", "meaning": "good, true, normal, easy", "examples": "eupnea, aneuploidy", "page": 2 },
+        { "term": "exo-", "meaning": "out", "examples": "exopeptidase, exocytosis, exocrine", "page": 2 }
+      ]
+    },
+    {
+      "letter": "F",
+      "entries": [
+        { "term": "facili-", "meaning": "easy", "examples": "facilitated", "page": 2 },
+        { "term": "fasci-", "meaning": "band, bundle", "examples": "fascia, fascicle", "page": 2 },
+        { "term": "fenestr-", "meaning": "window", "examples": "fenestrated", "page": 2 },
+        { "term": "fer-", "meaning": "to carry", "examples": "efferent, uriniferous", "page": 2 },
+        { "term": "ferri-", "meaning": "iron", "examples": "ferritin, transferrin", "page": 2 },
+        { "term": "fibro-", "meaning": "fiber", "examples": "fibroblast, fibrosis", "page": 2 },
+        { "term": "fili-", "meaning": "thread", "examples": "myofilament, filiform", "page": 2 },
+        { "term": "flagello-", "meaning": "whip", "examples": "flagellum", "page": 2 },
+        { "term": "foli-", "meaning": "leaf", "examples": "folic acid, folia", "page": 2 },
+        { "term": "-form", "meaning": "shape", "examples": "cuneiform, fusiform", "page": 2 },
+        { "term": "fove-", "meaning": "pit, depression", "examples": "fovea", "page": 2 },
+        { "term": "funiculo-", "meaning": "little rope, cord", "examples": "funiculus", "page": 2 },
+        { "term": "fusi-", "meaning": "1. spindle (fusiform) 2. pour out", "examples": "perfusion", "page": 2 }
+      ]
+    },
+    {
+      "letter": "G",
+      "entries": [
+        { "term": "gamo-", "meaning": "marriage, union", "examples": "monogamy, gamete", "page": 2 },
+        { "term": "gastro-", "meaning": "belly, stomach", "examples": "gastrointestinal, digastric", "page": 2 },
+        { "term": "-gen, -genic, -genesis", "meaning": "producing, giving rise to", "examples": "pathogen, carcinogenic, glycogenesis", "page": 2 },
+        { "term": "genio-", "meaning": "chin", "examples": "geniohyoid, genioglossus", "page": 2 },
+        { "term": "germi-", "meaning": "1. sprout, bud (germinal, germinativum) 2. microbe", "examples": "germicide", "page": 2 },
+        { "term": "gero-", "meaning": "old age", "examples": "progeria, geriatrics, gerontology", "page": 2 },
+        { "term": "gesto-", "meaning": "1. to bear, carry (ingest) 2. pregnancy", "examples": "gestation, progesterone", "page": 2 },
+        { "term": "glia-", "meaning": "glue", "examples": "neuroglia, microglia", "page": 2 },
+        { "term": "globu-", "meaning": "ball, sphere", "examples": "globulin, hemoglobin", "page": 2 },
+        { "term": "glom-", "meaning": "ball", "examples": "glomerulus", "page": 2 },
+        { "term": "glosso-", "meaning": "tongue", "examples": "glossopharyngeal, hypoglossal", "page": 2 },
+        { "term": "glyco-", "meaning": "sugar", "examples": "glycogen, glycolysis, hypoglycemia", "page": 2 },
+        { "term": "gono-", "meaning": "1. angle, corner (trigone) 2. seed, sex cell, generation", "examples": "gonad, oogonium, gonorrhea", "page": 2 },
+        { "term": "gradi-", "meaning": "walk, step", "examples": "retrograde, gradient", "page": 2 },
+        { "term": "-gram", "meaning": "recording of", "examples": "electrocardiogram, sonogram", "page": 2 },
+        { "term": "-graph", "meaning": "recording instrument", "examples": "sonograph, electrocardiograph", "page": 2 },
+        { "term": "-graphy", "meaning": "recording process", "examples": "sonography, radiography", "page": 2 },
+        { "term": "gravi-", "meaning": "severe, heavy", "examples": "gravid, myasthenia gravis", "page": 2 },
+        { "term": "gyro-", "meaning": "turn, twist", "examples": "gyrus", "page": 2 }
+      ]
+    },
+    {
+      "letter": "H",
+      "entries": [
+        { "term": "hallu-", "meaning": "great toe", "examples": "hallucis", "page": 2 },
+        { "term": "hemato-", "meaning": "blood", "examples": "hematology, hematopoiesis", "page": 2 },
+        { "term": "hemi-", "meaning": "half", "examples": "hemidesmosome, hemisphere", "page": 2 },
+        { "term": "-hemia", "meaning": "blood condition", "examples": "polycythemia", "page": 2 },
+        { "term": "hemo-", "meaning": "blood", "examples": "hemophilia, hemoglobin", "page": 2 },
+        { "term": "hetero-", "meaning": "different, other, various", "examples": "heterozygous", "page": 2 },
+        { "term": "histo-", "meaning": "tissue, web", "examples": "histology, histone", "page": 2 },
+        { "term": "holo-", "meaning": "whole, entire", "examples": "holistic, holocrine", "page": 2 },
+        { "term": "homeo-", "meaning": "constant, unchanging, uniform", "examples": "homeostasis, homeothermic", "page": 2 },
+        { "term": "homo-", "meaning": "same, alike", "examples": "homologous, homozygous", "page": 2 },
+        { "term": "hyalo-", "meaning": "clear, glassy", "examples": "hyaline, hyaluronic acid", "page": 2 },
+        { "term": "hydro-", "meaning": "water", "examples": "dehydration, hydrolysis, hydrophobic", "page": 2 },
+        { "term": "hyper-", "meaning": "above, above normal, excessive", "examples": "hyperkalemia, hypertonic", "page": 2 },
+        { "term": "hypo-", "meaning": "below, below normal, deficient", "examples": "hypogastric, hyponatremia, hypophysis", "page": 2 }
+      ]
+    },
+    {
+      "letter": "I",
+      "entries": [
+        { "term": "-ia", "meaning": "condition", "examples": "anemia, hypocalcemia, osteomalacia", "page": 2 },
+        { "term": "-ial", "meaning": "pertaining to", "examples": "hypophysial, epiphysial", "page": 2 },
+        { "term": "-ic", "meaning": "pertaining to", "examples": "isotonic, hemolytic, antigenic", "page": 2 },
+        { "term": "-icle, -icul", "meaning": "small", "examples": "ossicle, canaliculus, reticular", "page": 2 },
+        { "term": "ilia-", "meaning": "flank, loin", "examples": "ilium, iliac", "page": 2 },
+        { "term": "-illa, -illus", "meaning": "little", "examples": "papilla", "page": 2 },
+        { "term": "-in", "meaning": "protein, substance", "examples": "trypsin, fibrin, melanin", "page": 2 },
+        { "term": "infra-", "meaning": "below", "examples": "infraspinous, infrared", "page": 2 },
+        { "term": "ino-", "meaning": "fiber", "examples": "inotropic, inositol", "page": 2 },
+        { "term": "insulo-", "meaning": "island", "examples": "insula, insulin", "page": 2 },
+        { "term": "inter-", "meaning": "between", "examples": "intercellular, intervertebral", "page": 2 },
+        { "term": "intra-", "meaning": "within", "examples": "intracellular, intraocular", "page": 2 },
+        { "term": "iono-", "meaning": "ion", "examples": "ionotropic, cationic", "page": 2 },
+        { "term": "ischi-", "meaning": "to hold back", "examples": "ischium, ischemia", "page": 2 },
+        { "term": "-ism", "meaning": "1. process, state, condition (metabolism, rheumatism) 2. doctrine, belief, theory", "examples": "holism, reductionism, naturalism", "page": 2 },
+        { "term": "iso-", "meaning": "same, equal", "examples": "isometric, isotonic, isomer", "page": 2 },
+        { "term": "-issimus", "meaning": "most, greatest", "examples": "latissimus, longissimus", "page": 2 },
+        { "term": "-ite", "meaning": "little", "examples": "dendrite, somite", "page": 2 },
+        { "term": "-itis", "meaning": "inflammation", "examples": "dermatitis, gingivitis", "page": 2 }
+      ]
+    },
+    {
+      "letter": "J",
+      "entries": [
+        { "term": "jug-", "meaning": "to join", "examples": "conjugated, jugular", "page": 2 },
+        { "term": "juxta-", "meaning": "next to", "examples": "juxtamedullary, juxtaglomerular", "page": 2 }
+      ]
+    },
+    {
+      "letter": "K",
+      "entries": [
+        { "term": "kali-", "meaning": "potassium", "examples": "hypokalemia", "page": 2 },
+        { "term": "karyo-", "meaning": "seed, nucleus", "examples": "megakaryocyte, karyotype", "page": 2 },
+        { "term": "kerato-", "meaning": "horn", "examples": "keratin, keratinocyte", "page": 2 }
+      ]
+    },
+    {
+      "letter": "L",
+      "entries": [
+        { "term": "labi-", "meaning": "lip", "examples": "labium, levator labii", "page": 2 },
+        { "term": "lacera-", "meaning": "torn, cut", "examples": "foramen lacerum, laceration", "page": 2 },
+        { "term": "lacrimo-", "meaning": "tear, cry", "examples": "lacrimal gland, nasolacrimal", "page": 2 },
+        { "term": "lacto-", "meaning": "milk", "examples": "lactose, lactation, prolactin", "page": 2 },
+        { "term": "lamina-", "meaning": "layer", "examples": "lamina propria, laminar flow", "page": 2 },
+        { "term": "latero-", "meaning": "side", "examples": "bilateral, ipsilateral", "page": 2 },
+        { "term": "lati-", "meaning": "broad", "examples": "fascia lata, latissimus dorsi", "page": 2 },
+        { "term": "-lemma", "meaning": "husk", "examples": "sarcolemma, neurilemma", "page": 2 },
+        { "term": "lenti-", "meaning": "lens", "examples": "lentiform", "page": 2 },
+        { "term": "-let", "meaning": "small", "examples": "platelet", "page": 2 },
+        { "term": "leuko-", "meaning": "white", "examples": "leukocyte, leukemia", "page": 3 },
+        { "term": "levato-", "meaning": "to raise", "examples": "levator labii, elevation", "page": 3 },
+        { "term": "ligo-", "meaning": "to bind", "examples": "ligand, ligament", "page": 3 },
+        { "term": "line-", "meaning": "line", "examples": "linea alba, linea nigra", "page": 3 },
+        { "term": "litho-", "meaning": "stone", "examples": "otolith, lithotripsy", "page": 3 },
+        { "term": "-logy", "meaning": "study of", "examples": "histology, physiology, hematology", "page": 3 },
+        { "term": "lucid-", "meaning": "light, clear", "examples": "stratum lucidum, zona pellucida", "page": 3 },
+        { "term": "lun-", "meaning": "moon, crescent", "examples": "lunate, lunule, semilunar", "page": 3 },
+        { "term": "lute-", "meaning": "yellow", "examples": "macula lutea, corpus luteum", "page": 3 },
+        { "term": "lyso-, lyto-", "meaning": "split apart, break down (lysosome, hydrolysis, electrolyte)", "examples": "lysosome, hydrolysis, electrolyte", "page": 3 }
+      ]
+    },
+    {
+      "letter": "M",
+      "entries": [
+        { "term": "macro-", "meaning": "large", "examples": "macromolecule, macrophage", "page": 3 },
+        { "term": "macula-", "meaning": "spot", "examples": "macula lutea, macula densa", "page": 3 },
+        { "term": "mali-", "meaning": "bad", "examples": "malignant, malocclusion, malformed", "page": 3 },
+        { "term": "malle-", "meaning": "hammer", "examples": "malleus, malleolus", "page": 3 },
+        { "term": "mammo-", "meaning": "breast", "examples": "mammary, mammillary", "page": 3 },
+        { "term": "mano-", "meaning": "hand", "examples": "manus, manipulate", "page": 3 },
+        { "term": "manubri-", "meaning": "handle", "examples": "manubrium", "page": 3 },
+        { "term": "masto-", "meaning": "breast", "examples": "mastoid, gynecomastia", "page": 3 },
+        { "term": "medi-", "meaning": "middle", "examples": "medial, mediastinum, intermediate", "page": 3 },
+        { "term": "medullo-", "meaning": "marrow, pith", "examples": "medulla", "page": 3 },
+        { "term": "mega-", "meaning": "large", "examples": "megakaryocyte, hepatomegaly", "page": 3 },
+        { "term": "melano-", "meaning": "black", "examples": "melanin, melanocyte, melancholy", "page": 3 },
+        { "term": "meno-", "meaning": "month", "examples": "menstruation, menopause", "page": 3 },
+        { "term": "mento-", "meaning": "chin", "examples": "mental, mentalis", "page": 3 },
+        { "term": "mero-", "meaning": "part, segment", "examples": "isomer, centromere, merocrine", "page": 3 },
+        { "term": "meso-", "meaning": "in the middle", "examples": "mesoderm, mesentery", "page": 3 },
+        { "term": "meta-", "meaning": "beyond, next in a series", "examples": "metaphase, metacarpal", "page": 3 },
+        { "term": "metabolo-", "meaning": "change", "examples": "metabolism, metabolite", "page": 3 },
+        { "term": "-meter", "meaning": "measuring device", "examples": "calorimeter, spirometer", "page": 3 },
+        { "term": "metri-", "meaning": "1. length, measure (isometric, emmetropic) 2. uterus", "examples": "endometrium", "page": 3 },
+        { "term": "micro-", "meaning": "small", "examples": "microscopic, microcytic, microglia", "page": 3 },
+        { "term": "mito-", "meaning": "thread, filament", "examples": "mitochondria, mitosis", "page": 3 },
+        { "term": "mono-", "meaning": "one", "examples": "monocyte, monogamy, mononucleosis", "page": 3 },
+        { "term": "morpho-", "meaning": "form, shape, structure", "examples": "morphology, amorphous", "page": 3 },
+        { "term": "muta-", "meaning": "change", "examples": "mutagen, mutation", "page": 3 },
+        { "term": "myelo-", "meaning": "1. spinal cord (poliomyelitis, myelin) 2. bone marrow", "examples": "myeloid, myelocytic", "page": 3 },
+        { "term": "myo-, mysi-", "meaning": "muscle", "examples": "myoglobin, myosin, epimysium", "page": 3 }
+      ]
+    },
+    {
+      "letter": "N",
+      "entries": [
+        { "term": "natri-", "meaning": "sodium", "examples": "hyponatremia, natriuretic", "page": 3 },
+        { "term": "neo-", "meaning": "new", "examples": "neonatal, gluconeogenesis", "page": 3 },
+        { "term": "nephro-", "meaning": "kidney", "examples": "nephron, hydronephrosis", "page": 3 },
+        { "term": "neuro-", "meaning": "nerve", "examples": "aponeurosis, neurosoma, neurology", "page": 3 },
+        { "term": "nucleo-", "meaning": "nucleus, kernel", "examples": "nucleolus, nucleic acid", "page": 3 }
+      ]
+    },
+    {
+      "letter": "O",
+      "entries": [
+        { "term": "oo-", "meaning": "egg", "examples": "oogenesis, oocyte", "page": 3 },
+        { "term": "ob-", "meaning": "against, toward, before", "examples": "obstetrics, obturator, obstruction", "page": 3 },
+        { "term": "oculo-", "meaning": "eye", "examples": "oculi, oculomotor", "page": 3 },
+        { "term": "odonto-", "meaning": "tooth", "examples": "odontoblast, periodontal", "page": 3 },
+        { "term": "-oid", "meaning": "like, resembling", "examples": "colloid, sigmoid, ameboid", "page": 3 },
+        { "term": "-ole", "meaning": "small", "examples": "arteriole, bronchiole, nucleolus", "page": 3 },
+        { "term": "oligo-", "meaning": "few, a little, scanty", "examples": "oligopeptide, oliguria", "page": 3 },
+        { "term": "-oma", "meaning": "tumor, mass", "examples": "carcinoma, hematoma", "page": 3 },
+        { "term": "omo-", "meaning": "shoulder", "examples": "omohyoid, acromion", "page": 3 },
+        { "term": "onycho-", "meaning": "nail, claw", "examples": "hyponychium, onychomycosis", "page": 3 },
+        { "term": "op-", "meaning": "vision", "examples": "optics, myopia, photopic", "page": 3 },
+        { "term": "-opsy", "meaning": "viewing, to see", "examples": "biopsy, rhodopsin", "page": 3 },
+        { "term": "or-", "meaning": "mouth", "examples": "oral, orbicularis oris", "page": 3 },
+        { "term": "orbi-", "meaning": "circle", "examples": "orbicularis, orbit", "page": 3 },
+        { "term": "organo-", "meaning": "tool, instrument", "examples": "organ, organelle", "page": 3 },
+        { "term": "ortho-", "meaning": "straight", "examples": "orthopnea, orthodontics, orthopedics", "page": 3 },
+        { "term": "-ose", "meaning": "1. full of (adipose) 2. sugar", "examples": "sucrose, glucose", "page": 3 },
+        { "term": "-osis", "meaning": "1. process (osmosis, exocytosis) 2. condition, disease (cyanosis, thrombosis) 3. increase", "examples": "leukocytosis", "page": 3 },
+        { "term": "osmo-", "meaning": "push", "examples": "osmosis, chemiosmotic", "page": 3 },
+        { "term": "osse-, oste-", "meaning": "bone", "examples": "osseous, osteoporosis", "page": 3 },
+        { "term": "oto-", "meaning": "ear", "examples": "otolith, otitis, parotid", "page": 3 },
+        { "term": "-ous", "meaning": "1. full of 2. pertaining to (mucous, nervous) 3. like, characterized by", "examples": "nitrogenous, edematous, squamous, filamentous", "page": 3 },
+        { "term": "ovo-", "meaning": "egg", "examples": "ovum, ovary, ovulation", "page": 3 },
+        { "term": "oxy-", "meaning": "1. oxygen (hypoxia, oxyhemoglobin) 2. sharp, quick", "examples": "oxytocin", "page": 3 }
+      ]
+    },
+    {
+      "letter": "P",
+      "entries": [
+        { "term": "palli-", "meaning": "pale", "examples": "pallor, globus pallidus", "page": 3 },
+        { "term": "palpebro-", "meaning": "eyelid", "examples": "palpebrae", "page": 3 },
+        { "term": "pan-", "meaning": "all", "examples": "panhypopituitarism, pancreas", "page": 3 },
+        { "term": "panni-", "meaning": "cloth, rag", "examples": "pannus, panniculus", "page": 3 },
+        { "term": "papillo-", "meaning": "nipple", "examples": "papilla, papillary", "page": 3 },
+        { "term": "par-", "meaning": "birth", "examples": "postpartum, parturition, multiparous", "page": 3 },
+        { "term": "para-", "meaning": "next to", "examples": "parathyroid, parotid", "page": 3 },
+        { "term": "parieto-", "meaning": "wall", "examples": "parietal", "page": 3 },
+        { "term": "patho-", "meaning": "1. disease (pathology, pathogen) 2. feeling", "examples": "sympathetic", "page": 3 },
+        { "term": "pecto-", "meaning": "1. chest (pectoralis) 2. comblike", "examples": "pectineus", "page": 3 },
+        { "term": "pedi-", "meaning": "1. foot (bipedal, pedicle) 2. child", "examples": "pediatrics", "page": 3 },
+        { "term": "pelvi-", "meaning": "basin", "examples": "pelvis, pelvic", "page": 3 },
+        { "term": "-penia", "meaning": "deficiency", "examples": "leukopenia, thrombocytopenia", "page": 3 },
+        { "term": "penna-", "meaning": "feather", "examples": "unipennate, bipennate", "page": 3 },
+        { "term": "peri-", "meaning": "around", "examples": "periosteum, peritoneum, periodontal", "page": 3 },
+        { "term": "perone-", "meaning": "fibula", "examples": "peroneus tertius, peroneal nerve", "page": 3 },
+        { "term": "phago-", "meaning": "eat", "examples": "phagocytosis, macrophage", "page": 3 },
+        { "term": "philo-", "meaning": "loving, attracted to", "examples": "hydrophilic, amphiphilic", "page": 3 },
+        { "term": "phobo-", "meaning": "fearing, repelled by", "examples": "hydrophobic", "page": 3 },
+        { "term": "phor-", "meaning": "to carry, bear", "examples": "diaphoresis, electrophoresis", "page": 3 },
+        { "term": "phragm-", "meaning": "partition", "examples": "diaphragm", "page": 3 },
+        { "term": "phreno-", "meaning": "diaphragm", "examples": "phrenic nerve", "page": 3 },
+        { "term": "physio-", "meaning": "nature, natural cause", "examples": "physiology, physician", "page": 3 },
+        { "term": "-physis", "meaning": "growth", "examples": "diaphysis, hypophysis", "page": 3 },
+        { "term": "pilo-", "meaning": "hair", "examples": "piloerection", "page": 3 },
+        { "term": "pino-", "meaning": "drink, imbibe", "examples": "pinocytosis", "page": 3 },
+        { "term": "planto-", "meaning": "sole of foot", "examples": "plantaris, plantar wart", "page": 3 },
+        { "term": "plasi-", "meaning": "growth", "examples": "hyperplasia, neoplasia", "page": 3 },
+        { "term": "plasm-", "meaning": "shaped, molded", "examples": "cytoplasm, endoplasmic", "page": 3 },
+        { "term": "plasti-", "meaning": "form", "examples": "thromboplastin", "page": 3 },
+        { "term": "platy-", "meaning": "flat", "examples": "platysma", "page": 3 },
+        { "term": "pnea-", "meaning": "breath, breathing", "examples": "eupnea, dyspnea", "page": 3 },
+        { "term": "pneumo-", "meaning": "air, breath, lung", "examples": "pneumonia, pneumothorax", "page": 3 },
+        { "term": "podo-", "meaning": "foot", "examples": "pseudopod, podocyte", "page": 3 },
+        { "term": "poies-", "meaning": "forming", "examples": "hematopoiesis, erythropoietin", "page": 3 },
+        { "term": "poly-", "meaning": "many, much, excessive", "examples": "polypeptide, polyuria", "page": 3 },
+        { "term": "primi-", "meaning": "first", "examples": "primary, primipara, primitive", "page": 3 },
+        { "term": "pro-", "meaning": "1. before, in front, first (prokaryote, prophase, prostate) 2. promote, favor", "examples": "progesterone, prolactin", "page": 3 },
+        { "term": "pseudo-", "meaning": "false", "examples": "pseudopod", "page": 3 },
+        { "term": "psycho-", "meaning": "mind", "examples": "psychosis, psychosomatic", "page": 3 },
+        { "term": "ptero-, pterygo-", "meaning": "wing", "examples": "pterygoid", "page": 3 },
+        { "term": "-ptosis", "meaning": "dropping, falling, sagging", "examples": "apoptosis, nephroptosis", "page": 3 },
+        { "term": "puncto-", "meaning": "point", "examples": "puncta", "page": 4 },
+        { "term": "pyro-", "meaning": "fire", "examples": "pyrogen, antipyretic", "page": 4 }
+      ]
+    },
+    {
+      "letter": "Q",
+      "entries": [
+        { "term": "quadri-", "meaning": "four", "examples": "quadriceps, quadratus", "page": 4 },
+        { "term": "quater-", "meaning": "fourth", "examples": "quaternary", "page": 4 }
+      ]
+    },
+    {
+      "letter": "R",
+      "entries": [
+        { "term": "radiat-", "meaning": "radiating", "examples": "corona radiata", "page": 4 },
+        { "term": "rami-", "meaning": "branch", "examples": "ramus", "page": 4 },
+        { "term": "recto-", "meaning": "straight", "examples": "rectus abdominis, rectum", "page": 4 },
+        { "term": "reno-", "meaning": "kidney", "examples": "renal, renin", "page": 4 },
+        { "term": "reti-", "meaning": "network", "examples": "reticular, rete testis", "page": 4 },
+        { "term": "retinac-", "meaning": "retainer, bracelet", "examples": "retinaculum", "page": 4 },
+        { "term": "retro-", "meaning": "behind, backward", "examples": "retroperitoneal, retrovirus", "page": 4 },
+        { "term": "rhombo-", "meaning": "rhombus", "examples": "rhomboideus, rhombencephalon", "page": 4 },
+        { "term": "rubo-, rubro-", "meaning": "red", "examples": "bilirubin, rubrospinal", "page": 4 },
+        { "term": "rugo-", "meaning": "fold, wrinkle", "examples": "ruga, corrugator", "page": 4 }
+      ]
+    },
+    {
+      "letter": "S",
+      "entries": [
+        { "term": "sacculo-", "meaning": "little sac", "examples": "saccule", "page": 4 },
+        { "term": "sarco-", "meaning": "flesh, muscle", "examples": "sarcoplasm, sarcomere", "page": 4 },
+        { "term": "scala-", "meaning": "staircase", "examples": "scala tympani", "page": 4 },
+        { "term": "sclero-", "meaning": "hard, tough", "examples": "sclera, sclerosis", "page": 4 },
+        { "term": "scopo-", "meaning": "see", "examples": "microscope, endoscopy", "page": 4 },
+        { "term": "secto-", "meaning": "cut", "examples": "section, dissection", "page": 4 },
+        { "term": "semi-", "meaning": "half", "examples": "semilunar, semimembranosus", "page": 4 },
+        { "term": "sepsi-", "meaning": "infection", "examples": "asepsis, septicemia", "page": 4 },
+        { "term": "-sis", "meaning": "process", "examples": "diapedesis, amniocentesis", "page": 4 },
+        { "term": "sole-", "meaning": "sandal, sole of foot, flattish", "examples": "sole, soleus", "page": 4 },
+        { "term": "soma-, somato-", "meaning": "body", "examples": "somatic, somatotropin", "page": 4 },
+        { "term": "spheno-", "meaning": "wedge", "examples": "sphenoid", "page": 4 },
+        { "term": "spiro-", "meaning": "breathing", "examples": "inspiration, spirometry", "page": 4 },
+        { "term": "splanchno-", "meaning": "viscera", "examples": "splanchnic", "page": 4 },
+        { "term": "spleno-", "meaning": "1. bandage (splenius capitis) 2. spleen", "examples": "splenic artery", "page": 4 },
+        { "term": "squamo-", "meaning": "scale, flat", "examples": "squamous, desquamation", "page": 4 },
+        { "term": "stasi-, stati-", "meaning": "put, remain, stay the same", "examples": "hemostasis, homeostatic", "page": 4 },
+        { "term": "utriculo-", "meaning": "little bag", "examples": "utriculus", "page": 4 },
+        { "term": "steno-", "meaning": "narrow", "examples": "stenosis", "page": 4 },
+        { "term": "ster-, stereo-", "meaning": "solid, three-dimensional", "examples": "steroid, stereoscopic", "page": 4 },
+        { "term": "sterno-", "meaning": "breast, chest", "examples": "sternum, sternocleidomastoid", "page": 4 },
+        { "term": "stria-", "meaning": "stripe", "examples": "striated, corpus striatum", "page": 4 },
+        { "term": "sub-", "meaning": "below", "examples": "subcutaneous, subclavicular", "page": 4 },
+        { "term": "sulco-", "meaning": "furrow, groove", "examples": "sulcus", "page": 4 },
+        { "term": "supra-", "meaning": "above", "examples": "supraspinous, supraclavicular", "page": 4 },
+        { "term": "sura-", "meaning": "calf of leg", "examples": "triceps surae", "page": 4 },
+        { "term": "sym-", "meaning": "together", "examples": "sympathetic, symphysis", "page": 4 },
+        { "term": "syn-", "meaning": "together", "examples": "synostosis, syncytium", "page": 4 }
+      ]
+    },
+    {
+      "letter": "T",
+      "entries": [
+        { "term": "tachy-", "meaning": "fast", "examples": "tachycardia, tachypnea", "page": 4 },
+        { "term": "tarsi-", "meaning": "ankle", "examples": "tarsus, metatarsal", "page": 4 },
+        { "term": "tecto-", "meaning": "roof, cover", "examples": "tectorial membrane, tectum", "page": 4 },
+        { "term": "telo-", "meaning": "last, end", "examples": "telophase, telencephalon", "page": 4 },
+        { "term": "tempo-", "meaning": "time", "examples": "temporal", "page": 4 },
+        { "term": "terti-", "meaning": "third", "examples": "tertiary", "page": 4 },
+        { "term": "theli-", "meaning": "nipple, female, tender", "examples": "epithelium, polythelia", "page": 4 },
+        { "term": "thermo-", "meaning": "heat", "examples": "thermogenesis, thermoregulation", "page": 4 },
+        { "term": "thrombo-", "meaning": "blood clot", "examples": "thrombosis, thrombin", "page": 4 },
+        { "term": "thyro-", "meaning": "shield", "examples": "thyroid, thyrohyoid", "page": 4 },
+        { "term": "-tion", "meaning": "process", "examples": "circulation, pronation", "page": 4 },
+        { "term": "toci-", "meaning": "birth", "examples": "oxytocin", "page": 4 },
+        { "term": "tomo-", "meaning": "1. cut (tomography, atom, anatomy) 2. segment", "examples": "dermatome, myotome, sclerotome", "page": 4 },
+        { "term": "tono-", "meaning": "force, tension", "examples": "isotonic, tonus, myotonia", "page": 4 },
+        { "term": "topo-", "meaning": "place, position", "examples": "isotope, ectopic", "page": 4 },
+        { "term": "trabo-", "meaning": "plate", "examples": "trabecula", "page": 4 },
+        { "term": "trans-", "meaning": "cross", "examples": "transpiration, transdermal", "page": 4 },
+        { "term": "trapezi-", "meaning": "1. table, grinding surface (trapezium) 2. trapezoidal", "examples": "trapezius", "page": 4 },
+        { "term": "tri-", "meaning": "three", "examples": "triceps, triglyceride", "page": 4 },
+        { "term": "tricho-", "meaning": "hair", "examples": "trichosiderin, peritrichial", "page": 4 },
+        { "term": "trocho-", "meaning": "wheel, pulley", "examples": "trochlea", "page": 4 },
+        { "term": "troph-", "meaning": "1. food, nourishment (trophic, trophoblast) 2. growth", "examples": "dystrophy, hypertrophy", "page": 4 },
+        { "term": "tropo-", "meaning": "to turn, change", "examples": "metabotropic, gonadotropin", "page": 4 },
+        { "term": "tunica-", "meaning": "coat", "examples": "tunica intima, tunica vaginalis", "page": 4 },
+        { "term": "tympano-", "meaning": "drum, eardrum", "examples": "tympanic, tensor tympani", "page": 4 }
+      ]
+    },
+    {
+      "letter": "U",
+      "entries": [
+        { "term": "-ul", "meaning": "small", "examples": "trabecula, tubule, capitulum, glomerulus", "page": 4 },
+        { "term": "-uncle, -unculus", "meaning": "small", "examples": "homunculus, caruncle", "page": 4 },
+        { "term": "uni-", "meaning": "one", "examples": "unipennate, unipolar", "page": 4 },
+        { "term": "uri-", "meaning": "urine", "examples": "glycosuria, urinalysis, diuretic", "page": 4 }
+      ]
+    },
+    {
+      "letter": "V",
+      "entries": [
+        { "term": "vagino-", "meaning": "sheath", "examples": "invaginate, tunica vaginalis", "page": 4 },
+        { "term": "vago-", "meaning": "wander", "examples": "vagus", "page": 4 },
+        { "term": "vaso-", "meaning": "vessel", "examples": "vascular, vas deferens, vasa recta", "page": 4 },
+        { "term": "ventro-", "meaning": "belly, lower part", "examples": "ventral, ventricle", "page": 4 },
+        { "term": "vermi-", "meaning": "worm", "examples": "vermis, vermiform appendix", "page": 4 },
+        { "term": "vertebro-", "meaning": "spine", "examples": "vertebrae, intervertebral", "page": 4 },
+        { "term": "vesico-", "meaning": "bladder, blister", "examples": "vesical, vesicular", "page": 4 },
+        { "term": "villo-", "meaning": "hair, hairy", "examples": "microvillus", "page": 4 },
+        { "term": "vitre-", "meaning": "glass", "examples": "in vitro, vitreous humor", "page": 4 },
+        { "term": "vivi-", "meaning": "life, alive", "examples": "in vivo, revive", "page": 4 }
+      ]
+    },
+    {
+      "letter": "Z",
+      "entries": [
+        { "term": "zygo-", "meaning": "union, join, mate", "examples": "zygomatic, zygote, azygos", "page": 4 }
+      ]
+    }
+  ]
+};
+
+/* ===========================================================================
+ * Derived state
+ * =========================================================================== */
+
+// One flat card per root/affix, in DATA order.
+const cards = DATA.groups.flatMap((group) =>
+  group.entries.map((entry) => ({
+    group: group.letter,
+    term: entry.term,
+    meaning: entry.meaning,
+    examples: entry.examples,
+    page: entry.page,
+    // Pre-lowercased text that the search box matches against.
+    haystack: `${entry.term} ${entry.meaning} ${entry.examples}`.toLowerCase(),
+  }))
+);
+
+const el = (id) => document.getElementById(id);
+const dom = {
+  search: el('q'),
+  az: el('az'),
+  count: el('count'),
+  tools: document.querySelector('.tools'),
+  browse: el('browse'),
+  empty: el('empty'),
+  browseMode: el('browseMode'),
+  flashMode: el('flashMode'),
+  resourcesMode: el('resourcesMode'),
+  flashPanel: el('flashPanel'),
+  resourcesPanel: el('resourcesPanel'),
+  letterPicker: el('letterPicker'),
+  card: el('flashcard'),
+  term: el('fcTerm'),
+  meaning: el('fcMeaning'),
+  examples: el('fcExamples'),
+  hint: el('fcHint'),
+  status: el('fcStatus2'),
+  selectAll: el('selectAll'),
+  clearAll: el('clearAll'),
+  startQuiz: el('startQuiz'),
+  againBtn: el('againBtn'),
+  knowBtn: el('knowBtn'),
+  nextBtn: el('nextBtn'),
+  menu: el('lookupMenu'),
+  viewer: el('lookupViewer'),
+  viewerTitle: el('viewerTitle'),
+  viewerTabs: el('viewerTabs'),
+  viewerOpen: el('viewerOpen'),
+  viewerClose: el('viewerClose'),
+  viewerFrame: el('viewerFrame'),
+};
+
+/* ===========================================================================
+ * Browse list
+ * =========================================================================== */
+
+// The study set is hand-written data going into innerHTML; escape it so an
+// entry containing "<", ">" or "&" cannot break the page.
+const escapeHtml = (text) =>
+  text.replace(/[&<>]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch]));
+
+/* ===========================================================================
+ * Lookups. Sites offered when a term is selected, in the order they appear.
+ * To add a site, add a row: `label` is the text on the menu row and `url`
+ * receives the word already encoded.
+ *
+ * The site is loaded into an iframe, so a site that sends X-Frame-Options or a
+ * frame-ancestors policy (Google, DuckDuckGo, Cambridge, Merriam-Webster,
+ * Collins) would come up blank and does not belong in this list. Bing,
+ * Wikipedia and The Free Dictionary send neither.
+ * =========================================================================== */
+// `label` is the menu row; `tab` is the shorter text on the viewer's site tabs.
+const LOOKUPS = [
+  { label: 'Bing', tab: 'Bing', url: (q) => `https://www.bing.com/search?q=${q}` },
+  // The search endpoint, not /wiki/: a real word ("Acetabulum") redirects
+  // straight to its article, while a bare root ("angi-") has no article and
+  // gets the search results instead of a "page does not exist" notice.
+  { label: 'Wikipedia', tab: 'Wikipedia', url: (q) => `https://en.wikipedia.org/w/index.php?search=${q}` },
+  { label: 'The Free Dictionary: Medical', tab: 'Free Dictionary', url: (q) => `https://medical-dictionary.thefreedictionary.com/${q}` },
+];
+
+// The list writes a term in its own notation ("angi-", "-al", "ast-, astro-").
+// A lookup takes the first spelling with the hyphen kept, so the search shows
+// the root the way it is studied.
+const lookupWord = (term) => encodeURIComponent(term.split(',')[0].trim());
+
+// Meanings listing several numbered senses ("1. … 2. …") read better one sense
+// per line; a real <ol> gives the same 1. 2. 3. markers the source uses.
+const meaningHtml = (meaning) =>
+  /\d\.\s/.test(meaning)
+    ? `<ol class="senses">${meaning
+        .split(/\s+(?=\d\.\s)/)
+        .map((sense) => `<li>${escapeHtml(sense.replace(/^\d\.\s*/, ''))}</li>`)
+        .join('')}</ol>`
+    : escapeHtml(meaning);
+
+function renderEntry(card) {
+  const examples = card.examples
+    ? `\n          <div class="examples"><em>Examples:</em> ${escapeHtml(card.examples)}</div>`
+    : '';
+  return `      <article class="entry">
+        <div class="term" role="button" tabindex="0" data-term="${escapeHtml(card.term)}"
+             aria-haspopup="menu" title="Select to look up ${escapeHtml(card.term)}">${escapeHtml(card.term)}</div>
+        <div>
+          <div class="meaning">${meaningHtml(card.meaning)}</div>${examples}
+        </div>
+        <div class="page"><!-- p. ${card.page} --></div>
+      </article>`;
+}
+
+// Index-aligned with `cards`, and therefore rebuilt whenever the list is.
+let articles = [];
+let sections = [];
+
+function renderBrowse() {
+  dom.az.innerHTML = DATA.groups
+    .map((group) => `<a href="#group-${group.letter}">${group.letter}</a>`)
+    .join('');
+
+  // Sections are emitted in DATA order, one card each, so the i-th article in
+  // the DOM is the i-th card in `cards`.
+  let next = 0;
+  dom.browse.innerHTML = DATA.groups
+    .map((group) => {
+      const groupCards = cards.slice(next, next + group.entries.length);
+      next += group.entries.length;
+      // The entries sit in their own container so the multi-column CSS applies
+      // to the cards only: on the <section> it would flow the <h2> into the
+      // first column and halve its underline.
+      return `    <section class="group" id="group-${group.letter}" data-group="${group.letter}">
+      <h2>Group ${group.letter} <span class="group-count">(${group.entries.length})</span></h2>
+      <div class="group-body">
+${groupCards.map(renderEntry).join('\n')}
+      </div>
+    </section>`;
+    })
+    .join('\n');
+
+  articles = [...dom.browse.querySelectorAll('.entry')];
+  sections = [...dom.browse.querySelectorAll('.group')];
+}
+
+function filter() {
+  const query = dom.search.value.trim().toLowerCase();
+  let shown = 0;
+
+  cards.forEach((card, i) => {
+    const visible = !query || card.haystack.includes(query);
+    articles[i].style.display = visible ? '' : 'none';
+    if (visible) shown += 1;
+  });
+
+  sections.forEach((section) => {
+    const anyVisible = [...section.querySelectorAll('.entry')]
+      .some((article) => article.style.display !== 'none');
+    section.style.display = anyVisible ? '' : 'none';
+  });
+
+  dom.count.textContent = `Showing ${shown} of ${cards.length} entries`;
+  dom.empty.style.display = shown ? 'none' : 'block';
+}
+
+dom.search.addEventListener('input', filter);
+
+/* ===========================================================================
+ * Lookup: select a term -> menu of sites -> the site, in an iframe
+ * =========================================================================== */
+
+// The term the open menu belongs to; the viewer is opened from it.
+let menuTerm = '';
+
+// A selection worth looking up: some text, but not a whole passage. Longer
+// selections are the reader highlighting to copy, not asking for a definition.
+const LOOKUP_MAX = 60;
+// A selection can span lines and carry their indentation; a search wants one
+// line of words.
+const cleanText = (text) => text.replace(/\s+/g, ' ').trim();
+const isLookupText = (text) =>
+  text.length > 0 && text.length <= LOOKUP_MAX && /[a-z]/i.test(text);
+
+// The selection is not in the search box or another field, where it is just
+// text being edited.
+function inField(node) {
+  const element = node && (node.nodeType === 1 ? node : node.parentElement);
+  return !!element && !!element.closest('input, textarea, select, [contenteditable]');
+}
+
+// Where the menu should sit for a selection, in viewport coordinates.
+function selectionRect(selection) {
+  const box = selection.getRangeAt(0).getBoundingClientRect();
+  return box.width || box.height ? box : selection.getRangeAt(0).getClientRects()[0];
+}
+
+function openMenu(term, spot) {
+  menuTerm = term;
+  dom.menu.innerHTML =
+    `<div class="lookup-menu-head">${escapeHtml(term)}</div>` +
+    LOOKUPS.map(
+      (lookup, i) =>
+        `<button type="button" role="menuitem" data-lookup="${i}">${escapeHtml(lookup.label)}</button>`
+    ).join('');
+  dom.menu.hidden = false;
+
+  // Place the menu under what was selected, flipping above it and pulling it
+  // back inside the window when there is no room below or to the right.
+  const box = dom.menu.getBoundingClientRect();
+  let left = spot.left;
+  let top = spot.bottom + 6;
+  if (top + box.height > window.innerHeight - 8) top = Math.max(8, spot.top - box.height - 6);
+  if (left + box.width > window.innerWidth - 8) left = Math.max(8, window.innerWidth - box.width - 8);
+  dom.menu.style.left = `${left}px`;
+  dom.menu.style.top = `${top}px`;
+
+  const first = dom.menu.querySelector('button');
+  if (first) first.focus();
+}
+
+function closeMenu() {
+  dom.menu.hidden = true;
+  dom.menu.innerHTML = '';
+  menuTerm = '';
+}
+
+// The site goes straight into the frame; "Open in new tab" is there for anyone
+// who would rather have the full page (and is the way past a site that refuses
+// to be framed).
+let viewerUrl = '';
+// The term the viewer is currently open on, so the site tabs can switch site
+// without going back to the menu.
+let viewerTerm = '';
+
+// Load one site for the open term and mark its tab. Every tab carries the same
+// term, so switching is just another lookup on the same word.
+function showLookup(index) {
+  const lookup = LOOKUPS[index];
+  if (!lookup || !viewerTerm) return;
+  viewerUrl = lookup.url(lookupWord(viewerTerm));
+
+  dom.viewerTitle.textContent = `${lookup.label} · ${viewerTerm}`;
+  [...dom.viewerTabs.children].forEach((tab, i) => {
+    tab.classList.toggle('active', i === index);
+    tab.setAttribute('aria-selected', i === index ? 'true' : 'false');
+  });
+  dom.viewerFrame.src = viewerUrl;
+}
+
+function openViewer(index) {
+  if (!LOOKUPS[index] || !menuTerm) return;
+  viewerTerm = menuTerm;
+  // One tab per site, in LOOKUPS order; showLookup fills in the rest.
+  dom.viewerTabs.innerHTML = LOOKUPS.map(
+    (lookup, i) =>
+      `<button type="button" class="viewer-tab" role="tab" data-lookup="${i}">${escapeHtml(lookup.tab)}</button>`
+  ).join('');
+
+  dom.viewer.hidden = false;
+  closeMenu();
+  showLookup(index);
+  dom.viewerClose.focus();
+}
+
+function closeViewer() {
+  dom.viewer.hidden = true;
+  dom.viewerFrame.src = 'about:blank';
+  dom.viewerTabs.innerHTML = '';
+  viewerUrl = '';
+  viewerTerm = '';
+}
+
+function openInNewTab() {
+  if (viewerUrl) window.open(viewerUrl, '_blank', 'noopener');
+}
+
+// A term is looked up the same way as any other text: by selecting it, which
+// the document-level mouseup/keyup handler below already covers. Clicking alone
+// opens nothing — the pointer is for placing a caret, not for triggering the
+// menu. The keyboard still gets a shortcut, since it cannot drag across a word.
+dom.browse.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  const term = event.target.closest('.term');
+  if (!term) return;
+  event.preventDefault();
+  openMenu(term.dataset.term, term.getBoundingClientRect());
+});
+
+// Anywhere else on the page, selecting text opens the menu on what was
+// selected. This covers the meanings, the examples, the resource blurbs, the
+// flashcards and the page title alike.
+function lookupSelection(event) {
+  if (!dom.viewer.hidden || inField(event.target)) return;
+  // The mouseup that ends a press on the menu or the viewer is not a text
+  // selection: treating it as one rebuilds the menu under the pointer, and the
+  // click then lands on a button that no longer exists.
+  if (dom.menu.contains(event.target) || dom.viewer.contains(event.target)) return;
+  const selection = window.getSelection();
+  if (!selection || selection.isCollapsed || selection.rangeCount === 0) return;
+  if (inField(selection.anchorNode)) return;
+  const text = cleanText(selection.toString());
+  if (!isLookupText(text)) {
+    // A passage is being copied, not looked up: nothing to offer, so the menu
+    // that was open for the previous selection goes away.
+    closeMenu();
+    return;
+  }
+  const spot = selectionRect(selection);
+  if (spot) openMenu(text, spot);
+}
+
+// A selection can be made with the mouse or with the keyboard, and the keyboard
+// one only settles once the key is released.
+document.addEventListener('mouseup', lookupSelection);
+document.addEventListener('keyup', (event) => {
+  if (event.key === 'Shift' || event.key.startsWith('Arrow')) lookupSelection(event);
+});
+
+dom.menu.addEventListener('click', (event) => {
+  const button = event.target.closest('button[data-lookup]');
+  if (button) openViewer(Number(button.dataset.lookup));
+});
+dom.viewerTabs.addEventListener('click', (event) => {
+  const tab = event.target.closest('button[data-lookup]');
+  if (tab) showLookup(Number(tab.dataset.lookup));
+});
+dom.viewerClose.addEventListener('click', closeViewer);
+dom.viewerOpen.addEventListener('click', openInNewTab);
+dom.viewer.addEventListener('click', (event) => {
+  if (event.target === dom.viewer) closeViewer();
+});
+
+// A press outside the menu dismisses it. This listens on mousedown rather than
+// click so it runs before the mouseup that opens a menu for a new selection.
+document.addEventListener('mousedown', (event) => {
+  if (!dom.menu.hidden && !dom.menu.contains(event.target)) closeMenu();
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    if (!dom.viewer.hidden) closeViewer();
+    else closeMenu();
+    return;
+  }
+  // Arrow keys walk the menu, so a site can be picked without the mouse.
+  if (!dom.menu.hidden && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
+    const items = [...dom.menu.querySelectorAll('button')];
+    const step = event.key === 'ArrowDown' ? 1 : -1;
+    const at = items.indexOf(document.activeElement);
+    items[(at + step + items.length) % items.length].focus();
+    event.preventDefault();
+    return;
+  }
+  if (event.key === '/' && document.activeElement !== dom.search
+      && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+    event.preventDefault();
+    dom.search.focus();
+  }
+});
+
+/* ===========================================================================
+ * Flashcards
+ * =========================================================================== */
+
+let deck = [];
+let position = 0;
+let known = 0;
+let again = 0;
+
+// One checkbox per letter group; all selected to begin with.
+DATA.groups.forEach((group) => {
+  const label = document.createElement('label');
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.value = group.letter;
+  checkbox.checked = true;
+  label.append(checkbox, document.createTextNode(group.letter));
+  dom.letterPicker.append(label);
+});
+
+const pickers = () => [...dom.letterPicker.querySelectorAll('input')];
+const selectedLetters = () => new Set(
+  pickers().filter((checkbox) => checkbox.checked).map((checkbox) => checkbox.value)
+);
+
+function shuffle(items) {
+  for (let i = items.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+  return items;
+}
+
+function startQuiz() {
+  const chosen = selectedLetters();
+  if (!chosen.size) {
+    dom.status.textContent = 'Select at least one letter group.';
+    return;
+  }
+  deck = shuffle(cards.filter((card) => chosen.has(card.group)));
+  position = 0;
+  known = 0;
+  again = 0;
+  showCard();
+}
+
+function showCard() {
+  if (!deck.length) {
+    dom.term.textContent = 'No cards selected';
+    dom.meaning.textContent = '';
+    dom.examples.textContent = '';
+    dom.status.textContent = 'Choose at least one group.';
+    return;
+  }
+
+  if (position >= deck.length) {
+    dom.term.textContent = 'Round complete';
+    dom.meaning.textContent = `Known: ${known} · Again: ${again}`;
+    dom.examples.textContent = 'Start / Reshuffle to practice another random round.';
+    dom.card.classList.add('revealed');
+    dom.hint.textContent = '';
+    dom.againBtn.disabled = dom.knowBtn.disabled = dom.nextBtn.disabled = true;
+    dom.status.textContent = `Completed ${deck.length} card${deck.length === 1 ? '' : 's'}`;
+    return;
+  }
+
+  const card = deck[position];
+  dom.term.textContent = card.term;
+  dom.meaning.textContent = card.meaning;
+  dom.examples.textContent = card.examples ? `Examples: ${card.examples}` : '';
+  dom.card.classList.remove('revealed');
+  dom.hint.textContent = 'Click the card to reveal the meaning.';
+  dom.status.textContent = `Card ${position + 1} of ${deck.length} · Known ${known} · Again ${again}`;
+  dom.againBtn.disabled = dom.knowBtn.disabled = dom.nextBtn.disabled = false;
+}
+
+function reveal() {
+  if (deck.length && position < deck.length) {
+    dom.card.classList.add('revealed');
+    dom.hint.textContent = 'How well did you remember it?';
+  }
+}
+
+// One of three panels at a time: the browse list, the flashcard deck, or the
+// external resources. The search/A-Z tools only belong to the browse list.
+function setMode(mode) {
+  const browse = mode === 'browse';
+  dom.flashPanel.classList.toggle('active', mode === 'flash');
+  dom.resourcesPanel.classList.toggle('active', mode === 'resources');
+  dom.browseMode.classList.toggle('active', browse);
+  dom.flashMode.classList.toggle('active', mode === 'flash');
+  dom.resourcesMode.classList.toggle('active', mode === 'resources');
+  dom.tools.style.display = browse ? '' : 'none';
+  dom.browse.style.display = browse ? '' : 'none';
+  dom.empty.style.display = 'none';
+  if (browse) filter();
+}
+
+dom.browseMode.addEventListener('click', () => setMode('browse'));
+dom.flashMode.addEventListener('click', () => setMode('flash'));
+dom.resourcesMode.addEventListener('click', () => setMode('resources'));
+
+dom.selectAll.addEventListener('click', () => pickers().forEach((c) => { c.checked = true; }));
+dom.clearAll.addEventListener('click', () => pickers().forEach((c) => { c.checked = false; }));
+dom.startQuiz.addEventListener('click', startQuiz);
+
+dom.card.addEventListener('click', reveal);
+dom.card.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    reveal();
+  }
+});
+
+dom.nextBtn.addEventListener('click', () => { position += 1; showCard(); });
+dom.knowBtn.addEventListener('click', () => { known += 1; position += 1; showCard(); });
+dom.againBtn.addEventListener('click', () => {
+  // Re-queue the card a few places further down the deck.
+  again += 1;
+  const current = deck[position];
+  position += 1;
+  deck.splice(Math.min(deck.length, position + 3), 0, current);
+  showCard();
+});
+
+/* ===========================================================================
+ * Contact
+ * =========================================================================== */
+
+// The address is stored backwards in the markup, so the page source holds no
+// string a harvesting bot can match on. It is put back together here, at which
+// point the visitor gets a normal mailto link; without scripting they keep the
+// readable "name (at) domain" fallback that is already in the HTML.
+const contact = el('contactEmail');
+const email = contact.dataset.emailReversed.split('').reverse().join('');
+const mailto = document.createElement('a');
+mailto.href = `mailto:${email}`;
+mailto.textContent = email;
+contact.replaceChildren(mailto);
+
+/* ===========================================================================
+ * Start
+ * =========================================================================== */
+
+renderBrowse();
+filter();
+</script>
+</body>
+</html>
