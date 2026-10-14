@@ -1092,13 +1092,21 @@ const escapeHtml = (text) =>
  * receives the word already encoded.
  *
  * The site is loaded into an iframe, so a site that sends X-Frame-Options or a
- * frame-ancestors policy (Google, DuckDuckGo, Cambridge, Merriam-Webster,
- * Collins) would come up blank and does not belong in this list. Bing,
- * Wikipedia and The Free Dictionary send neither.
+ * frame-ancestors policy (DuckDuckGo, Cambridge, Merriam-Webster, Collins)
+ * would come up blank and does not belong in this list. Bing, Wikipedia and
+ * The Free Dictionary send neither.
+ *
+ * A site that refuses to be framed can still be offered with `newtab: true`:
+ * picking it skips the iframe and opens the site in a new browser tab instead.
  * =========================================================================== */
-// `label` is the menu row; `tab` is the shorter text on the viewer's site tabs.
+// `label` is the menu row; `tab` is the shorter text on the viewer's site tabs;
+// `newtab` opens the site in a new tab instead of in the viewer.
 const LOOKUPS = [
-  { label: 'Bing', tab: 'Bing', url: (q) => `https://www.bing.com/search?q=${q}` },
+  { label: 'Bing', tab: 'Bing', url: (q) => `https://www.bing.com/search?q=definition of ${q}` },
+  // Google sends X-Frame-Options: SAMEORIGIN, so it cannot be framed and goes
+  // straight to a new tab. The " (newtab)" in the label is the hint that the
+  // viewer will not open.
+  { label: 'Google (newtab)', tab: 'Google (newtab)', newtab: true, url: (q) => `https://www.google.com/search?q=definition of ${q}` },
   // The search endpoint, not /wiki/: a real word ("Acetabulum") redirects
   // straight to its article, while a bare root ("angi-") has no article and
   // gets the search results instead of a "page does not exist" notice.
@@ -1271,19 +1279,38 @@ function showLookup(index) {
   dom.viewerFrame.src = viewerUrl;
 }
 
-function openViewer(index) {
-  if (!LOOKUPS[index] || !menuTerm) return;
-  viewerTerm = menuTerm;
-  // One tab per site, in LOOKUPS order; showLookup fills in the rest.
-  dom.viewerTabs.innerHTML = LOOKUPS.map(
-    (lookup, i) =>
-      `<button type="button" class="viewer-tab" role="tab" data-lookup="${i}">${escapeHtml(lookup.tab)}</button>`
-  ).join('');
+// Open one site for a term. Called with a term from the menu (a fresh lookup,
+// which also builds the site tabs) and without one from the viewer's own tabs
+// (a switch to another site for the term already open).
+//
+// A `newtab` site is never put in the frame: an unframable site would only show
+// a blank panel, so picking it opens a browser tab and leaves the viewer as it
+// was — or, from the menu, does not open the viewer at all.
+function openLookup(index, term) {
+  const lookup = LOOKUPS[index];
+  if (!lookup) return;
 
+  if (term) {
+    viewerTerm = term;
+    // One tab per site, in LOOKUPS order; showLookup fills in the rest.
+    dom.viewerTabs.innerHTML = LOOKUPS.map(
+      (site, i) =>
+        `<button type="button" class="viewer-tab" role="tab" data-lookup="${i}">${escapeHtml(site.tab)}</button>`
+    ).join('');
+  }
+  if (!viewerTerm) return;
+
+  if (lookup.newtab) {
+    window.open(lookup.url(lookupWord(viewerTerm)), '_blank', 'noopener');
+    closeMenu();
+    return;
+  }
+
+  const wasHidden = dom.viewer.hidden;
   dom.viewer.hidden = false;
   closeMenu();
   showLookup(index);
-  dom.viewerClose.focus();
+  if (wasHidden) dom.viewerClose.focus();
 }
 
 function closeViewer() {
@@ -1342,11 +1369,12 @@ document.addEventListener('keyup', (event) => {
 
 dom.menu.addEventListener('click', (event) => {
   const button = event.target.closest('button[data-lookup]');
-  if (button) openViewer(Number(button.dataset.lookup));
+  // The term is read here, before closeMenu clears it.
+  if (button) openLookup(Number(button.dataset.lookup), menuTerm);
 });
 dom.viewerTabs.addEventListener('click', (event) => {
   const tab = event.target.closest('button[data-lookup]');
-  if (tab) showLookup(Number(tab.dataset.lookup));
+  if (tab) openLookup(Number(tab.dataset.lookup));
 });
 dom.viewerClose.addEventListener('click', closeViewer);
 dom.viewerOpen.addEventListener('click', openInNewTab);
